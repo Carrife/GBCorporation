@@ -1,0 +1,91 @@
+.modal {
+    height: 100%;
+    width: 100hv;
+    position: fixed;
+    top: 2%;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    pointer-events: none;
+    opacity: 0;
+
+    transition: 0.5s;
+}
+
+.modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal.testactive {
+    opacity: 1;
+    pointer-events: all;
+    align-items: flex-start;
+}
+
+.modal_content {
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #000000;
+    
+}
+
+.modal_label {
+    color:rgb(160, 172, 172);
+}
+
+.modal_label_green {
+    color:rgb(43, 213, 51);
+}
+
+.modal_label_red {
+    color:rgb(227, 54, 54);
+}
+
+.modal_label_orange {
+    color:rgb(236, 145, 48);
+}
+
+.modal_button {
+    color:aliceblue;
+    background-color: #262424;
+    width: 90px;
+    height: 35px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.modal_button:hover {
+    color: rgb(70, 149, 213);
+}
+
+.modal_input {
+    color:aliceblue;
+    background-color: #262424;
+    border: none;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.modal_table_td {
+    padding: 10px;
+}
+
+.modal_table_tests {
+    /*margin-top: 35vmin;*/
+    display: flex;
+}
+
+.modal_table_td_request {
+    padding-right: 10px;
+    padding-left: 80px;
+}
+
+.modal_input_checkbox {
+    width: 20px;
+    height: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
