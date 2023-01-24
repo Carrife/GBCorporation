@@ -4,6 +4,7 @@ import'../../App.css';
 import EmployeeAdd from './EmployeeAdd';
 import EmployeeEdit from './EmployeeEdit';
 import EmployeeTestData from './EmployeeTestsData';
+import { Navigate } from 'react-router-dom';
 
 const Employees = (props: {role: string}) => {
     const [employees, setEmployees] = useState([]);
@@ -36,7 +37,8 @@ const Employees = (props: {role: string}) => {
 
             if(token === '')
             {
-                window.location.reload();
+                //window.location.reload();
+                return <Navigate to="/"/>
             }
                 
             fetch("http://localhost:8000/api/Employee/GetAll", {
@@ -101,7 +103,7 @@ const Employees = (props: {role: string}) => {
         <>
             <Sidebar role={props.role}/>
             <div className='pages'>
-                {props.role === "Admin" || props.role === "RootUser" ? <button className='button_link' onClick={() => setModalAddActive(true)}>Create New</button> : ''}
+                {props.role === "Admin" ? <button className='button_link' onClick={() => setModalAddActive(true)}>Create New</button> : ''}
                 <table className='pages-table'>
                     <thead>
                         <tr>
@@ -139,8 +141,8 @@ const Employees = (props: {role: string}) => {
                                 <td>{department['name']}</td>
                                 <td>{language ? language['name'] : ''}</td>
                                 <td><button className='button_link' onClick={(e) => employeeTestsData(id, e)}>Details</button></td>
-                                <td>{props.role === "Admin" || props.role === "RootUser" || props.role === "LineManager" ?<button className='button_link' onClick={() => employeeEdit(id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, email, phone, workPhone, department['id'], language === null ? '' : language['id'], role['id'])}>Edit</button> : ''}</td>
-                                <td>{props.role === "Admin" || props.role === "RootUser" ? <button className='button_link' onClick={(e) => employeeDelete(id, e)}>Delete</button> : ''}</td>
+                                <td>{props.role === "Admin" || props.role === "LineManager" ?<button className='button_link' onClick={() => employeeEdit(id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, email, phone, workPhone, department['id'], language === null ? '' : language['id'], role['id'])}>Edit</button> : ''}</td>
+                                <td>{props.role === "Admin" ? <button className='button_link' onClick={(e) => employeeDelete(id, e)}>Delete</button> : ''}</td>
                             </tr>
                         )
                         )}

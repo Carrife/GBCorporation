@@ -27,8 +27,7 @@
 .modal_content {
     padding: 20px;
     border-radius: 12px;
-    background-color: #000000;
-    
+    background-color: #23252a;
 }
 
 .modal_label {
@@ -49,7 +48,9 @@
 
 .modal_button {
     color:aliceblue;
-    background-color: #262424;
+    background-color: #4b4c51;
+    border: none;
+    border-radius: 2rem;
     width: 90px;
     height: 35px;
     display: block;
@@ -63,7 +64,7 @@
 
 .modal_input {
     color:aliceblue;
-    background-color: #262424;
+    background-color: #4b4c51;
     border: none;
     border-radius: 5px 5px 5px 5px;
 }
@@ -77,15 +78,26 @@
     display: flex;
 }
 
-.modal_table_td_request {
-    padding-right: 10px;
-    padding-left: 80px;
-}
-
 .modal_input_checkbox {
     width: 20px;
     height: 20px;
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.modal_data {
+    color:rgb(160, 172, 172);
+    padding-right: 15px;
+}
+
+.modal_label_decoration {
+    color:rgb(160, 172, 172);
+    text-decoration: underline;
+}
+
+.modal_button_add {
+    background-color:unset;
+    border: none;
+    color:rgb(160, 172, 172);
 }

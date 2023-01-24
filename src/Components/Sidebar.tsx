@@ -8,7 +8,7 @@ const Sidebar = (props: {role: string}) => {
             <div>
                 <nav className={'nav-menu'}>
                     <ul className="nav-menu-items">
-                        {props.role === "RootUser"   ? 
+                        {props.role === "Admin" || props.role === "HR" ? 
                             SidebarData.map((item, index) => {
                                 return (
                                     <li key={index} className={item.cName}>
@@ -19,7 +19,7 @@ const Sidebar = (props: {role: string}) => {
                                     </li>
                                 )
                             })
-                        : props.role === "LineManager" || props.role === "Admin" ?
+                        : props.role === "LineManager" ?
                             SidebarDataWithoutTests.map((item, index) => {
                                 return (
                                     <li key={index} className={item.cName}>

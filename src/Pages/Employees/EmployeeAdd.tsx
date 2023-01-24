@@ -20,21 +20,21 @@ const EmployeeAdd = (props: {active: boolean, setActive: (active: boolean) => vo
     const [departments, setDepartments] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:8000/api/Employee/GetLanguages", {
+        fetch("http://localhost:8000/api/SuperDictionary/GetProgrammingLanguages", {
             method: "GET",
             headers: {'Accept': '*/*', "Authorization": "Bearer " + props.token}
         })
             .then(response => response.json())
             .then(data => setLanguages(data))
 
-        fetch("http://localhost:8000/api/Employee/GetDepartments", {
+        fetch("http://localhost:8000/api/SuperDictionary/GetDepartments", {
             method: "GET",
             headers: {'Accept': '*/*', "Authorization": "Bearer " + props.token}
         })
             .then(response => response.json())
             .then(data => setDepartments(data))
 
-        fetch("http://localhost:8000/api/Employee/GetRoles", {
+        fetch("http://localhost:8000/api/Role/GetRoles", {
             method: "GET",
             headers: {'Accept': '*/*', "Authorization": "Bearer " + props.token}
         })

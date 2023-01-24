@@ -11,13 +11,12 @@ const TemplateUpload = (props: {active: boolean, setActive: (active: boolean) =>
             
         const formData = new FormData();
         formData.append('file', userFile);
-        console.log('file: '+userFile);
+        //console.log('file: '+userFile);
                        
         fetch("http://localhost:8000/api/Template/Upload", {                
             method: 'POST',
             headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, id },
-            body: formData
-                        
+            body: formData        
         });
             
         window.location.reload();

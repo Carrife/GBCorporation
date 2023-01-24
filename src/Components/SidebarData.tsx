@@ -8,6 +8,12 @@ export const SidebarData = [
         cName: 'nav-text'
     },
     {
+        title: 'Applicants',
+        path: '/applicants',
+        icon: <AiIcons.AiOutlineBook/>,
+        cName: 'nav-text'
+    },
+    {
         title: 'Templates',
         path: '/templates',
         icon: <AiIcons.AiOutlineFile/>,

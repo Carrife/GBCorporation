@@ -6,6 +6,7 @@ import Employee from './Pages/Employees/Employees';
 import Template from './Pages/Templates/Template';
 import Test from './Pages/Tests/Test';
 import Setting from './Pages/Setting';
+import Applicant from './Pages/Applicants/Applicant'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Logout from './Pages/Logout';
 
@@ -43,6 +44,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Login setName={setName}  />} />
                         <Route path="/employees" element={<Employee role={role}/>} />
+                        <Route path="/applicants" element={<Applicant role={role}/>} />
                         <Route path="/templates" element={<Template role={role}/>} />
                         <Route path="/tests" element={<Test username={name} role={role}/>} />
                         <Route path="/settings" element={<Setting name={name} role={role}/>} />
