@@ -37,8 +37,12 @@
 }
 
 .nav-text a:hover {
-    background-color: #1a83ff;
+    background-color: #4b4c51;
 }
+
+.active_tab {
+    color: #57585e;
+  }
 
 .nav-menu-items {
     width: 100%;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, SyntheticEvent } from 'react';
-import Sidebar from '../../Components/Sidebar';
 import'../../App.css';
+import Sidebar from '../../Components/Sidebar';
 import TestStart from './TestStart';
 
 const Test = (props: {username: string, role: string}) => {
@@ -36,7 +36,7 @@ const Test = (props: {username: string, role: string}) => {
 
     return (
         <>
-        <Sidebar role={props.role} />
+            <Sidebar role={props.role}/>
         <div className='pages'>
             <table className='pages-table'>
                 <thead>

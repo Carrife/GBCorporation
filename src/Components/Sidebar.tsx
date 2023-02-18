@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom";
 import { SidebarData, SidebarDataWithoutTemplates, SidebarDataWithoutTests,  FooterData} from "./SidebarData";
 import'./Sidebar.css';
+import { useEffect, useState } from "react";
 
 const Sidebar = (props: {role: string}) => {
+    const[urlPath, setUrlPath] = useState('');
+    
+    useEffect(() => {
+        setUrlPath(window.location.pathname);
+    }, []);
+
     return (
         <>
             <div>
@@ -14,7 +21,7 @@ const Sidebar = (props: {role: string}) => {
                                     <li key={index} className={item.cName}>
                                         <Link to={item.path}>
                                             {item.icon}
-                                            <span>{item.title}</span>
+                                            <span className={urlPath === item.path ? 'active_tab' : ''}>{item.title}</span>
                                         </Link>
                                     </li>
                                 )
@@ -25,7 +32,7 @@ const Sidebar = (props: {role: string}) => {
                                     <li key={index} className={item.cName}>
                                         <Link to={item.path}>
                                             {item.icon}
-                                            <span>{item.title}</span>
+                                            <span className={urlPath === item.path ? 'active_tab' : ''}>{item.title}</span>
                                         </Link>
                                     </li>
                                 )
@@ -35,7 +42,7 @@ const Sidebar = (props: {role: string}) => {
                                 <li key={index} className={item.cName}>
                                     <Link to={item.path}>
                                         {item.icon}
-                                        <span>{item.title}</span>
+                                        <span className={urlPath === item.path ? 'active_tab' : ''}>{item.title}</span>
                                     </Link>
                                 </li>
                             )

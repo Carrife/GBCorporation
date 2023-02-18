@@ -1,6 +1,8 @@
 import { SyntheticEvent, useState } from "react";
 import Modal from "../../Components/Modal";
 import'../../Components/Modal.css';
+import Notification from "../../Components/Notification";
+import Errors from "../../Enums/Errors";
 
 const ApplicantAdd = (props: {active: boolean, setActive: (active: boolean) => void, token: string | null}) => {
     const [nameRu, setNameRu] = useState('');
@@ -10,6 +12,8 @@ const ApplicantAdd = (props: {active: boolean, setActive: (active: boolean) => v
     const [surnameEn, setSurnameEn] = useState('');
     const [phone, setPhone] = useState('');
     const [login, setLogin] = useState('');
+    const [activeNotif, setActiveNotif] = useState(false);
+    const [notification, setNotification] = useState('');
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -31,14 +35,26 @@ const ApplicantAdd = (props: {active: boolean, setActive: (active: boolean) => v
 
         if(!response.ok)
         {
-            console.log('Error');
+            if(response.status === 409)
+            {
+                response.json().then(data => setNotification(Errors[data['errorStatus']]));
+            }
+            else
+            {
+                setNotification(Errors[response.status]);
+            }
+            
+            setActiveNotif(true);
         }
-
-        props.setActive(false);
-        window.location.reload();
+        else
+        {
+            props.setActive(false);
+            window.location.reload();
+        }
     }
     
     return (
+        <>
         <Modal active={props.active} setActive={props.setActive} type=''>
             <form onSubmit={submit}>
                 <table>
@@ -101,6 +117,8 @@ const ApplicantAdd = (props: {active: boolean, setActive: (active: boolean) => v
                 <br/><button className="modal_button" type="submit">Create</button>
             </form>
         </Modal>
+        <Notification active={activeNotif} setActive={setActiveNotif}>{notification}</Notification>
+        </>
     )
 }
 

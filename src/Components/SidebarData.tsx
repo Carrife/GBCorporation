@@ -14,6 +14,12 @@ export const SidebarData = [
         cName: 'nav-text'
     },
     {
+        title: 'Hiring',
+        path: '/hiring',
+        icon: <AiIcons.AiOutlineBook/>,
+        cName: 'nav-text'
+    },
+    {
         title: 'Templates',
         path: '/templates',
         icon: <AiIcons.AiOutlineFile/>,
@@ -74,7 +80,6 @@ export const SidebarDataWithoutTests = [
         cName: 'nav-text'
     },
 ]
-
 
 export const FooterData = [
     {

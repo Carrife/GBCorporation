@@ -1,5 +1,3 @@
-import 'react-pro-sidebar/dist/css/styles.css';
-import Sidebar from '../Components/Sidebar';
 import { SyntheticEvent, useState } from 'react';
 
 const Setting = (props: {name: string, role: string}) => {
@@ -30,8 +28,6 @@ const Setting = (props: {name: string, role: string}) => {
     }
 
     return (
-        <> 
-            <Sidebar role={props.role}/>
             <div className="form-signin">
                 <form onSubmit={submit}>
                     <input type="password" className="form-control" placeholder="Password" required
@@ -46,7 +42,6 @@ const Setting = (props: {name: string, role: string}) => {
                     <button className="w-100 btn btn-lg btn-primary" type="submit">Save</button>
                 </form>
             </div>
-        </>
     );
 };
 

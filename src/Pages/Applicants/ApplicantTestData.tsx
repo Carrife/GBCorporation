@@ -15,14 +15,17 @@ const ApplicantTestData = (props: {active: boolean, applicantId: string, setActi
 
     const addLogicTest = async () => {
         setModalAddLogicActive(true);
+        props.setActive(false);
     };
 
     const addProgrammingTest = async () => {
         setModalAddProgrammingActive(true);
+        props.setActive(false);
     };
 
     const addForeignLangTest = async () => {
         setModalAddForeignLangActive(true);
+        props.setActive(false);
     };
 
     return (

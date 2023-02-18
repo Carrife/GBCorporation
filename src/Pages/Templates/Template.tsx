@@ -1,10 +1,11 @@
 import React, { useState, useEffect, SyntheticEvent } from 'react';
 import { Navigate } from 'react-router-dom';
-import Sidebar from '../../Components/Sidebar';
 import'../../App.css';
 import TemplateAdd from './TemplateAdd';
 import TemplateUpload from './TemplateUpload';
 import fileDownload from 'js-file-download';
+import * as AiIcons from 'react-icons/ai';
+import Sidebar from '../../Components/Sidebar';
 
 const Template = (props: {role: string}) => {
     const [templates, setTemplates] = useState([]);
@@ -55,7 +56,7 @@ const Template = (props: {role: string}) => {
 
     return (
         <>
-        <Sidebar role={props.role}/>
+            <Sidebar role={props.role}/>
         <div className='pages'> 
             <button className='button_link' onClick={() => setModalAddActive(true)}>Create New</button>
             <br/>

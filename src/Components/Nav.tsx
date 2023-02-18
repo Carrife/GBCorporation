@@ -1,8 +1,9 @@
 import'../App.css';
+import './Nav.css'
  
 const Nav = (props: {name: string, role: string}) => {
     return (
-        <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+        <nav className="navbar">
             <div className="container-fluid">
                 <p className="navbar-brand">GB Corporation</p>
                 <div>

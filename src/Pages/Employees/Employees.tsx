@@ -1,10 +1,11 @@
 import React, { useState, useEffect, SyntheticEvent } from 'react';
-import Sidebar from '../../Components/Sidebar';
 import'../../App.css';
 import EmployeeAdd from './EmployeeAdd';
 import EmployeeEdit from './EmployeeEdit';
 import EmployeeTestData from './EmployeeTestsData';
+import * as AiIcons from 'react-icons/ai';
 import { Navigate } from 'react-router-dom';
+import Sidebar from '../../Components/Sidebar';
 
 const Employees = (props: {role: string}) => {
     const [employees, setEmployees] = useState([]);
@@ -37,7 +38,6 @@ const Employees = (props: {role: string}) => {
 
             if(token === '')
             {
-                //window.location.reload();
                 return <Navigate to="/"/>
             }
                 
@@ -48,7 +48,7 @@ const Employees = (props: {role: string}) => {
                 .then(response => response.json())
                 .then(data => setEmployees(data));
         })();
-    }, []);
+    }, [token]);
 
     const employeeDelete = async (id: string, e: SyntheticEvent) => {
         e.preventDefault();
@@ -99,6 +99,7 @@ const Employees = (props: {role: string}) => {
         setModalTestDataActive(true);
     };
 
+    
     return (
         <>
             <Sidebar role={props.role}/>
@@ -140,9 +141,9 @@ const Employees = (props: {role: string}) => {
                                 <td>{workPhone}</td>
                                 <td>{department['name']}</td>
                                 <td>{language ? language['name'] : ''}</td>
-                                <td><button className='button_link' onClick={(e) => employeeTestsData(id, e)}>Details</button></td>
-                                <td>{props.role === "Admin" || props.role === "LineManager" ?<button className='button_link' onClick={() => employeeEdit(id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, email, phone, workPhone, department['id'], language === null ? '' : language['id'], role['id'])}>Edit</button> : ''}</td>
-                                <td>{props.role === "Admin" ? <button className='button_link' onClick={(e) => employeeDelete(id, e)}>Delete</button> : ''}</td>
+                                <td><button className='button_table' onClick={(e) => employeeTestsData(id, e)}><AiIcons.AiOutlineUnorderedList/></button></td>
+                                <td>{props.role === "Admin" || props.role === "LineManager" ?<button className='button_table' onClick={() => employeeEdit(id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, email, phone, workPhone, department['id'], language === null ? '' : language['id'], role['id'])}><AiIcons.AiOutlineEdit/></button> : ''}</td>
+                                <td>{props.role === "Admin" ? <button className='button_table' onClick={(e) => employeeDelete(id, e)}><AiIcons.AiOutlineDelete/></button> : ''}</td>
                             </tr>
                         )
                         )}

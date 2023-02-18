@@ -1,12 +1,13 @@
-import React, { useState, useEffect, SyntheticEvent } from 'react';
-import Sidebar from '../../Components/Sidebar';
+import { useState, useEffect, SyntheticEvent } from 'react';
 import'../../App.css';
 import { Navigate } from 'react-router-dom';
 import ApplicantAdd from './ApplicantAdd';
 import ApplicantEdit from './ApplicantEdit';
 import ApplicantTestData from './ApplicantTestData';
+import * as AiIcons from 'react-icons/ai';
+import Sidebar from '../../Components/Sidebar';
 
-const Applicants = (props: {role: string}) => {
+const Applicants = (props: {role: string, token: string}) => {
     const [applicants, setApplicants] = useState([]);
     const [modalAddActive, setModalAddActive] = useState(false);
     const [modalEditActive, setModalEditActive] = useState(false);
@@ -20,24 +21,22 @@ const Applicants = (props: {role: string}) => {
     const [nameEn, setNameEn] = useState('');
     const [surnameEn, setSurnameEn] = useState('');
     const [phone, setPhone] = useState('');
-    const token = window.localStorage.getItem('token');
 
     useEffect(() => {(
         load => {
-            if(token === '')
+            if(props.token === '')
             {
-                //window.location.reload();
                 return <Navigate to="/"/>
             }
                 
             fetch("http://localhost:8000/api/Applicant/GetAll", {
                 method: 'GET',
-                headers: { 'Accept': '*/*', "Authorization": "Bearer " + token },
+                headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token },
             })
                 .then(response => response.json())
                 .then(data => setApplicants(data));
         })();        
-    }, []);
+    }, [props.token]);
 
     const applicantEdit = async (id: string, nameRu: string, surnameRu: string, patronymicRu: string, nameEn: string, surnameEn: string, 
             phone: string) => {
@@ -58,7 +57,7 @@ const Applicants = (props: {role: string}) => {
         
         await fetch("http://localhost:8000/api/Applicant/GetTestDatas", {
             method: 'GET',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + token, 'Content-Type': 'application/json', id},
+            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id},
             credentials: 'include'
         })
             .then(response => response.json())
@@ -101,16 +100,16 @@ const Applicants = (props: {role: string}) => {
                                 <td>{login}</td>
                                 <td>{phone}</td>
                                 <td>{status['name']}</td>
-                                <td>{props.role === "Admin" || props.role === "LineManager" ?<button className='button_link' onClick={() => applicantEdit(id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, phone)}>Edit</button> : ''}</td>
-                                <td><button className='button_link' onClick={(e) => applicantTestData(id, e)}>Details</button></td>
+                                <td>{props.role === "Admin" || props.role === "LineManager" ?<button className='button_table' onClick={() => applicantEdit(id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, phone)}><AiIcons.AiOutlineEdit/></button> : ''}</td>
+                                <td><button className='button_table' onClick={(e) => applicantTestData(id, e)}><AiIcons.AiOutlineUnorderedList/></button></td>
                             </tr>
                         )
                         )}
                     </tbody>
                 </table>
-                <ApplicantAdd active={modalAddActive} setActive={setModalAddActive} token={token}/>
-                <ApplicantTestData active={modalTestDataActive} applicantId={id} setActive={setModalTestDataActive} testData={testData} token={token}/>
-                <ApplicantEdit active={modalEditActive} setActive={setModalEditActive} id={id} nameRu={nameRu} surnameRu={surnameRu} patronymicRu={patronymicRu} nameEn={nameEn} surnameEn={surnameEn} phone={phone} token={token}/>
+                <ApplicantAdd active={modalAddActive} setActive={setModalAddActive} token={props.token}/>
+                <ApplicantTestData active={modalTestDataActive} applicantId={id} setActive={setModalTestDataActive} testData={testData} token={props.token}/>
+                <ApplicantEdit active={modalEditActive} setActive={setModalEditActive} id={id} nameRu={nameRu} surnameRu={surnameRu} patronymicRu={patronymicRu} nameEn={nameEn} surnameEn={surnameEn} phone={phone} token={props.token}/>
             </div>
         </>
     );

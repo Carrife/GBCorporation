@@ -9,6 +9,7 @@
     justify-content:center;
     pointer-events: none;
     opacity: 0;
+    z-index: 1;
 
     transition: 0.5s;
 }
@@ -74,7 +75,6 @@
 }
 
 .modal_table_tests {
-    /*margin-top: 35vmin;*/
     display: flex;
 }
 
