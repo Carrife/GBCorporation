@@ -3,17 +3,16 @@ import'../../App.css';
 import Sidebar from '../../Components/Sidebar';
 import TestStart from './TestStart';
 
-const Test = (props: {username: string, role: string}) => {
+const Test = (props: {username: string, role: string, token:string}) => {
     const [templates, setTemplates] = useState([]);
     const [modalStartActive, setModalStartActive] = useState(false);
     const [testName, setTestName] = useState('');
     const [testData, setTestData] = useState([{question:'', answers: []}]);
-    const token = window.localStorage.getItem('token');
 
     useEffect(() => {
         fetch("http://localhost:8000/api/Template/GetAll", {
             method: "GET",
-            headers: {'Accept': '*/*', "Authorization": "Bearer " + token}
+            headers: {'Accept': '*/*', "Authorization": "Bearer " + props.token}
         })
             .then(response => response.json())
             .then(data => setTemplates(data))
@@ -24,7 +23,7 @@ const Test = (props: {username: string, role: string}) => {
         
         await fetch("http://localhost:8000/api/TestCompetencies/Start", {
             method: 'GET',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + token, 'Content-Type': 'application/json', id},
+            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id},
             credentials: 'include'
         })
             .then(response => response.json())
@@ -56,7 +55,7 @@ const Test = (props: {username: string, role: string}) => {
                     )}
                 </tbody>
             </table>
-            <TestStart active={modalStartActive} setActive={setModalStartActive} testData={testData} testName={testName} username={props.username} token={token}/>
+            <TestStart active={modalStartActive} setActive={setModalStartActive} testData={testData} testName={testName} username={props.username} token={props.token}/>
         </div>
         </>
     );

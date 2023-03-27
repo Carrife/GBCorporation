@@ -39,10 +39,16 @@ export const SidebarData = [
     },
 ]
 
-export const SidebarDataWithoutTemplates = [
+export const SidebarDataLMTL = [
     {
         title: 'Employees',
         path: '/employees',
+        icon: <AiIcons.AiOutlineBook/>,
+        cName: 'nav-text'
+    },
+    {
+        title: 'Hiring',
+        path: '/hiring',
         icon: <AiIcons.AiOutlineBook/>,
         cName: 'nav-text'
     },
@@ -60,7 +66,7 @@ export const SidebarDataWithoutTemplates = [
     },
 ]
 
-export const SidebarDataWithoutTests = [
+export const SidebarDataDevelopers = [
     {
         title: 'Employees',
         path: '/employees',

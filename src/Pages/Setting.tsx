@@ -1,17 +1,16 @@
 import { SyntheticEvent, useState } from 'react';
 
-const Setting = (props: {name: string, role: string}) => {
+const Setting = (props: {name: string, role: string, token:string}) => {
     const [password, setPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
-    const token = window.localStorage.getItem('token');
 
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
         const response = await fetch("http://localhost:8000/api/Auth/UpdatePassword", {
             method: 'POST',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + token, 'Content-Type': 'application/json' },
+            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json' },
             credentials: 'include',
             body: JSON.stringify({
                 userName: props.name,

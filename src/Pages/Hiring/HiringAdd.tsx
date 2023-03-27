@@ -2,6 +2,8 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Modal from "../../Components/Modal";
 import'../../Components/Modal.css';
+import Notification from "../../Components/Notification";
+import Errors from "../../Enums/Errors";
 
 const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void, token: string | null}) => {
     const [applicantId, setApplicantId] = useState(0);
@@ -17,14 +19,16 @@ const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void
     const [foreignLanguageTestId, setForeignLanguageTestId] = useState(0);
     const [foreignLanguageTests, setForeignLanguageTests] = useState([]);
     const [date, setDate] = useState('');
+    const [activeNotif, setActiveNotif] = useState(false);
+    const [notification, setNotification] = useState('');
 
     useEffect(() => {(
         load => {
-            if(props.token?.length === 0)
+            if(props.token === '')
             {
                 return <Navigate to="/"/>
             }
-                
+
             fetch("http://localhost:8000/api/Applicant/GetActiveShort", {
                 method: 'GET',
                 headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token },
@@ -46,36 +50,37 @@ const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void
                 .then(response => response.json())
                 .then(data => setLineManagers(data));
         })();        
-    }, []);
+    }, [props.token]);
 
     useEffect(() => {(
         load => {
-            if(applicantId > 0)
+            if(applicants.length > 0)
             {
+                var applicId = applicantId === 0 ? applicants['0']['id'] : applicantId
+            
                 fetch("http://localhost:8000/api/Hiring/GetLogicTestShort", {
                     method: 'GET',
-                    headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id: applicantId.toString() },
+                    headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id: applicId.toString() },
                 })
                     .then(response => response.json())
                     .then(data => setLogicTests(data));
 
                 fetch("http://localhost:8000/api/Hiring/GetProgrammingTestShort", {
                     method: 'GET',
-                    headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id: applicantId.toString() },
+                    headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id: applicId.toString() },
                 })
                     .then(response => response.json())
                     .then(data => setProgrammingTests(data));
 
                 fetch("http://localhost:8000/api/Hiring/GetForeignTestShort", {
                     method: 'GET',
-                    headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id: applicantId.toString() },
+                    headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id: applicId.toString() },
                 })
                     .then(response => response.json())
                     .then(data => setForeignLanguageTests(data));
             }
-            
         })();       
-    }, [applicantId]);
+    }, [applicantId, props.token, applicants]);
     
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
@@ -85,26 +90,39 @@ const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void
             headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json' },
             credentials: 'include',
             body: JSON.stringify({
-                applicantId,
-                teamLeaderId,
-                lineManagerId,
-                logicTestId,
-                programmingTestId,
-                foreignLanguageTestId,
+                applicant: {id: applicantId === 0 ? applicants['0']['id'] : applicantId, name:""},
+                teamLeader: {id: teamLeaderId === 0 ? teamLeaders['0']['id'] : teamLeaderId, name:""},
+                lineManager: {id: lineManagerId === 0 ? lineManagers['0']['id'] : lineManagerId, name:""},
+                logicTest: {id: logicTestId === 0 ? logicTests['0']['id'] : logicTestId, title:""},
+                programmingTest: {id: programmingTestId === 0 ? programmingTests['0']['id'] : programmingTestId, title:""},
+                foreignLanguageTest: {id: foreignLanguageTestId === 0 ? foreignLanguageTests['0']['id'] : foreignLanguageTestId, title:""},
+                status: {id: 0, name: ""},
                 date
             })
         });
 
         if(!response.ok)
         {
-            console.log('Error');
+            if(response.status === 409)
+            {
+                response.json().then(data => setNotification(Errors[data['errorStatus']]));
+            }
+            else
+            {
+                setNotification(Errors[response.status]);
+            }
+            
+            setActiveNotif(true);
         }
-
-        props.setActive(false);
-        window.location.reload();
+        else
+        {
+            props.setActive(false);
+            window.location.reload();
+        }
     }
     
     return (
+        <>
         <Modal active={props.active} setActive={props.setActive} type=''>
             <form onSubmit={submit}>
                 <table>
@@ -179,6 +197,8 @@ const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void
                 <br/><button className="modal_button" type="submit">Create</button>
             </form>
         </Modal>
+        <Notification active={activeNotif} setActive={setActiveNotif}>{notification}</Notification>
+        </>
     )
 }
 

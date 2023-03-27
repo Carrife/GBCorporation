@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { SidebarData, SidebarDataWithoutTemplates, SidebarDataWithoutTests,  FooterData} from "./SidebarData";
+import { SidebarData, SidebarDataLMTL, SidebarDataDevelopers,  FooterData} from "./SidebarData";
 import'./Sidebar.css';
 import { useEffect, useState } from "react";
 
@@ -26,8 +26,8 @@ const Sidebar = (props: {role: string}) => {
                                     </li>
                                 )
                             })
-                        : props.role === "LineManager" ?
-                            SidebarDataWithoutTests.map((item, index) => {
+                        : props.role === "LineManager" || props.role === "TeamLeader" ?
+                        SidebarDataLMTL.map((item, index) => {
                                 return (
                                     <li key={index} className={item.cName}>
                                         <Link to={item.path}>
@@ -37,7 +37,7 @@ const Sidebar = (props: {role: string}) => {
                                     </li>
                                 )
                             })
-                        : SidebarDataWithoutTemplates.map((item, index) => {
+                        : SidebarDataDevelopers.map((item, index) => {
                             return (
                                 <li key={index} className={item.cName}>
                                     <Link to={item.path}>

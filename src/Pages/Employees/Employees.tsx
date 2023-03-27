@@ -7,7 +7,7 @@ import * as AiIcons from 'react-icons/ai';
 import { Navigate } from 'react-router-dom';
 import Sidebar from '../../Components/Sidebar';
 
-const Employees = (props: {role: string}) => {
+const Employees = (props: {role: string, token:string}) => {
     const [employees, setEmployees] = useState([]);
     const [modalAddActive, setModalAddActive] = useState(false);
     const [modalEditActive, setModalEditActive] = useState(false);
@@ -26,7 +26,6 @@ const Employees = (props: {role: string}) => {
     const [department, setDepartment] = useState('');
     const [role, setRole] = useState('');
     const [workPhone, setWorkPhone] = useState('');
-    const token = window.localStorage.getItem('token');
 
     useEffect(() => {(
         load => {
@@ -36,26 +35,26 @@ const Employees = (props: {role: string}) => {
                 window.location.reload();
             }
 
-            if(token === '')
+            if(props.token === '')
             {
                 return <Navigate to="/"/>
             }
                 
             fetch("http://localhost:8000/api/Employee/GetAll", {
                 method: 'GET',
-                headers: { 'Accept': '*/*', "Authorization": "Bearer " + token },
+                headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token },
             })
                 .then(response => response.json())
                 .then(data => setEmployees(data));
         })();
-    }, [token]);
+    }, [props.token]);
 
     const employeeDelete = async (id: string, e: SyntheticEvent) => {
         e.preventDefault();
 
         const response = await fetch("http://localhost:8000/api/Employee/Delete", {                
             method: 'POST',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + token, 'Content-Type': 'application/json', id },
+            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id },
             credentials: 'include'
         });
 
@@ -90,7 +89,7 @@ const Employees = (props: {role: string}) => {
         
         await fetch("http://localhost:8000/api/Employee/GetById", {
             method: 'GET',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + token, 'Content-Type': 'application/json', id},
+            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id},
             credentials: 'include'
         })
             .then(response => response.json())
@@ -149,9 +148,9 @@ const Employees = (props: {role: string}) => {
                         )}
                     </tbody>
                 </table>
-                <EmployeeAdd active={modalAddActive} setActive={setModalAddActive} token={token}/>
+                <EmployeeAdd active={modalAddActive} setActive={setModalAddActive} token={props.token}/>
                 <EmployeeTestData active={modalTestDataActive} setActive={setModalTestDataActive} testData={testData}/>
-                <EmployeeEdit active={modalEditActive} setActive={setModalEditActive} id={id} nameRu={nameRu} surnameRu={surnameRu} patronymicRu={patronymicRu} nameEn={nameEn} surnameEn={surnameEn} phone={phone} workPhone={workPhone} departmentId={department} languageId={language} token={token}/>
+                <EmployeeEdit active={modalEditActive} setActive={setModalEditActive} id={id} nameRu={nameRu} surnameRu={surnameRu} patronymicRu={patronymicRu} nameEn={nameEn} surnameEn={surnameEn} phone={phone} workPhone={workPhone} departmentId={department} languageId={language} token={props.token}/>
             </div>
         </>
     );

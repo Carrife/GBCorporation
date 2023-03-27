@@ -71,7 +71,7 @@ const Applicants = (props: {role: string, token: string}) => {
         <>
             <Sidebar role={props.role}/>
             <div className='pages'>
-                {props.role === "Admin" || props.role === "HR" ? <button className='button_link' onClick={() => setModalAddActive(true)}>Create New</button> : ''}
+                <button className='button_link' onClick={() => setModalAddActive(true)}>Create New</button>
                 <table className='pages-table'>
                     <thead>
                         <tr>
@@ -100,7 +100,7 @@ const Applicants = (props: {role: string, token: string}) => {
                                 <td>{login}</td>
                                 <td>{phone}</td>
                                 <td>{status['name']}</td>
-                                <td>{props.role === "Admin" || props.role === "LineManager" ?<button className='button_table' onClick={() => applicantEdit(id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, phone)}><AiIcons.AiOutlineEdit/></button> : ''}</td>
+                                <td><button className='button_table' onClick={() => applicantEdit(id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, phone)}><AiIcons.AiOutlineEdit/></button></td>
                                 <td><button className='button_table' onClick={(e) => applicantTestData(id, e)}><AiIcons.AiOutlineUnorderedList/></button></td>
                             </tr>
                         )

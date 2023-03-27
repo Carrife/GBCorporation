@@ -15,6 +15,7 @@ function App() {
     const [name, setName] = useState('');
     const [role, setRole] = useState('');
     const [token, setToken] = useState('');
+    const [userId, setUserId] = useState('');
 
     useEffect(() => {
         (
@@ -28,9 +29,10 @@ function App() {
 
                 setName(content.name);
                 setRole(content.role);
+                setUserId(content.id);
                 window.localStorage.setItem('token', content.token);
                 setToken(content.token);
-
+                
                 if(!response.ok)
                 {
                     <Navigate to="/login"/>
@@ -45,13 +47,13 @@ function App() {
               <Nav name={name} role={role}/>
                 <main>
                     <Routes>
-                        <Route path="/" element={<Login setName={setName}  />} />
-                        <Route path="/employees" element={<Employee role={role}/>} />
+                        <Route path="/" element={<Login setName={setName} />} />
+                        <Route path="/employees" element={<Employee role={role} token={token}/>} />
                         <Route path="/applicants" element={<Applicant role={role} token={token}/>} />
-                        <Route path="/hiring" element={<Hiring role={role}/>} />
-                        <Route path="/templates" element={<Template role={role}/>} />
-                        <Route path="/tests" element={<Test username={name} role={role}/>} />
-                        <Route path="/settings" element={<Setting name={name} role={role}/>} />
+                        <Route path="/hiring" element={<Hiring role={role} userId={userId} token={token}/>} />
+                        <Route path="/templates" element={<Template role={role} token={token}/>} />
+                        <Route path="/tests" element={<Test username={name} role={role} token={token}/>} />
+                        <Route path="/settings" element={<Setting name={name} role={role} token={token}/>} />
                         <Route path="/logout" element={<Logout name={name} setName={setName} role={role} setRole={setRole}/>} />
                     </Routes>
               </main>
