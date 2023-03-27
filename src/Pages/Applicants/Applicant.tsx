@@ -5,7 +5,7 @@ import ApplicantAdd from './ApplicantAdd';
 import ApplicantEdit from './ApplicantEdit';
 import ApplicantTestData from './ApplicantTestData';
 import * as AiIcons from 'react-icons/ai';
-import Sidebar from '../../Components/Sidebar';
+import Sidebar from '../../Components/Sidebar/Sidebar';
 
 const Applicants = (props: {role: string, token: string}) => {
     const [applicants, setApplicants] = useState([]);

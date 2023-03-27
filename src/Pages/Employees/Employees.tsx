@@ -5,7 +5,7 @@ import EmployeeEdit from './EmployeeEdit';
 import EmployeeTestData from './EmployeeTestsData';
 import * as AiIcons from 'react-icons/ai';
 import { Navigate } from 'react-router-dom';
-import Sidebar from '../../Components/Sidebar';
+import Sidebar from '../../Components/Sidebar/Sidebar';
 
 const Employees = (props: {role: string, token:string}) => {
     const [employees, setEmployees] = useState([]);

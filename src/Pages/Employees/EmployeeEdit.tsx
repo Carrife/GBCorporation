@@ -1,5 +1,5 @@
 import { SyntheticEvent, useEffect, useState } from "react";
-import Modal from "../../Components/Modal";
+import Modal from "../../Components/Modal/Modal";
 
 const EmployeeEdit = (props: {active: boolean, setActive: (active: boolean) => void, id: string, nameRu: string, surnameRu: string, patronymicRu: string, nameEn: string, surnameEn: string, phone: string, workPhone: string, departmentId: string, languageId: string, token: string | null}) => {
     const id = props.id;

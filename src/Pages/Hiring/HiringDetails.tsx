@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Modal from "../../Components/Modal";
+import Modal from "../../Components/Modal/Modal";
 import * as AiIcons from 'react-icons/ai';
 import LMDescription from './Details/LMDescription';
 import TLDescription from './Details/TLDescription';
-import Notification from "../../Components/Notification";
+import Notification from "../../Components/Notification/Notification";
 import Errors from "../../Enums/Errors";
 
 const HiringDetails = (props: {active: boolean, hiringId: string, setActive: (active: boolean) => void, hitingData: never[], role: string, token: string | null}) => {

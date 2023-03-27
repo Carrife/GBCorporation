@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 import HirinAdd from './HiringAdd';
 import HiringDetails from './HiringDetails';
 import * as AiIcons from 'react-icons/ai';
-import Sidebar from '../../Components/Sidebar';
+import Sidebar from '../../Components/Sidebar/Sidebar';
 
 const Hiring = (props: {role: string, userId: string, token: string}) => {
     const [hirings, setHirings] = useState([]);

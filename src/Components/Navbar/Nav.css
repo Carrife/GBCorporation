@@ -1,0 +1,24 @@
+.navbar {
+    background-color: #23252a;
+    width:100vw;
+    display: flex;
+    position: fixed;
+    top: 0px;
+    left: 0;
+}
+
+.navbar-space-vertical {
+    width: 100%;
+    max-width: 100%;
+    text-align: right;
+}
+
+.nav-space-horizontal {
+    width: 100%;
+}
+
+.navbar-title {
+    margin-top: 5;
+    color: 'lightgrey';
+    min-width:30vw;
+}

@@ -1,6 +1,6 @@
 import { SyntheticEvent, useState } from "react";
-import Modal from "../../../Components/Modal";
-import Notification from "../../../Components/Notification";
+import Modal from "../../../Components/Modal/Modal";
+import Notification from "../../../Components/Notification/Notification";
 import Errors from "../../../Enums/Errors";
 
 const LMDescription = (props: {active: boolean, hiringId: string, setActive: (active: boolean) => void, descriptionLM: string, token: string | null}) => {

@@ -5,7 +5,7 @@ import TemplateAdd from './TemplateAdd';
 import TemplateUpload from './TemplateUpload';
 import fileDownload from 'js-file-download';
 import * as AiIcons from 'react-icons/ai';
-import Sidebar from '../../Components/Sidebar';
+import Sidebar from '../../Components/Sidebar/Sidebar';
 
 const Template = (props: {role: string, token:string}) => {
     const [templates, setTemplates] = useState([]);

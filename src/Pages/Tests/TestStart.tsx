@@ -1,6 +1,6 @@
 import { SyntheticEvent, useEffect, useState } from "react";
-import Modal from "../../Components/Modal";
-import'../../Components/Modal.css';
+import Modal from "../../Components/Modal/Modal";
+import'../../Components/Modal/Modal.css';
 
 const TestStart = (props: {active: boolean, setActive: (active: boolean) => void, testData: {question:string, answers: never[]}[], testName: string, username: string, token: string | null}) => {
     const testData = props.testData;

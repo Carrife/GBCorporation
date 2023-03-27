@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Modal from "../../Components/Modal";
+import Modal from "../../Components/Modal/Modal";
 import * as AiIcons from 'react-icons/ai';
 import LogicTest from './TestDatas/LogicTest';
 import ForeignLanguageTest from './TestDatas/ForeignLanguageTest';

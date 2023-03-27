@@ -1,6 +1,6 @@
 import { SyntheticEvent, useState } from "react";
-import Modal from "../../Components/Modal";
-import'../../Components/Modal.css';
+import Modal from "../../Components/Modal/Modal";
+import'../../Components/Modal/Modal.css';
 
 const TemplateAdd = (props: {active: boolean, setActive: (active: boolean) => void, token: string | null}) => {
     const [name, setName] = useState('');

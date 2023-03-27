@@ -1,6 +1,6 @@
 import { ChangeEvent} from "react";
-import Modal from "../../Components/Modal";
-import'../../Components/Modal.css';
+import Modal from "../../Components/Modal/Modal";
+import'../../Components/Modal/Modal.css';
 
 const TemplateUpload = (props: {active: boolean, setActive: (active: boolean) => void, id:string, token: string | null}) => {
     const id = props.id;

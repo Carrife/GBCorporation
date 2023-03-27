@@ -1,6 +1,6 @@
 import { SyntheticEvent, useState } from "react";
-import Modal from "../../Components/Modal";
-import Notification from "../../Components/Notification";
+import Modal from "../../Components/Modal/Modal";
+import Notification from "../../Components/Notification/Notification";
 import Errors from "../../Enums/Errors";
 
 const ApplicantEdit = (props: {active: boolean, setActive: (active: boolean) => void, id: string, nameRu: string, surnameRu: string, patronymicRu: string, nameEn: string, surnameEn: string, phone: string, token: string | null}) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, SyntheticEvent } from 'react';
 import'../../App.css';
-import Sidebar from '../../Components/Sidebar';
+import Sidebar from '../../Components/Sidebar/Sidebar';
 import TestStart from './TestStart';
 
 const Test = (props: {username: string, role: string, token:string}) => {

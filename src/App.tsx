@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import Nav from './Components/Nav';
+import Nav from './Components/Navbar/Nav';
 import Login from './Pages/Login';
 import Employee from './Pages/Employees/Employees';
 import Template from './Pages/Templates/Template';

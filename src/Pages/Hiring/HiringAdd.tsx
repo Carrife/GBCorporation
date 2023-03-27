@@ -1,8 +1,8 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import Modal from "../../Components/Modal";
-import'../../Components/Modal.css';
-import Notification from "../../Components/Notification";
+import Modal from "../../Components/Modal/Modal";
+import'../../Components/Modal/Modal.css';
+import Notification from "../../Components/Notification/Notification";
 import Errors from "../../Enums/Errors";
 
 const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void, token: string | null}) => {

@@ -1,4 +1,4 @@
-import Modal from "../../Components/Modal";
+import Modal from "../../Components/Modal/Modal";
 
 const EmployeeTestData = (props: {active: boolean, setActive: (active: boolean) => void, testData: never[]}) => {
     const testData = props.testData;

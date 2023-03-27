@@ -1,6 +1,6 @@
 import { SyntheticEvent, useState } from "react";
-import Modal from "../../../Components/Modal";
-import Notification from "../../../Components/Notification";
+import Modal from "../../../Components/Modal/Modal";
+import Notification from "../../../Components/Notification/Notification";
 import Errors from "../../../Enums/Errors";
 
 const LogicTest = (props: {active: boolean, applicantId: string, setActive: (active: boolean) => void, token: string | null}) => {
