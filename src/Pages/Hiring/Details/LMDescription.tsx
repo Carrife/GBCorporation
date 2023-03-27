@@ -1,11 +1,10 @@
 import { SyntheticEvent, useState } from "react";
-import Modal from "../../../Components/Modal/Modal";
+import ModalWindow from "../../../Components/Modal/Modal";
 import Notification from "../../../Components/Notification/Notification";
 import Errors from "../../../Enums/Errors";
 
 const LMDescription = (props: {active: boolean, hiringId: string, setActive: (active: boolean) => void, descriptionLM: string, token: string | null}) => {
     const [description, setDescription] = useState('');
-    const [activeNotif, setActiveNotif] = useState(false);
     const [notification, setNotification] = useState('');
 
     const submit = async (e: SyntheticEvent) => {
@@ -28,8 +27,7 @@ const LMDescription = (props: {active: boolean, hiringId: string, setActive: (ac
                 setNotification(Errors[response.status]);
             }
             
-            setActiveNotif(true);
-        }
+            <Notification title=''>{notification}</Notification>        }
         else
         {
             setDescription('');
@@ -40,7 +38,7 @@ const LMDescription = (props: {active: boolean, hiringId: string, setActive: (ac
     
     return (
         <>
-        <Modal active={props.active} setActive={props.setActive} type=''>
+        <ModalWindow title='' isActive={props.active}>
             <form onSubmit={submit}>
                 <table>
                     <tbody>
@@ -55,8 +53,7 @@ const LMDescription = (props: {active: boolean, hiringId: string, setActive: (ac
                 </table>
                 <br/><button className="modal_button" type="submit">Save</button>
             </form>
-        </Modal>
-        <Notification active={activeNotif} setActive={setActiveNotif}>{notification}</Notification>
+        </ModalWindow>
         </>
     )
 }

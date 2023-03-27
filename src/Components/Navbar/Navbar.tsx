@@ -1,15 +1,15 @@
 import'../../App.css';
-import './Nav.css'
+import './Navbar.css'
 import { Typography, Layout, Space } from 'antd';
 const { Title, Text } = Typography;
 const { Header } = Layout;
  
-const Nav = (props: {name: string, role: string}) => {
+const Navbar = (props: {name: string, role: string}) => {
     return (
         <Layout>
             <Header className='navbar'>
                 <Space.Compact direction="horizontal" className='nav-space-horizontal' >
-                    <Title level={4} italic className='navbar-title' style={{ marginTop: 5, color: 'lightgrey'}}>GB Corporation</Title>
+                    <Title level={4} italic style={{ marginTop: 5, color: 'lightgrey', minWidth: 200}}>GB Corporation</Title>
                         <Space.Compact direction="vertical" className='navbar-space-vertical'>
                             <Text style={{ color: 'lightgrey'}}>      
                                 {props.name ? props.name : ""}
@@ -23,4 +23,4 @@ const Nav = (props: {name: string, role: string}) => {
     );
 }
 
-export default Nav;
+export default Navbar;

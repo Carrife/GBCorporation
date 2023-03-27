@@ -1,6 +1,6 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import Modal from "../../Components/Modal/Modal";
+import ModalWindow from "../../Components/Modal/Modal";
 import'../../Components/Modal/Modal.css';
 import Notification from "../../Components/Notification/Notification";
 import Errors from "../../Enums/Errors";
@@ -19,7 +19,6 @@ const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void
     const [foreignLanguageTestId, setForeignLanguageTestId] = useState(0);
     const [foreignLanguageTests, setForeignLanguageTests] = useState([]);
     const [date, setDate] = useState('');
-    const [activeNotif, setActiveNotif] = useState(false);
     const [notification, setNotification] = useState('');
 
     useEffect(() => {(
@@ -112,8 +111,7 @@ const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void
                 setNotification(Errors[response.status]);
             }
             
-            setActiveNotif(true);
-        }
+            <Notification title=''>{notification}</Notification>        }
         else
         {
             props.setActive(false);
@@ -123,7 +121,7 @@ const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void
     
     return (
         <>
-        <Modal active={props.active} setActive={props.setActive} type=''>
+        <ModalWindow title='' isActive={props.active}>
             <form onSubmit={submit}>
                 <table>
                     <td className="modal_table_td">
@@ -196,8 +194,7 @@ const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void
                 </table>
                 <br/><button className="modal_button" type="submit">Create</button>
             </form>
-        </Modal>
-        <Notification active={activeNotif} setActive={setActiveNotif}>{notification}</Notification>
+        </ModalWindow>
         </>
     )
 }

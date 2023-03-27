@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Modal from "../../Components/Modal/Modal";
+import ModalWindow from "../../Components/Modal/Modal";
 import * as AiIcons from 'react-icons/ai';
 import LogicTest from './TestDatas/LogicTest';
 import ForeignLanguageTest from './TestDatas/ForeignLanguageTest';
@@ -30,7 +30,7 @@ const ApplicantTestData = (props: {active: boolean, applicantId: string, setActi
 
     return (
         <>
-        <Modal active={props.active} setActive={props.setActive} type=''>
+        <ModalWindow title='' isActive={props.active}>
             <label className="modal_label_decoration">Logic</label>
             <button className='modal_button_add' onClick={() => addLogicTest()}><AiIcons.AiOutlinePlusCircle/></button>
             <table>
@@ -107,7 +107,7 @@ const ApplicantTestData = (props: {active: boolean, applicantId: string, setActi
                     ))}
                 </tbody>
             </table>
-        </Modal>
+        </ModalWindow>
         <LogicTest active={modalAddLogicActive} applicantId={id} setActive={setModalAddLogicActive} token={props.token}/>
         <ForeignLanguageTest active={modalAddForeignLangActive} applicantId={id} setActive={setModalAddForeignLangActive} token={props.token}/>
         <ProgrammingTest active={modalAddProgrammingActive} applicantId={id} setActive={setModalAddProgrammingActive} token={props.token}/>

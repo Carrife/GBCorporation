@@ -6,6 +6,8 @@ import ApplicantEdit from './ApplicantEdit';
 import ApplicantTestData from './ApplicantTestData';
 import * as AiIcons from 'react-icons/ai';
 import Sidebar from '../../Components/Sidebar/Sidebar';
+import { Layout, theme } from 'antd';
+
 
 const Applicants = (props: {role: string, token: string}) => {
     const [applicants, setApplicants] = useState([]);
@@ -13,7 +15,7 @@ const Applicants = (props: {role: string, token: string}) => {
     const [modalEditActive, setModalEditActive] = useState(false);
     const [modalTestDataActive, setModalTestDataActive] = useState(false);
     const [testData, setTestData] = useState({foreignLanguageTests:[], logicTests: [], programmingTests: []});
-
+    const { Content } = Layout;
     const [id, setId] = useState('');
     const [nameRu, setNameRu] = useState('');
     const [surnameRu, setSurnameRu] = useState('');
@@ -21,6 +23,9 @@ const Applicants = (props: {role: string, token: string}) => {
     const [nameEn, setNameEn] = useState('');
     const [surnameEn, setSurnameEn] = useState('');
     const [phone, setPhone] = useState('');
+    const {
+        token: { colorBgContainer },
+      } = theme.useToken();
 
     useEffect(() => {(
         load => {
@@ -68,50 +73,51 @@ const Applicants = (props: {role: string, token: string}) => {
     };
 
     return (
-        <>
+        <Layout>
             <Sidebar role={props.role}/>
-            <div className='pages'>
-                <button className='button_link' onClick={() => setModalAddActive(true)}>Create New</button>
-                <table className='pages-table'>
-                    <thead>
-                        <tr>
-                            <th>
-                                Name Ru
-                            </th>
-                            <th>
-                                Name En
-                            </th>
-                            <th>
-                                Login
-                            </th>
-                            <th>
-                                Phone
-                            </th>
-                            <th>
-                                Status
-                            </th>
-                        </tr> 
-                    </thead>
-                    <tbody>
-                        {applicants.map(({id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, phone, login, status}, index) => (
-                            <tr key={index}>
-                                <td>{surnameRu} {nameRu} {patronymicRu}</td>
-                                <td>{nameEn} {surnameEn}</td>
-                                <td>{login}</td>
-                                <td>{phone}</td>
-                                <td>{status['name']}</td>
-                                <td><button className='button_table' onClick={() => applicantEdit(id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, phone)}><AiIcons.AiOutlineEdit/></button></td>
-                                <td><button className='button_table' onClick={(e) => applicantTestData(id, e)}><AiIcons.AiOutlineUnorderedList/></button></td>
-                            </tr>
-                        )
-                        )}
-                    </tbody>
-                </table>
-                <ApplicantAdd active={modalAddActive} setActive={setModalAddActive} token={props.token}/>
-                <ApplicantTestData active={modalTestDataActive} applicantId={id} setActive={setModalTestDataActive} testData={testData} token={props.token}/>
-                <ApplicantEdit active={modalEditActive} setActive={setModalEditActive} id={id} nameRu={nameRu} surnameRu={surnameRu} patronymicRu={patronymicRu} nameEn={nameEn} surnameEn={surnameEn} phone={phone} token={props.token}/>
-            </div>
-        </>
+            <Layout className='page-layout'>
+                <Content>
+                    <button className='button_link' onClick={() => setModalAddActive(true)}>Create New</button>
+                    <table className='pages-table'>
+                        <thead>
+                            <tr>
+                                <th>
+                                    Name Ru
+                                </th>
+                                <th>
+                                    Name En
+                                </th>
+                                <th>
+                                    Login
+                                </th>
+                                <th>
+                                    Phone
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                            </tr> 
+                        </thead>
+                        <tbody>
+                            {applicants.map(({id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, phone, login, status}, index) => (
+                                <tr key={index}>
+                                    <td>{surnameRu} {nameRu} {patronymicRu}</td>
+                                    <td>{nameEn} {surnameEn}</td>
+                                    <td>{login}</td>
+                                    <td>{phone}</td>
+                                    <td>{status['name']}</td>
+                                    <td><button className='button_table' onClick={() => applicantEdit(id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, phone)}><AiIcons.AiOutlineEdit/></button></td>
+                                    <td><button className='button_table' onClick={(e) => applicantTestData(id, e)}><AiIcons.AiOutlineUnorderedList/></button></td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <ApplicantAdd active={modalAddActive} setActive={setModalAddActive} token={props.token}/>
+                    <ApplicantTestData active={modalTestDataActive} applicantId={id} setActive={setModalTestDataActive} testData={testData} token={props.token}/>
+                    <ApplicantEdit active={modalEditActive} setActive={setModalEditActive} id={id} nameRu={nameRu} surnameRu={surnameRu} patronymicRu={patronymicRu} nameEn={nameEn} surnameEn={surnameEn} phone={phone} token={props.token}/>
+                </Content>
+            </Layout>
+        </Layout>
     );
 };
 

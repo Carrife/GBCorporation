@@ -1,5 +1,5 @@
 import { SyntheticEvent, useEffect, useState } from "react";
-import Modal from "../../../Components/Modal/Modal";
+import ModalWindow from "../../../Components/Modal/Modal";
 import Notification from "../../../Components/Notification/Notification";
 import Errors from "../../../Enums/Errors";
 
@@ -9,7 +9,6 @@ const ProgrammingTest = (props: {active: boolean, applicantId: string, setActive
     const [date, setDate] = useState('');
     const [languageId, setLanguageId] = useState(0);
     const [languages, setLanguages] = useState([]);
-    const [activeNotif, setActiveNotif] = useState(false);
     const [notification, setNotification] = useState('');
 
     useEffect(() => {
@@ -48,7 +47,7 @@ const ProgrammingTest = (props: {active: boolean, applicantId: string, setActive
                 setNotification(Errors[response.status]);
             }
             
-            setActiveNotif(true);
+            <Notification title=''>{notification}</Notification>        
         }
         else
         {
@@ -61,7 +60,7 @@ const ProgrammingTest = (props: {active: boolean, applicantId: string, setActive
     
     return (
         <>
-            <Modal active={props.active} setActive={props.setActive} type=''>
+            <ModalWindow title='' isActive={props.active}>
                 <form onSubmit={submit}>
                     <table>
                         <td className="modal_table_td">
@@ -94,8 +93,7 @@ const ProgrammingTest = (props: {active: boolean, applicantId: string, setActive
                     </table>
                     <br/><button className="modal_button" type="submit">Create</button>
                 </form>
-            </Modal>
-            <Notification active={activeNotif} setActive={setActiveNotif}>{notification}</Notification>
+            </ModalWindow>
         </>
 
     )

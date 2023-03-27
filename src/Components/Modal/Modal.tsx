@@ -1,13 +1,20 @@
 import'./Modal.css';
+import { Modal } from 'antd';
+import { useState } from 'react';
 
-const Modal = (props: {active: boolean, setActive: (active: boolean) => void, children: any, type: string}) => {
+const ModalWindow = (props: {title: string, isActive: boolean, children: any}) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    if(props.isActive)
+    {
+        setIsModalOpen(true);
+    }
+
     return (
-        <div className={props.active ? (props.type === 'test' ? "modal testactive" : "modal active"): "modal"} onClick={() => props.setActive(false)}>
-            <div className="modal_content" onClick={e => e.stopPropagation()}>
-                {props.children}
-            </div>
-        </div>
+        <Modal title={props.title} open={isModalOpen}>
+            {props.children}
+        </Modal>
     );
-}
+};
 
-export default Modal;
+export default ModalWindow;

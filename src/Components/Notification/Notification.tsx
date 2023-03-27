@@ -1,20 +1,21 @@
-import'./Notification.css';
-import * as AiIcons from 'react-icons/ai';
+import { notification } from 'antd';
+import React from 'react';
+import { AiOutlineNotification } from 'react-icons/ai';
 
-const Notification = (props: {active: boolean, setActive: (active: boolean) => void, children: any}) => {
+const Notification = (props: {title: '', children: any}) => {
+    const [api, contextHolder] = notification.useNotification();
+    const Context = React.createContext({ name: 'Default' });
     
-    const close = async () => {
-        props.setActive(false);
-    };
-
+    api.error({
+        message: props.title,
+        description: <Context.Consumer>{props.children}</Context.Consumer>
+    })
+            
     return (
-        <div className={props.active ? "notification active" : "notification"}>
-            <div className="notification_content">
-                <button className='notification_button' onClick={() => close()}><AiIcons.AiOutlineClose/></button>
-                <h6><AiIcons.AiOutlineExclamationCircle/> Error</h6>
-                {props.children}
-            </div>
-        </div>
+        <Context.Provider value={AiOutlineNotification}>
+            {contextHolder}  
+        </Context.Provider>
+              
     );
 }
 

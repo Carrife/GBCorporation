@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import Nav from './Components/Navbar/Nav';
+import Navbar from './Components/Navbar/Navbar';
 import Login from './Pages/Login';
 import Employee from './Pages/Employees/Employees';
 import Template from './Pages/Templates/Template';
@@ -44,7 +44,7 @@ function App() {
     return (
       <div className="App">
           <BrowserRouter>
-              <Nav name={name} role={role}/>
+              <Navbar name={name} role={role}/>
                 <main>
                     <Routes>
                         <Route path="/" element={<Login setName={setName} />} />

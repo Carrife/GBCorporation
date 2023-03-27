@@ -1,5 +1,5 @@
 import { SyntheticEvent, useEffect, useState } from "react";
-import Modal from "../../Components/Modal/Modal";
+import ModalWindow from "../../Components/Modal/Modal";
 
 const EmployeeEdit = (props: {active: boolean, setActive: (active: boolean) => void, id: string, nameRu: string, surnameRu: string, patronymicRu: string, nameEn: string, surnameEn: string, phone: string, workPhone: string, departmentId: string, languageId: string, token: string | null}) => {
     const id = props.id;
@@ -76,7 +76,7 @@ const EmployeeEdit = (props: {active: boolean, setActive: (active: boolean) => v
     }
     
     return (
-        <Modal active={props.active} setActive={props.setActive} type=''>
+        <ModalWindow title='' isActive={props.active}>
             <form onSubmit={submit}>
                 <table>
                     <td className="modal_table_td">
@@ -157,7 +157,7 @@ const EmployeeEdit = (props: {active: boolean, setActive: (active: boolean) => v
 
                 <br/><button className="modal_button" type="submit">Save</button>
             </form>
-        </Modal>
+        </ModalWindow>
     )
 }
 

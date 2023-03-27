@@ -1,10 +1,10 @@
-import Modal from "../../Components/Modal/Modal";
+import ModalWindow from "../../Components/Modal/Modal";
 
 const EmployeeTestData = (props: {active: boolean, setActive: (active: boolean) => void, testData: never[]}) => {
     const testData = props.testData;
     
     return (
-        <Modal active={props.active} setActive={props.setActive} type=''>
+        <ModalWindow title='' isActive={props.active}>
             <table>
                 <thead>
                     <tr className="modal_table_td">
@@ -29,7 +29,7 @@ const EmployeeTestData = (props: {active: boolean, setActive: (active: boolean) 
                     )): ''}
                 </tbody>
             </table>
-        </Modal>
+        </ModalWindow>
     )
 }
 

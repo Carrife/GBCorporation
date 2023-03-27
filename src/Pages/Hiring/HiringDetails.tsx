@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Modal from "../../Components/Modal/Modal";
+import ModalWindow from "../../Components/Modal/Modal";
 import * as AiIcons from 'react-icons/ai';
 import LMDescription from './Details/LMDescription';
 import TLDescription from './Details/TLDescription';
@@ -9,7 +9,6 @@ import Errors from "../../Enums/Errors";
 const HiringDetails = (props: {active: boolean, hiringId: string, setActive: (active: boolean) => void, hitingData: never[], role: string, token: string | null}) => {
     const [modalAddLMDescriptionActive, setModalAddLMDescriptionActive] = useState(false);
     const [modalAddTLDescriptionActive, setModalAddTLDescriptionActive] = useState(false);
-    const [activeNotif, setActiveNotif] = useState(false);
     const [notification, setNotification] = useState('');
     const [description, setDescription] = useState('');
     
@@ -45,8 +44,7 @@ const HiringDetails = (props: {active: boolean, hiringId: string, setActive: (ac
                 setNotification(Errors[response.status]);
             }
             
-            setActiveNotif(true);
-        }
+            <Notification title=''>{notification}</Notification>        }
         else
         {
             props.setActive(false);
@@ -72,8 +70,7 @@ const HiringDetails = (props: {active: boolean, hiringId: string, setActive: (ac
                 setNotification(Errors[response.status]);
             }
             
-            setActiveNotif(true);
-        }
+            <Notification title=''>{notification}</Notification>        }
         else
         {
             props.setActive(false);
@@ -86,7 +83,7 @@ const HiringDetails = (props: {active: boolean, hiringId: string, setActive: (ac
 
     return (
         <>
-        <Modal active={props.active} setActive={props.setActive} type=''>
+        <ModalWindow title='' isActive={props.active}>
             {hitingData.map(item => (
                 <table>
                     <tbody>
@@ -153,10 +150,9 @@ const HiringDetails = (props: {active: boolean, hiringId: string, setActive: (ac
                     </tbody>
                 </table>
             ))}            
-        </Modal>
+        </ModalWindow>
         <LMDescription active={modalAddLMDescriptionActive} hiringId={props.hiringId} setActive={setModalAddLMDescriptionActive} descriptionLM={description} token={props.token}/>
         <TLDescription active={modalAddTLDescriptionActive} hiringId={props.hiringId} setActive={setModalAddTLDescriptionActive} descriptionTL={description} token={props.token}/>
-        <Notification active={activeNotif} setActive={setActiveNotif}>{notification}</Notification>
         </>
     )
 }

@@ -1,5 +1,5 @@
 import { SyntheticEvent, useState } from "react";
-import Modal from "../../Components/Modal/Modal";
+import ModalWindow from "../../Components/Modal/Modal";
 import'../../Components/Modal/Modal.css';
 
 const TemplateAdd = (props: {active: boolean, setActive: (active: boolean) => void, token: string | null}) => {
@@ -27,7 +27,7 @@ const TemplateAdd = (props: {active: boolean, setActive: (active: boolean) => vo
     }
     
     return (
-        <Modal active={props.active} setActive={props.setActive} type=''>
+        <ModalWindow title='' isActive={props.active}>
             <form onSubmit={submit}>
                 <table>
                     <td className="modal_table_td">
@@ -43,7 +43,7 @@ const TemplateAdd = (props: {active: boolean, setActive: (active: boolean) => vo
 
                 <br/><button className="modal_button" type="submit">Create</button>
             </form>
-        </Modal>
+        </ModalWindow>
     )
 }
 
