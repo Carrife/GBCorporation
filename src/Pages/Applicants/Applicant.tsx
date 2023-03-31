@@ -1,120 +1,117 @@
-import { useState, useEffect, SyntheticEvent } from 'react';
+import { useState, useEffect } from 'react';
 import'../../App.css';
-import { Navigate } from 'react-router-dom';
 import ApplicantAdd from './ApplicantAdd';
 import ApplicantEdit from './ApplicantEdit';
 import ApplicantTestData from './ApplicantTestData';
 import * as AiIcons from 'react-icons/ai';
 import Sidebar from '../../Components/Sidebar/Sidebar';
-import { Layout, theme } from 'antd';
-
+import { Layout, Table, Space, Button} from 'antd';
+import type { ColumnsType, TableProps } from 'antd/es/table';
+import { GetAllApplicant, GetApplicantTestData, Applicant, GetApplicantById, TestData } from '../../Actions/ApplicantActions';
 
 const Applicants = (props: {role: string, token: string}) => {
-    const [applicants, setApplicants] = useState([]);
+    const [applicants, setApplicants] = useState<Applicant[]>([]);
+    const [applicant, setApplicant] = useState<Applicant>();
+    const [applicantId, setApplicantId] = useState('');
     const [modalAddActive, setModalAddActive] = useState(false);
     const [modalEditActive, setModalEditActive] = useState(false);
     const [modalTestDataActive, setModalTestDataActive] = useState(false);
-    const [testData, setTestData] = useState({foreignLanguageTests:[], logicTests: [], programmingTests: []});
+    const [testData, setTestData] = useState<TestData>();
     const { Content } = Layout;
-    const [id, setId] = useState('');
-    const [nameRu, setNameRu] = useState('');
-    const [surnameRu, setSurnameRu] = useState('');
-    const [patronymicRu, setPatronymicRu] = useState('');
-    const [nameEn, setNameEn] = useState('');
-    const [surnameEn, setSurnameEn] = useState('');
-    const [phone, setPhone] = useState('');
-    const {
-        token: { colorBgContainer },
-      } = theme.useToken();
+    
+    interface DataType {
+        key: React.Key;
+        nameRu: string;
+        nameEn: string;
+        login: string;
+        phone: string;
+        status: string;
+    }
+
+    const columns: ColumnsType<DataType> = [
+        {
+            title: 'Name (Ru)',
+            dataIndex: 'nameRu',
+            key: 'nameRu',
+            sorter: {
+                compare: (a, b) => (a.nameRu.toLowerCase() < b.nameRu.toLowerCase()) ? 1 : -1,
+            },
+        },
+        {
+            title: 'Name (En)',
+            dataIndex: 'nameEn',
+            key: 'nameEn',
+            sorter: {
+                compare: (a, b) => (a.nameRu.toLowerCase() < b.nameRu.toLowerCase()) ? 1 : -1,
+            },
+        },
+        {
+            title: 'Login',
+            dataIndex: 'login',
+            key: 'login',
+            sorter: {
+                compare: (a, b) => (a.nameRu.toLowerCase() < b.nameRu.toLowerCase()) ? 1 : -1,
+            },
+        },
+        {
+            title: 'Phone',
+            dataIndex: 'phone',
+            key: 'phone',
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+        },
+        {
+            title: '',
+            key: 'action',
+            render: (_, record) => (
+                <Space size="middle">
+                    <Button type='text' onClick={() => applicantEdit(record.key.toString())}><AiIcons.AiOutlineEdit/></Button>                
+                    <Button type='text' onClick={(e) => applicantTestData(record.key.toString())}><AiIcons.AiOutlineUnorderedList/></Button>            
+                </Space>
+            )
+        },
+    ];
 
     useEffect(() => {(
         load => {
-            if(props.token === '')
+            if(window.localStorage.getItem('token') === 'undefined')
             {
-                return <Navigate to="/"/>
+                window.location.href = "/"
             }
-                
-            fetch("http://localhost:8000/api/Applicant/GetAll", {
-                method: 'GET',
-                headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token },
-            })
-                .then(response => response.json())
-                .then(data => setApplicants(data));
+            else
+            {
+                GetAllApplicant(props.token).then(result => setApplicants(result));
+            }
         })();        
     }, [props.token]);
+    
+    const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
+        console.log('params', pagination, filters, sorter, extra);
+    };
 
-    const applicantEdit = async (id: string, nameRu: string, surnameRu: string, patronymicRu: string, nameEn: string, surnameEn: string, 
-            phone: string) => {
-        
-        setId(id);
-        setNameRu(nameRu);
-        setSurnameRu(surnameRu);
-        setPatronymicRu(patronymicRu);
-        setNameEn(nameEn);
-        setSurnameEn(surnameEn);
-        setPhone(phone);
-        
+    const applicantEdit = async (id: string) => {
+        GetApplicantById(props.token, id).then(result => setApplicant(result));
         setModalEditActive(true);
     };
 
-    const applicantTestData = async (id: string, e: SyntheticEvent) => {
-        e.preventDefault();
-        
-        await fetch("http://localhost:8000/api/Applicant/GetTestDatas", {
-            method: 'GET',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id},
-            credentials: 'include'
-        })
-            .then(response => response.json())
-            .then(data => setTestData(data))
-        
-        setId(id);
+    const applicantTestData = async (id: string) => {
+        GetApplicantTestData(props.token, id).then(result => {setTestData(result); setApplicantId(id)});        
         setModalTestDataActive(true);
     };
 
     return (
-        <Layout>
+        <Layout className='layout'>
             <Sidebar role={props.role}/>
             <Layout className='page-layout'>
                 <Content>
-                    <button className='button_link' onClick={() => setModalAddActive(true)}>Create New</button>
-                    <table className='pages-table'>
-                        <thead>
-                            <tr>
-                                <th>
-                                    Name Ru
-                                </th>
-                                <th>
-                                    Name En
-                                </th>
-                                <th>
-                                    Login
-                                </th>
-                                <th>
-                                    Phone
-                                </th>
-                                <th>
-                                    Status
-                                </th>
-                            </tr> 
-                        </thead>
-                        <tbody>
-                            {applicants.map(({id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, phone, login, status}, index) => (
-                                <tr key={index}>
-                                    <td>{surnameRu} {nameRu} {patronymicRu}</td>
-                                    <td>{nameEn} {surnameEn}</td>
-                                    <td>{login}</td>
-                                    <td>{phone}</td>
-                                    <td>{status['name']}</td>
-                                    <td><button className='button_table' onClick={() => applicantEdit(id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, phone)}><AiIcons.AiOutlineEdit/></button></td>
-                                    <td><button className='button_table' onClick={(e) => applicantTestData(id, e)}><AiIcons.AiOutlineUnorderedList/></button></td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <Button type="link" onClick={() => setModalAddActive(true)}>Create New</Button>
+                    <Table columns={columns} dataSource={applicants} onChange={onChange} />
                     <ApplicantAdd active={modalAddActive} setActive={setModalAddActive} token={props.token}/>
-                    <ApplicantTestData active={modalTestDataActive} applicantId={id} setActive={setModalTestDataActive} testData={testData} token={props.token}/>
-                    <ApplicantEdit active={modalEditActive} setActive={setModalEditActive} id={id} nameRu={nameRu} surnameRu={surnameRu} patronymicRu={patronymicRu} nameEn={nameEn} surnameEn={surnameEn} phone={phone} token={props.token}/>
+                    <ApplicantTestData active={modalTestDataActive} applicantId={applicantId} setActive={setModalTestDataActive} testData={testData} token={props.token}/>
+                    <ApplicantEdit active={modalEditActive} setActive={setModalEditActive} applicant={applicant} token={props.token}/>
                 </Content>
             </Layout>
         </Layout>

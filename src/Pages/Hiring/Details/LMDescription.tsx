@@ -1,7 +1,6 @@
 import { SyntheticEvent, useState } from "react";
 import ModalWindow from "../../../Components/Modal/Modal";
-import Notification from "../../../Components/Notification/Notification";
-import Errors from "../../../Enums/Errors";
+import {Errors} from "../../../Enums/Errors";
 
 const LMDescription = (props: {active: boolean, hiringId: string, setActive: (active: boolean) => void, descriptionLM: string, token: string | null}) => {
     const [description, setDescription] = useState('');
@@ -27,7 +26,8 @@ const LMDescription = (props: {active: boolean, hiringId: string, setActive: (ac
                 setNotification(Errors[response.status]);
             }
             
-            <Notification title=''>{notification}</Notification>        }
+            //<Notification>{notification}</Notification>        
+        }
         else
         {
             setDescription('');
@@ -38,7 +38,7 @@ const LMDescription = (props: {active: boolean, hiringId: string, setActive: (ac
     
     return (
         <>
-        <ModalWindow title='' isActive={props.active}>
+        <ModalWindow title='' isActive={props.active} setActive={props.setActive}>
             <form onSubmit={submit}>
                 <table>
                     <tbody>

@@ -3,8 +3,7 @@ import ModalWindow from "../../Components/Modal/Modal";
 import * as AiIcons from 'react-icons/ai';
 import LMDescription from './Details/LMDescription';
 import TLDescription from './Details/TLDescription';
-import Notification from "../../Components/Notification/Notification";
-import Errors from "../../Enums/Errors";
+import {Errors} from "../../Enums/Errors";
 
 const HiringDetails = (props: {active: boolean, hiringId: string, setActive: (active: boolean) => void, hitingData: never[], role: string, token: string | null}) => {
     const [modalAddLMDescriptionActive, setModalAddLMDescriptionActive] = useState(false);
@@ -44,7 +43,8 @@ const HiringDetails = (props: {active: boolean, hiringId: string, setActive: (ac
                 setNotification(Errors[response.status]);
             }
             
-            <Notification title=''>{notification}</Notification>        }
+            /*<Notification>{notification}</Notification> */
+        }
         else
         {
             props.setActive(false);
@@ -70,7 +70,8 @@ const HiringDetails = (props: {active: boolean, hiringId: string, setActive: (ac
                 setNotification(Errors[response.status]);
             }
             
-            <Notification title=''>{notification}</Notification>        }
+            /*<Notification>{notification}</Notification> */
+        }
         else
         {
             props.setActive(false);
@@ -83,7 +84,7 @@ const HiringDetails = (props: {active: boolean, hiringId: string, setActive: (ac
 
     return (
         <>
-        <ModalWindow title='' isActive={props.active}>
+        <ModalWindow title='' isActive={props.active} setActive={props.setActive}>
             {hitingData.map(item => (
                 <table>
                     <tbody>

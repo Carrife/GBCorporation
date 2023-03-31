@@ -8,7 +8,7 @@ import Test from './Pages/Tests/Test';
 import Setting from './Pages/Setting';
 import Applicant from './Pages/Applicants/Applicant'
 import Hiring from './Pages/Hiring/Hiring'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Logout from './Pages/Logout';
 
 function App() {
@@ -24,23 +24,18 @@ function App() {
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',
                 });
-
+                
                 const content = await response.json();
-
+                
                 setName(content.name);
                 setRole(content.role);
                 setUserId(content.id);
                 window.localStorage.setItem('token', content.token);
                 setToken(content.token);
-                
-                if(!response.ok)
-                {
-                    <Navigate to="/login"/>
-                }
             }
         )();
     }, []);
-
+    
     return (
       <div className="App">
           <BrowserRouter>

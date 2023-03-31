@@ -1,6 +1,5 @@
 import { ChangeEvent} from "react";
 import ModalWindow from "../../Components/Modal/Modal";
-import'../../Components/Modal/Modal.css';
 
 const TemplateUpload = (props: {active: boolean, setActive: (active: boolean) => void, id:string, token: string | null}) => {
     const id = props.id;
@@ -23,7 +22,7 @@ const TemplateUpload = (props: {active: boolean, setActive: (active: boolean) =>
     };
     
     return (
-        <ModalWindow title='' isActive={props.active}>
+        <ModalWindow title='' isActive={props.active} setActive={props.setActive}>
                 <label className="modal_label">File</label>
                 <br/>     
                 <input type="file" name="file" onChange={(e) => templateUpload(e)}/>  

@@ -4,7 +4,7 @@ const EmployeeTestData = (props: {active: boolean, setActive: (active: boolean) 
     const testData = props.testData;
     
     return (
-        <ModalWindow title='' isActive={props.active}>
+        <ModalWindow title='' isActive={props.active} setActive={props.setActive}>
             <table>
                 <thead>
                     <tr className="modal_table_td">

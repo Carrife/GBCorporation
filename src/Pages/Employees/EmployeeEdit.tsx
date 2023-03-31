@@ -76,7 +76,7 @@ const EmployeeEdit = (props: {active: boolean, setActive: (active: boolean) => v
     }
     
     return (
-        <ModalWindow title='' isActive={props.active}>
+        <ModalWindow title='' isActive={props.active} setActive={props.setActive}>
             <form onSubmit={submit}>
                 <table>
                     <td className="modal_table_td">

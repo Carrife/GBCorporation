@@ -16,18 +16,22 @@ const Hiring = (props: {role: string, userId: string, token: string}) => {
 
     useEffect(() => {(
         load => {
-            if(props.token === '')
+            if(window.localStorage.getItem('token') === 'undefined')
             {
-                return <Navigate to="/"/>
+                window.location.href = "/"
             }
-
-            fetch("http://localhost:8000/api/Hiring/GetAll", {
+            else
+            {
+                 fetch("http://localhost:8000/api/Hiring/GetAll", {
                 method: 'GET',
                 headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token,'Content-Type': 'application/json', userId: props.userId, role: props.role},
                 credentials: 'include'
             })
                 .then(response => response.json())
                 .then(data => setHirings(data));
+            }
+
+           
             
         })();        
     }, [props.token, props.userId, props.role]);

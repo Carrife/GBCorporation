@@ -32,20 +32,23 @@ const Employees = (props: {role: string, token:string}) => {
             if(window.localStorage.getItem('login') === 'true')
             {
                 window.localStorage.setItem('login', 'false');
-                window.location.reload();
             }
 
-            if(props.token === '')
+            if(window.localStorage.getItem('token') === 'undefined')
             {
-                return <Navigate to="/"/>
+                window.location.href = "/"
             }
-                
-            fetch("http://localhost:8000/api/Employee/GetAll", {
+            else
+            {
+                 fetch("http://localhost:8000/api/Employee/GetAll", {
                 method: 'GET',
                 headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token },
             })
                 .then(response => response.json())
                 .then(data => setEmployees(data));
+            }
+                
+           
         })();
     }, [props.token]);
 

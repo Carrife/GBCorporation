@@ -1,9 +1,20 @@
 .page-layout {
-    margin-right: 0;
+    margin-top: 5rem;
     margin-left: 15rem;
-    padding-left: 5rem;
     background-color: #ffffff;
-    height: 100vh;
+    min-height: 40vh;
+    padding-left: 5rem;
+    height: 80vh;
+    min-width: 20vw;
+    width: 70vw;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.layout {
+    background-color: #ffffff;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .form-signin {
@@ -55,14 +66,6 @@
 
 .button:hover {
     color: rgb(70, 149, 213);
-}
-
-.button_link {
-    color: rgb(70, 149, 213);
-    background-color: #ffffff;
-    border: none;
-    margin-left: -5px;
-    margin-top: 5rem;
 }
 
 .button_table {

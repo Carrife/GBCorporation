@@ -1,6 +1,5 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
-import'../../Components/Modal/Modal.css';
 
 const TestStart = (props: {active: boolean, setActive: (active: boolean) => void, testData: {question:string, answers: never[]}[], testName: string, username: string, token: string | null}) => {
     const testData = props.testData;
@@ -78,7 +77,7 @@ const TestStart = (props: {active: boolean, setActive: (active: boolean) => void
     }
     
     return (
-        <ModalWindow title='' isActive={props.active}>
+        <ModalWindow title='' isActive={props.active} setActive={props.setActive}>
             {isNotConfirmed ?
             <form onSubmit={submit}>
                 <table className="modal_table_tests">

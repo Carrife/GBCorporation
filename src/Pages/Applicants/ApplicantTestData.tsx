@@ -4,14 +4,16 @@ import * as AiIcons from 'react-icons/ai';
 import LogicTest from './TestDatas/LogicTest';
 import ForeignLanguageTest from './TestDatas/ForeignLanguageTest';
 import ProgrammingTest from './TestDatas/ProgrammingTest';
+import { TestData } from "../../Actions/ApplicantActions";
+import { Button, Card, Space, Typography  } from "antd";
+import ModalTitles from "../../Enums/ModalTitles";
 
-const ApplicantTestData = (props: {active: boolean, applicantId: string, setActive: (active: boolean) => void, testData: {foreignLanguageTests:never[], logicTests: never[], programmingTests: never[]}, token: string | null}) => {
+const { Text} = Typography;
+
+const ApplicantTestData = (props: {active: boolean, applicantId: string, setActive: (active: boolean) => void, testData: TestData | undefined, token: string | null}) => {
     const [modalAddLogicActive, setModalAddLogicActive] = useState(false);
     const [modalAddProgrammingActive, setModalAddProgrammingActive] = useState(false);
     const [modalAddForeignLangActive, setModalAddForeignLangActive] = useState(false);
-    
-    const testData = props.testData;
-    const id = props.applicantId;
 
     const addLogicTest = async () => {
         setModalAddLogicActive(true);
@@ -30,87 +32,73 @@ const ApplicantTestData = (props: {active: boolean, applicantId: string, setActi
 
     return (
         <>
-        <ModalWindow title='' isActive={props.active}>
-            <label className="modal_label_decoration">Logic</label>
-            <button className='modal_button_add' onClick={() => addLogicTest()}><AiIcons.AiOutlinePlusCircle/></button>
-            <table>
-                <thead>
-                    <tr>
-                        <th className="modal_data">
-                            Result
-                        </th>
-                        <th className="modal_data">
-                            Date
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {testData.logicTests.map(item => ( 
-                        <tr>
-                            <td className="modal_label">{item['result']}%</td>
-                            <td className="modal_label">{JSON.stringify(item['date']).split("T")[0].split('"')[1]}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <br/>
-            <label className="modal_label_decoration">Programming</label>
-            <button className='modal_button_add' onClick={() => addProgrammingTest()}><AiIcons.AiOutlinePlusCircle/></button>
-            <table>
-                <thead>
-                    <tr className="modal_table_td">
-                        <th className="modal_data">
-                            Language
-                        </th>
-                        <th className="modal_data">
-                            Result
-                        </th>
-                        <th className="modal_data">
-                            Date
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                {testData.programmingTests.map(item => (
-                        <tr className="modal_table_td">
-                            <td className="modal_label">{item['programmingLanguage']}</td>
-                            <td className="modal_label">{item['result']}%</td>
-                            <td className="modal_label">{JSON.stringify(item['date']).split("T")[0].split('"')[1]}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <br/>
-            <label className="modal_label_decoration">Foreign Language</label>
-            <button className='modal_button_add' onClick={() => addForeignLangTest()}><AiIcons.AiOutlinePlusCircle/></button>
-            <table>
-                <thead>
-                    <tr className="modal_table_td">
-                        <th className="modal_data">
-                            Language
-                        </th>
-                        <th className="modal_data">
-                            Result
-                        </th>
-                        <th className="modal_data">
-                            Date
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                {testData.foreignLanguageTests.map(item => (
-                        <tr className="modal_table_td">
-                            <td className="modal_label">{item['foreignLanguage']}</td>
-                            <td className="modal_label">{item['result']}%</td>
-                            <td className="modal_label">{JSON.stringify(item['date']).split("T")[0].split('"')[1]}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </ModalWindow>
-        <LogicTest active={modalAddLogicActive} applicantId={id} setActive={setModalAddLogicActive} token={props.token}/>
-        <ForeignLanguageTest active={modalAddForeignLangActive} applicantId={id} setActive={setModalAddForeignLangActive} token={props.token}/>
-        <ProgrammingTest active={modalAddProgrammingActive} applicantId={id} setActive={setModalAddProgrammingActive} token={props.token}/>
+            <ModalWindow title={ModalTitles.APPLICANT_TESTS} isActive={props.active} setActive={props.setActive}>
+                <Space direction="horizontal" size={70} style={{}}>
+                    <Card title="Logic" size="small" extra={<Button type='text' onClick={() => addLogicTest()}><AiIcons.AiOutlinePlusCircle/></Button>}>
+                        <Space size={20}>
+                            <Space direction="vertical">
+                                <Text>Result</Text>
+                                {props.testData?.logicTests.map(item => ( 
+                                    <Text>{item['result']}%</Text>
+                                ))}
+                            </Space>
+                            <Space direction="vertical">
+                                <Text>Date</Text>
+                                {props.testData?.logicTests.map(item => ( 
+                                    <Text>{item['date']}</Text>
+                                ))}
+                            </Space>
+                        </Space>
+                    </Card>
+                    <Card title="Programming" size="small" extra={<Button type='text' onClick={() => addProgrammingTest()}><AiIcons.AiOutlinePlusCircle/></Button>}>
+                        <Space size={20}>
+                            <Space direction="vertical">
+                                <Text>Language</Text>
+                                {props.testData?.programmingTests.map(item => ( 
+                                    <Text>{item['programmingLanguage']}</Text>
+                                ))}
+                            </Space>
+                            <Space direction="vertical">
+                                <Text>Result</Text>
+                                {props.testData?.programmingTests.map(item => ( 
+                                    <Text>{item['result']}%</Text>
+                                ))}
+                            </Space>
+                            <Space direction="vertical">
+                                <Text>Date</Text>
+                                {props.testData?.programmingTests.map(item => ( 
+                                    <Text>{item['date']}</Text>
+                                ))}
+                            </Space>
+                        </Space>
+                    </Card>
+                    <Card title="Foreign language" size="small" extra={<Button type='text' onClick={() => addForeignLangTest()}><AiIcons.AiOutlinePlusCircle/></Button>}>
+                        <Space size={20}>
+                            <Space direction="vertical">
+                                <Text>Language</Text>
+                                {props.testData?.foreignLanguageTests.map(item => ( 
+                                    <Text>{item['foreignLanguage']}</Text>
+                                ))}
+                            </Space>
+                            <Space direction="vertical">
+                                <Text>Result</Text>
+                                {props.testData?.foreignLanguageTests.map(item => ( 
+                                    <Text>{item['result']}%</Text>
+                                ))}
+                            </Space>
+                            <Space direction="vertical">
+                                <Text>Date</Text>
+                                {props.testData?.foreignLanguageTests.map(item => ( 
+                                    <Text>{item['date']}</Text>
+                                ))}
+                            </Space>
+                        </Space>
+                    </Card>
+                </Space>
+            </ModalWindow>
+            <LogicTest active={modalAddLogicActive} applicantId={props.applicantId} setActive={setModalAddLogicActive} token={props.token}/>
+            <ForeignLanguageTest active={modalAddForeignLangActive} applicantId={props.applicantId} setActive={setModalAddForeignLangActive} token={props.token}/>
+            <ProgrammingTest active={modalAddProgrammingActive} applicantId={props.applicantId} setActive={setModalAddProgrammingActive} token={props.token}/>
         </>
     )
 }

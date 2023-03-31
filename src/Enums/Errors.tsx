@@ -1,7 +1,13 @@
-enum Errors {
+export enum Errors {
     BadRequest = 400,
+    InternalError = 500,
     SameLoginExists = 1,
     HiringExists = 2,
 }
 
-export default Errors;
+export enum ErrorTitles {
+    ERROR = "Error",
+    WARNING = "Warning",
+    SUCCESS = "Success",
+    INFO = "Info", 
+}

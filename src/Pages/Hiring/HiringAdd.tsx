@@ -1,9 +1,6 @@
 import { SyntheticEvent, useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
 import ModalWindow from "../../Components/Modal/Modal";
-import'../../Components/Modal/Modal.css';
-import Notification from "../../Components/Notification/Notification";
-import Errors from "../../Enums/Errors";
+import {Errors} from "../../Enums/Errors";
 
 const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void, token: string | null}) => {
     const [applicantId, setApplicantId] = useState(0);
@@ -23,12 +20,13 @@ const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void
 
     useEffect(() => {(
         load => {
-            if(props.token === '')
+            if(window.localStorage.getItem('token') === 'undefined')
             {
-                return <Navigate to="/"/>
+                window.location.href = "/"
             }
-
-            fetch("http://localhost:8000/api/Applicant/GetActiveShort", {
+            else
+            {
+                fetch("http://localhost:8000/api/Applicant/GetActiveShort", {
                 method: 'GET',
                 headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token },
             })
@@ -48,6 +46,9 @@ const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void
             })
                 .then(response => response.json())
                 .then(data => setLineManagers(data));
+            }
+
+            
         })();        
     }, [props.token]);
 
@@ -111,7 +112,8 @@ const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void
                 setNotification(Errors[response.status]);
             }
             
-            <Notification title=''>{notification}</Notification>        }
+            //<Notification>{notification}</Notification>        
+        }
         else
         {
             props.setActive(false);
@@ -121,7 +123,7 @@ const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void
     
     return (
         <>
-        <ModalWindow title='' isActive={props.active}>
+        <ModalWindow title='' isActive={props.active} setActive={props.setActive}>
             <form onSubmit={submit}>
                 <table>
                     <td className="modal_table_td">

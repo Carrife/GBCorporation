@@ -1,122 +1,116 @@
-import { SyntheticEvent, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
-import Notification from "../../Components/Notification/Notification";
-import Errors from "../../Enums/Errors";
+import ModalTitles from "../../Enums/ModalTitles";
+import { Button, Col, Form, Input, Row, theme } from 'antd';
+import { UpdateApplicant } from "../../Actions/ApplicantActions";
 
-const ApplicantEdit = (props: {active: boolean, setActive: (active: boolean) => void, id: string, nameRu: string, surnameRu: string, patronymicRu: string, nameEn: string, surnameEn: string, phone: string, token: string | null}) => {
-    const id = props.id;
-    const propsNameRu = props.nameRu;
-    const propsSurnameRu = props.surnameRu;
-    const propsPatronymicRu = props.patronymicRu;
-    const propsNameEn = props.nameEn;
-    const propsSurnameEn = props.surnameEn;
-    const propsPhone = props.phone;
+const ApplicantEdit = (props: {active: boolean, setActive: (active: boolean) => void, applicant: any, token: string | null}) => {    
+    const { token } = theme.useToken();
+    const [form] = Form.useForm();
+    const formStyle = {
+        background: '#ffffff',
+        borderRadius: token.borderRadiusLG,
+        padding: 10,
+    };
 
-    const [nameRu, setNameRu] = useState('');
-    const [surnameRu, setSurnameRu] = useState('');
-    const [patronymicRu, setPatronymicRu] = useState('');
-    const [nameEn, setNameEn] = useState('');
-    const [surnameEn, setSurnameEn] = useState('');
-    const [phone, setPhone] = useState('');
-    const [notification, setNotification] = useState('');
-
-    const submit = async (e: SyntheticEvent) => {
-        e.preventDefault();
-
-        const response = await fetch("http://localhost:8000/api/Applicant/Update", {
-            method: 'PUT',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({
-                id,
-                nameRu: nameRu === '' ? propsNameRu : nameRu,
-                surnameRu: surnameRu === '' ? propsSurnameRu : surnameRu,
-                patronymicRu: patronymicRu === '' ? propsPatronymicRu : patronymicRu,
-                nameEn: nameEn === '' ? propsNameEn : nameEn,
-                surnameEn: surnameEn === '' ? propsSurnameEn : surnameEn,
-                phone: phone === '' ? propsPhone : phone
-            })
-        });
-
-        if(!response.ok)
-        {        
-            if(response.status === 409)
-            {
-                response.json().then(data => setNotification(Errors[data['errorStatus']]));
-            }
-            else
-            {
-                setNotification(Errors[response.status]);
-            }
-            
-            <Notification title=''>{notification}</Notification>        }
-        else
-        {
-            props.setActive(false);
-            window.location.reload();
-        } 
-    }
+    const onFinish = (values: any) => {
+        UpdateApplicant(props.token, values, props.setActive, props.applicant.id);
+    };
     
-    return (
-        <>
-        <ModalWindow title='' isActive={props.active}>
-            <form onSubmit={submit}>
-                <table>
-                    <td className="modal_table_td">
-                        <tr>
-                            <label className="modal_label">Name Ru</label>
-                            <br/>
-                            <input type="text" id="nameRu" className="modal_input" defaultValue={props.nameRu} required
-                                onChange={e => setNameRu(e.target.value)}
-                            />
-                        </tr>
-                        <tr>
-                            <br/><label className="modal_label">Surname Ru</label>
-                            <br/>
-                            <input type="text" className="modal_input" defaultValue={props.surnameRu} required
-                                onChange={e => setSurnameRu(e.target.value)}
-                            />
-                        </tr>
-                        <tr>
-                            <br/><label className="modal_label">Patronymic Ru</label>
-                            <br/>
-                            <input type="text" className="modal_input" defaultValue={props.patronymicRu} required
-                                onChange={e => setPatronymicRu(e.target.value)}
-                            />
-                        </tr>
-                    </td>
-                    <td className="modal_table_td">
-                        <tr>
-                            <label className="modal_label">Name En</label>
-                            <br/>
-                            <input type="text" className="modal_input" defaultValue={props.nameEn} required
-                                onChange={e => setNameEn(e.target.value)}
-                            />
-                        </tr>
-                        <tr>
-                            <br/><label className="modal_label">Surname En</label>
-                            <br/>
-                            <input type="text" className="modal_input" defaultValue={props.surnameEn} required
-                                onChange={e => setSurnameEn(e.target.value)}
-                            />
-                        </tr>
-                    </td>
-                    <td className="modal_table_td">
-                        <tr>
-                            <label className="modal_label">Phone</label>
-                            <br/>
-                            <input type="text" className="modal_input" defaultValue={props.phone} required
-                                onChange={e => setPhone(e.target.value)}
-                            />   
-                        </tr>
-                    </td>
-                </table>
-
-                <br/><button className="modal_button" type="submit">Save</button>
-            </form>
+    return props.applicant?.nameRu ? (
+        <ModalWindow title={ModalTitles.EDIT_APPLICANT} isActive={props.active} setActive={props.setActive}>
+            <Form form={form} name="applicant_create" style={formStyle} onFinish={onFinish}>
+                <Row gutter={25}>
+                    <Col span={8} key={1}>
+                        <Form.Item
+                            name={`surnameRu`}
+                            label={`Surname Ru`}
+                            initialValue={props.applicant?.surnameRu}
+                            rules={[{
+                                required: true,
+                                message: 'Empty field',
+                            },]}
+                        >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item
+                            name={`nameRu`}
+                            label={`Name Ru`}
+                            initialValue={props.applicant?.nameRu}
+                            rules={[{
+                                required: true,
+                                message: 'Empty field',
+                            },]}
+                        >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item
+                            name={`patronymicRu`}
+                            label={`Patronymic Ru`}
+                            initialValue={props.applicant?.patronymicRu}
+                            rules={[{
+                                required: true,
+                                message: 'Empty field',
+                            },]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Col>
+                    <Col span={8} key={2}>
+                        <Form.Item
+                            name={`nameEn`}
+                            label={`Name En`}
+                            initialValue={props.applicant?.nameEn}
+                            rules={[{
+                                required: true,
+                                message: 'Empty field',
+                            },]}
+                        >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item
+                            name={`surnameEn`}
+                            label={`Surname En`}
+                            initialValue={props.applicant?.surnameEn}
+                            rules={[{
+                                required: true,
+                                message: 'Empty field',
+                            },]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Col> 
+                    <Col span={8} key={3}>
+                        <Form.Item
+                            name={`phone`}
+                            label={`Phone`}
+                            initialValue={props.applicant?.phone}
+                            rules={[{
+                                required: true,
+                                message: 'Empty field',
+                            },]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Col>   
+                </Row>
+                <Row>
+                    <Col span={24} style={{ textAlign: 'right' }}>
+                        <Button type="primary" htmlType="submit">
+                            Save
+                        </Button>
+                        <Button
+                            style={{ margin: '0 8px' }}
+                            onClick={() => {
+                            form.resetFields();
+                            }}
+                        >
+                            Reset
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
         </ModalWindow>
-        </>
-    )
+    ) : (<></>)
 }
 
 export default ApplicantEdit;
