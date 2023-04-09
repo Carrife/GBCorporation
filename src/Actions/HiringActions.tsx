@@ -321,7 +321,7 @@ export function GetInterviewerPositions(
 }
 
 export function GetPositions(token: string | null): Promise<Short[]> {
-	return fetch("http://localhost:8000/api/Hiring/GetPositions", {
+	return fetch("http://localhost:8000/api/SuperDictionary/GetPositions", {
 		method: "GET",
 		headers: { Accept: "*/*", Authorization: "Bearer " + token },
 	})
@@ -393,6 +393,7 @@ export async function CreateHiring(
 		});
 
 		setActive(false);
+		window.location.reload();
 	}
 }
 

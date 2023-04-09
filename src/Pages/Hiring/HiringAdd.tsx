@@ -126,7 +126,6 @@ const HiringAdd = (props: {
 
 	const onFinish = (values: any) => {
 		CreateHiring(props.token, values, props.setActive);
-		window.location.reload();
 	};
 
 	return (

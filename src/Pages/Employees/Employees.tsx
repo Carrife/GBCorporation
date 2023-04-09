@@ -1,163 +1,209 @@
-import React, { useState, useEffect, SyntheticEvent } from 'react';
-import'../../App.css';
-import EmployeeAdd from './EmployeeAdd';
-import EmployeeEdit from './EmployeeEdit';
-import EmployeeTestData from './EmployeeTestsData';
-import * as AiIcons from 'react-icons/ai';
-import { Navigate } from 'react-router-dom';
-import Sidebar from '../../Components/Sidebar/Sidebar';
+import React, { useState, useEffect } from "react";
+import "../../App.css";
+import EmployeeAdd from "./EmployeeAdd";
+import EmployeeEdit from "./EmployeeEdit";
+import EmployeeDetails from "./EmployeeData";
+import * as AiIcons from "react-icons/ai";
+import Sidebar from "../../Components/Sidebar/Sidebar";
+import type { ColumnsType, TableProps } from "antd/es/table";
+import {
+	Employee,
+	EmployeeData,
+	EmployeeFired,
+	GetAllEmployee,
+	GetEmployeeById,
+} from "../../Actions/EmployeeActions";
+import { Button, Layout, Space, Table } from "antd";
 
-const Employees = (props: {role: string, token:string}) => {
-    const [employees, setEmployees] = useState([]);
-    const [modalAddActive, setModalAddActive] = useState(false);
-    const [modalEditActive, setModalEditActive] = useState(false);
-    const [modalTestDataActive, setModalTestDataActive] = useState(false);
-    const [testData, setTestData] = useState([]);
+const Employees = (props: { role: string; token: string }) => {
+	const [employees, setEmployees] = useState<Employee[]>([]);
+	const [employee, setEmployee] = useState<EmployeeData>();
+	const [modalAddActive, setModalAddActive] = useState(false);
+	const [modalEditActive, setModalEditActive] = useState(false);
+	const [modalDataActive, setModalDataActive] = useState(false);
+	const { Content } = Layout;
 
-    const [id, setId] = useState('');
-    const [nameRu, setNameRu] = useState('');
-    const [surnameRu, setSurnameRu] = useState('');
-    const [patronymicRu, setPatronymicRu] = useState('');
-    const [nameEn, setNameEn] = useState('');
-    const [surnameEn, setSurnameEn] = useState('');
-    const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
-    const [language, setLanguage] = useState('');
-    const [department, setDepartment] = useState('');
-    const [role, setRole] = useState('');
-    const [workPhone, setWorkPhone] = useState('');
+	interface DataType {
+		key: React.Key;
+		nameRu: string;
+		nameEn: string;
+		login: string;
+		phone: string;
+		email: string;
+		department: string;
+		position: string;
+		status: string;
+	}
 
-    useEffect(() => {(
-        load => {
-            if(window.localStorage.getItem('login') === 'true')
-            {
-                window.localStorage.setItem('login', 'false');
-                window.location.reload();
-            }
+	const columns: ColumnsType<DataType> = [
+		{
+			title: "Name (Ru)",
+			dataIndex: "nameRu",
+			key: "nameRu",
+			sorter: {
+				compare: (a, b) =>
+					a.nameRu.toLowerCase() < b.nameRu.toLowerCase() ? 1 : -1,
+			},
+		},
+		{
+			title: "Name (En)",
+			dataIndex: "nameEn",
+			key: "nameEn",
+			sorter: {
+				compare: (a, b) =>
+					a.nameRu.toLowerCase() < b.nameRu.toLowerCase() ? 1 : -1,
+			},
+		},
+		{
+			title: "Login",
+			dataIndex: "login",
+			key: "login",
+			sorter: {
+				compare: (a, b) =>
+					a.nameRu.toLowerCase() < b.nameRu.toLowerCase() ? 1 : -1,
+			},
+		},
+		{
+			title: "Department",
+			dataIndex: "department",
+			key: "department",
+			sorter: {
+				compare: (a, b) =>
+					a.nameRu.toLowerCase() < b.nameRu.toLowerCase() ? 1 : -1,
+			},
+		},
+		{
+			title: "Position",
+			dataIndex: "position",
+			key: "position",
+			sorter: {
+				compare: (a, b) =>
+					a.nameRu.toLowerCase() < b.nameRu.toLowerCase() ? 1 : -1,
+			},
+		},
+		{
+			title: "Status",
+			dataIndex: "status",
+			key: "status",
+		},
+		{
+			title: "",
+			key: "action",
+			render: (_, record) => (
+				<Space size="middle">
+					{props.role === "Admin" ? (
+						<Button
+							type="text"
+							onClick={() => employeeEdit(record.key.toString())}
+						>
+							<AiIcons.AiOutlineEdit />
+						</Button>
+					) : (
+						""
+					)}
+					<Button
+						type="text"
+						onClick={() => employeeData(record.key.toString())}
+					>
+						<AiIcons.AiOutlineUnorderedList />
+					</Button>
+					{props.role === "Admin" ? (
+						<Button
+							type="text"
+							onClick={() => employeeFired(record.key.toString())}
+						>
+							<AiIcons.AiOutlineDelete />
+						</Button>
+					) : (
+						""
+					)}
+				</Space>
+			),
+		},
+	];
 
-            if(window.localStorage.getItem('token') === 'undefined')
-            {
-                window.location.href = "/"
-            }
-            else
-            {
-                 fetch("http://localhost:8000/api/Employee/GetAll", {
-                method: 'GET',
-                headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token },
-            })
-                .then(response => response.json())
-                .then(data => setEmployees(data));
-            }
-                
-           
-        })();
-    }, [props.token]);
+	useEffect(() => {
+		((load) => {
+			if (window.localStorage.getItem("login") === "true") {
+				window.localStorage.setItem("login", "false");
+				window.location.reload();
+			}
 
-    const employeeDelete = async (id: string, e: SyntheticEvent) => {
-        e.preventDefault();
+			if (window.localStorage.getItem("login") === "false") {
+				if (window.localStorage.getItem("token") === "undefined") {
+					window.location.href = "/";
+				} else {
+					GetAllEmployee(props.token).then((result) =>
+						setEmployees(result)
+					);
+				}
+			}
+		})();
+	}, [props.token]);
 
-        const response = await fetch("http://localhost:8000/api/Employee/Delete", {                
-            method: 'POST',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id },
-            credentials: 'include'
-        });
+	const onChange: TableProps<DataType>["onChange"] = (
+		pagination,
+		filters,
+		sorter,
+		extra
+	) => {
+		console.log("params", pagination, filters, sorter, extra);
+	};
 
-        if(response.ok)
-        {
-            window.location.reload();
-        }
-    };
+	const employeeFired = async (id: string) => {
+		EmployeeFired(props.token, id);
+	};
 
-    const employeeEdit = async (id: string, nameRu: string, surnameRu: string, patronymicRu: string, nameEn: string, surnameEn: string, 
-            email: string, phone: string, workPhone: string, department: string, language: string, role:string) => {
-        
-        setId(id);
-        
-        setNameRu(nameRu);
-        setSurnameRu(surnameRu);
-        setPatronymicRu(patronymicRu);
-        setNameEn(nameEn);
-        setSurnameEn(surnameEn);
-        setWorkPhone(workPhone);
-        setPhone(phone);
-        setEmail(email);
-        setLanguage(language);
-        setDepartment(department);
-        setRole(role);
-        
-        setModalEditActive(true);
-    };
+	const employeeEdit = async (id: string) => {
+		GetEmployeeById(props.token, id).then((result) => setEmployee(result));
+		setModalEditActive(true);
+	};
 
-    const employeeTestsData = async (id: string, e: SyntheticEvent) => {
-        e.preventDefault();
-        
-        await fetch("http://localhost:8000/api/Employee/GetById", {
-            method: 'GET',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id},
-            credentials: 'include'
-        })
-            .then(response => response.json())
-            .then(data => setTestData(data['testCompetencies']))
-    
-        setModalTestDataActive(true);
-    };
+	const employeeData = async (id: string) => {
+		GetEmployeeById(props.token, id).then((result) => setEmployee(result));
+		setModalDataActive(true);
+	};
 
-    
-    return (
-        <>
-            <Sidebar role={props.role}/>
-            <div className='pages'>
-                {props.role === "Admin" ? <button className='button_link' onClick={() => setModalAddActive(true)}>Create New</button> : ''}
-                <table className='pages-table'>
-                    <thead>
-                        <tr>
-                            <th>
-                                Name Ru
-                            </th>
-                            <th>
-                                Name En
-                            </th>
-                            <th>
-                                Email
-                            </th>
-                            <th>
-                                Phone
-                            </th>
-                            <th>
-                                WorkPhone
-                            </th>
-                            <th>
-                                Department
-                            </th>
-                            <th>
-                                Language
-                            </th>
-                        </tr> 
-                    </thead>
-                    <tbody>
-                        {employees.map(({id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, email, phone, workPhone, department, language, isTestRequest, role}, index) => (
-                            <tr key={index}>
-                                <td>{surnameRu} {nameRu} {patronymicRu}</td>
-                                <td>{nameEn} {surnameEn}</td>
-                                <td>{email}</td>
-                                <td>{phone}</td>
-                                <td>{workPhone}</td>
-                                <td>{department['name']}</td>
-                                <td>{language ? language['name'] : ''}</td>
-                                <td><button className='button_table' onClick={(e) => employeeTestsData(id, e)}><AiIcons.AiOutlineUnorderedList/></button></td>
-                                <td>{props.role === "Admin" || props.role === "LineManager" ?<button className='button_table' onClick={() => employeeEdit(id, nameRu, surnameRu, patronymicRu, nameEn, surnameEn, email, phone, workPhone, department['id'], language === null ? '' : language['id'], role['id'])}><AiIcons.AiOutlineEdit/></button> : ''}</td>
-                                <td>{props.role === "Admin" ? <button className='button_table' onClick={(e) => employeeDelete(id, e)}><AiIcons.AiOutlineDelete/></button> : ''}</td>
-                            </tr>
-                        )
-                        )}
-                    </tbody>
-                </table>
-                <EmployeeAdd active={modalAddActive} setActive={setModalAddActive} token={props.token}/>
-                <EmployeeTestData active={modalTestDataActive} setActive={setModalTestDataActive} testData={testData}/>
-                <EmployeeEdit active={modalEditActive} setActive={setModalEditActive} id={id} nameRu={nameRu} surnameRu={surnameRu} patronymicRu={patronymicRu} nameEn={nameEn} surnameEn={surnameEn} phone={phone} workPhone={workPhone} departmentId={department} languageId={language} token={props.token}/>
-            </div>
-        </>
-    );
+	return (
+		<Layout className="layout">
+			<Sidebar role={props.role} />
+			<Layout className="page-layout">
+				<Content>
+					{props.role === "Admin" ? (
+						<Button
+							type="link"
+							onClick={() => setModalAddActive(true)}
+						>
+							Create New
+						</Button>
+					) : (
+						""
+					)}
+					<Table
+						columns={columns}
+						dataSource={employees}
+						onChange={onChange}
+					/>
+					<EmployeeAdd
+						active={modalAddActive}
+						setActive={setModalAddActive}
+						token={props.token}
+					/>
+					<EmployeeDetails
+						active={modalDataActive}
+						setActive={setModalDataActive}
+						employee={employee}
+					/>
+					<EmployeeEdit
+						active={modalEditActive}
+						setActive={setModalEditActive}
+						employee={employee}
+						token={props.token}
+					/>
+				</Content>
+			</Layout>
+		</Layout>
+	);
 };
 
 export default Employees;

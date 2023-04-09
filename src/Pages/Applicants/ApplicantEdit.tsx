@@ -2,6 +2,7 @@ import ModalWindow from "../../Components/Modal/Modal";
 import ModalTitles from "../../Enums/ModalTitles";
 import { Button, Col, Form, Input, Row } from "antd";
 import { UpdateApplicant } from "../../Actions/ApplicantActions";
+import { useEffect } from "react";
 
 const ApplicantEdit = (props: {
 	active: boolean;
@@ -10,6 +11,21 @@ const ApplicantEdit = (props: {
 	token: string | null;
 }) => {
 	const [form] = Form.useForm();
+
+	useEffect(() => {
+		reset();
+	}, [form, props.applicant]);
+
+	const reset = () => {
+		form.setFieldsValue({
+			surnameRu: props.applicant?.surnameRu,
+			nameRu: props.applicant?.nameRu,
+			patronymicRu: props.applicant?.patronymicRu,
+			nameEn: props.applicant?.nameEn,
+			surnameEn: props.applicant?.surnameEn,
+			phone: props.applicant?.phone,
+		});
+	}
 
 	const onFinish = (values: any) => {
 		UpdateApplicant(
@@ -20,7 +36,7 @@ const ApplicantEdit = (props: {
 		);
 	};
 
-	return props.applicant?.nameRu ? (
+	return (
 		<ModalWindow
 			title={ModalTitles.EDIT_APPLICANT}
 			isActive={props.active}
@@ -28,7 +44,7 @@ const ApplicantEdit = (props: {
 		>
 			<Form
 				form={form}
-				style={{padding: 10}}
+				style={{ padding: 10 }}
 				onFinish={onFinish}
 				labelCol={{ flex: "114px" }}
 				labelAlign="left"
@@ -39,7 +55,6 @@ const ApplicantEdit = (props: {
 						<Form.Item
 							name={`surnameRu`}
 							label={`Surname Ru`}
-							initialValue={props.applicant?.surnameRu}
 							rules={[
 								{
 									required: true,
@@ -52,7 +67,6 @@ const ApplicantEdit = (props: {
 						<Form.Item
 							name={`nameRu`}
 							label={`Name Ru`}
-							initialValue={props.applicant?.nameRu}
 							rules={[
 								{
 									required: true,
@@ -65,7 +79,6 @@ const ApplicantEdit = (props: {
 						<Form.Item
 							name={`patronymicRu`}
 							label={`Patronymic Ru`}
-							initialValue={props.applicant?.patronymicRu}
 							rules={[
 								{
 									required: true,
@@ -80,7 +93,6 @@ const ApplicantEdit = (props: {
 						<Form.Item
 							name={`nameEn`}
 							label={`Name En`}
-							initialValue={props.applicant?.nameEn}
 							rules={[
 								{
 									required: true,
@@ -93,7 +105,6 @@ const ApplicantEdit = (props: {
 						<Form.Item
 							name={`surnameEn`}
 							label={`Surname En`}
-							initialValue={props.applicant?.surnameEn}
 							rules={[
 								{
 									required: true,
@@ -108,7 +119,6 @@ const ApplicantEdit = (props: {
 						<Form.Item
 							name={`phone`}
 							label={`Phone`}
-							initialValue={props.applicant?.phone}
 							rules={[
 								{
 									required: true,
@@ -128,7 +138,7 @@ const ApplicantEdit = (props: {
 						<Button
 							style={{ margin: "0 8px" }}
 							onClick={() => {
-								form.resetFields();
+								reset();
 							}}
 						>
 							Reset
@@ -137,8 +147,6 @@ const ApplicantEdit = (props: {
 				</Row>
 			</Form>
 		</ModalWindow>
-	) : (
-		<></>
 	);
 };
 

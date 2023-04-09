@@ -9,6 +9,9 @@ enum ModalTitles {
     HIRING_DATA = "Hiring data",
     HIRING_DESCRIPTION= "Update description",
     HIRING= "Hiring",
+    CREATE_EMPLOYEE = "Create Employee",
+    EDIT_EMPLOYEE = "Update Employee",
+    EMPLOYEE_DATA = "Employee data",
 }
 
 export default ModalTitles;
