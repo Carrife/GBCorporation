@@ -32,6 +32,7 @@ const Employees = (props: {role: string, token:string}) => {
             if(window.localStorage.getItem('login') === 'true')
             {
                 window.localStorage.setItem('login', 'false');
+                window.location.reload();
             }
 
             if(window.localStorage.getItem('token') === 'undefined')

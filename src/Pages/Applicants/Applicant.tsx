@@ -7,7 +7,7 @@ import * as AiIcons from 'react-icons/ai';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import { Layout, Table, Space, Button} from 'antd';
 import type { ColumnsType, TableProps } from 'antd/es/table';
-import { GetAllApplicant, GetApplicantTestData, Applicant, GetApplicantById, TestData } from '../../Actions/ApplicantActions';
+import { GetAllApplicants, GetApplicantTestData, Applicant, GetApplicantById, TestData } from '../../Actions/ApplicantActions';
 
 const Applicants = (props: {role: string, token: string}) => {
     const [applicants, setApplicants] = useState<Applicant[]>([]);
@@ -69,7 +69,7 @@ const Applicants = (props: {role: string, token: string}) => {
             render: (_, record) => (
                 <Space size="middle">
                     <Button type='text' onClick={() => applicantEdit(record.key.toString())}><AiIcons.AiOutlineEdit/></Button>                
-                    <Button type='text' onClick={(e) => applicantTestData(record.key.toString())}><AiIcons.AiOutlineUnorderedList/></Button>            
+                    <Button type='text' onClick={() => applicantTestData(record.key.toString())}><AiIcons.AiOutlineUnorderedList/></Button>            
                 </Space>
             )
         },
@@ -83,7 +83,7 @@ const Applicants = (props: {role: string, token: string}) => {
             }
             else
             {
-                GetAllApplicant(props.token).then(result => setApplicants(result));
+                GetAllApplicants(props.token).then(result => setApplicants(result));
             }
         })();        
     }, [props.token]);
@@ -98,7 +98,8 @@ const Applicants = (props: {role: string, token: string}) => {
     };
 
     const applicantTestData = async (id: string) => {
-        GetApplicantTestData(props.token, id).then(result => {setTestData(result); setApplicantId(id)});        
+        GetApplicantTestData(props.token, id).then(result => setTestData(result)); 
+        setApplicantId(id);       
         setModalTestDataActive(true);
     };
 

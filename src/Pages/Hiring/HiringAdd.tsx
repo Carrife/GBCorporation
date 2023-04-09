@@ -1,204 +1,458 @@
-import { SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
-import {Errors} from "../../Enums/Errors";
+import {
+	GetActiveApplicants,
+	Interviewers,
+	Short,
+	GetInterviewers,
+	GetTestData,
+	TestData,
+	CreateHiring,
+	GetInterviewerPositions,
+	GetPositions,
+} from "../../Actions/HiringActions";
+import {
+	Button,
+	Col,
+	DatePicker,
+	Divider,
+	Form,
+	Row,
+	Select,
+	Space,
+} from "antd";
+import ModalTitles from "../../Enums/ModalTitles";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import Role from "../../Enums/RoleEnum";
+import TestTypeEnum from "../../Enums/TestTypeEnum";
 
-const HiringAdd = (props: {active: boolean, setActive: (active: boolean) => void, token: string | null}) => {
-    const [applicantId, setApplicantId] = useState(0);
-    const [applicants, setApplicants] = useState([]);
-    const [teamLeaderId, setTeamLeaderId] = useState(0);
-    const [teamLeaders, setTeamLeaders] = useState([]);
-    const [lineManagerId, setLineManagerId] = useState(0);
-    const [lineManagers, setLineManagers] = useState([]);
-    const [logicTestId, setLogicTestId] = useState(0);
-    const [logicTests, setLogicTests] = useState([]);
-    const [programmingTestId, setProgrammingTestId] = useState(0);
-    const [programmingTests, setProgrammingTests] = useState([]);
-    const [foreignLanguageTestId, setForeignLanguageTestId] = useState(0);
-    const [foreignLanguageTests, setForeignLanguageTests] = useState([]);
-    const [date, setDate] = useState('');
-    const [notification, setNotification] = useState('');
+const HiringAdd = (props: {
+	active: boolean;
+	setActive: (active: boolean) => void;
+	token: string | null;
+}) => {
+	const [applicantId, setApplicantId] = useState("");
+	const [applicants, setApplicants] = useState<Short[]>([]);
+	const [interviewerPositions, setInterviewerPositions] = useState<Short[]>(
+		[]
+	);
+	const [positions, setPositions] = useState<Short[]>([]);
+	const [interviewers, setInterviewers] = useState<Interviewers>();
+	const [currentInterviewers, setCurrentInterviewers] = useState<
+		Short[] | undefined
+	>([]);
+	const [currentResults, setCurrentResults] = useState<Short[] | undefined>(
+		[]
+	);
+	const [testData, setTestData] = useState<TestData>();
+	const [form] = Form.useForm();
 
-    useEffect(() => {(
-        load => {
-            if(window.localStorage.getItem('token') === 'undefined')
-            {
-                window.location.href = "/"
-            }
-            else
-            {
-                fetch("http://localhost:8000/api/Applicant/GetActiveShort", {
-                method: 'GET',
-                headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token },
-            })
-                .then(response => response.json())
-                .then(data => setApplicants(data));
-            
-            fetch("http://localhost:8000/api/Employee/GetTLShort", {
-                method: 'GET',
-                headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token },
-            })
-                .then(response => response.json())
-                .then(data => setTeamLeaders(data));
+	const testTypes = [
+		{
+			name: TestTypeEnum.PROGRAMMING,
+			id: "1",
+		},
+		{
+			name: TestTypeEnum.FOREIGN,
+			id: "2",
+		},
+		{
+			name: TestTypeEnum.LOGIC,
+			id: "3",
+		},
+	];
 
-            fetch("http://localhost:8000/api/Employee/GetLMShort", {
-                method: 'GET',
-                headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token },
-            })
-                .then(response => response.json())
-                .then(data => setLineManagers(data));
-            }
+	const applicantChange = (value: string) => {
+		setApplicantId(value);
+		form.resetFields(["tests"]);
+	};
 
-            
-        })();        
-    }, [props.token]);
+	const positionChange = (value: string) => {
+		let label = interviewerPositions.find(
+			(x) => x.id.toString() === value.toString()
+		)?.name;
 
-    useEffect(() => {(
-        load => {
-            if(applicants.length > 0)
-            {
-                var applicId = applicantId === 0 ? applicants['0']['id'] : applicantId
-            
-                fetch("http://localhost:8000/api/Hiring/GetLogicTestShort", {
-                    method: 'GET',
-                    headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id: applicId.toString() },
-                })
-                    .then(response => response.json())
-                    .then(data => setLogicTests(data));
+		if (label === Role.LM) {
+			setCurrentInterviewers(interviewers?.lineManagers);
+		} else if (label === Role.ADMIN) {
+			setCurrentInterviewers(interviewers?.admins);
+		} else if (label === Role.TL) {
+			setCurrentInterviewers(interviewers?.teamLeaders);
+		} else if (label === Role.HR) {
+			setCurrentInterviewers(interviewers?.hRs);
+		} else if (label === Role.BA) {
+			setCurrentInterviewers(interviewers?.bAs);
+		} else if (label === Role.CEO) {
+			setCurrentInterviewers(interviewers?.ceo);
+		} else if (label === Role.CHIEF_ACCOUNATN) {
+			setCurrentInterviewers(interviewers?.chiefAccountant);
+		}
+	};
 
-                fetch("http://localhost:8000/api/Hiring/GetProgrammingTestShort", {
-                    method: 'GET',
-                    headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id: applicId.toString() },
-                })
-                    .then(response => response.json())
-                    .then(data => setProgrammingTests(data));
+	const typeChange = (value: string) => {
+		if (value === TestTypeEnum.FOREIGN) {
+			setCurrentResults(testData?.foreignTest);
+		} else if (value === TestTypeEnum.LOGIC) {
+			setCurrentResults(testData?.logicTest);
+		} else if (value === TestTypeEnum.PROGRAMMING) {
+			setCurrentResults(testData?.programmingTest);
+		}
+	};
 
-                fetch("http://localhost:8000/api/Hiring/GetForeignTestShort", {
-                    method: 'GET',
-                    headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id: applicId.toString() },
-                })
-                    .then(response => response.json())
-                    .then(data => setForeignLanguageTests(data));
-            }
-        })();       
-    }, [applicantId, props.token, applicants]);
-    
-    const submit = async (e: SyntheticEvent) => {
-        e.preventDefault();
+	useEffect(() => {
+		((load) => {
+			GetActiveApplicants(props.token).then((result) =>
+				setApplicants(result)
+			);
+			GetInterviewers(props.token).then((result) =>
+				setInterviewers(result)
+			);
+			GetInterviewerPositions(props.token).then((result) =>
+				setInterviewerPositions(result)
+			);
+			GetPositions(props.token).then((result) => setPositions(result));
+		})();
+	}, [props.token]);
 
-        const response = await fetch("http://localhost:8000/api/Hiring/Create", {
-            method: 'POST',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({
-                applicant: {id: applicantId === 0 ? applicants['0']['id'] : applicantId, name:""},
-                teamLeader: {id: teamLeaderId === 0 ? teamLeaders['0']['id'] : teamLeaderId, name:""},
-                lineManager: {id: lineManagerId === 0 ? lineManagers['0']['id'] : lineManagerId, name:""},
-                logicTest: {id: logicTestId === 0 ? logicTests['0']['id'] : logicTestId, title:""},
-                programmingTest: {id: programmingTestId === 0 ? programmingTests['0']['id'] : programmingTestId, title:""},
-                foreignLanguageTest: {id: foreignLanguageTestId === 0 ? foreignLanguageTests['0']['id'] : foreignLanguageTestId, title:""},
-                status: {id: 0, name: ""},
-                date
-            })
-        });
+	useEffect(() => {
+		((load) => {
+			if (applicants.length > 0) {
+				GetTestData(props.token, applicantId).then((result) =>
+					setTestData(result)
+				);
+			}
+		})();
+	}, [applicantId, props.token, applicants]);
 
-        if(!response.ok)
-        {
-            if(response.status === 409)
-            {
-                response.json().then(data => setNotification(Errors[data['errorStatus']]));
-            }
-            else
-            {
-                setNotification(Errors[response.status]);
-            }
-            
-            //<Notification>{notification}</Notification>        
-        }
-        else
-        {
-            props.setActive(false);
-            window.location.reload();
-        }
-    }
-    
-    return (
-        <>
-        <ModalWindow title='' isActive={props.active} setActive={props.setActive}>
-            <form onSubmit={submit}>
-                <table>
-                    <td className="modal_table_td">
-                        <tr>
-                            <label className="modal_label">Applicant</label>
-                            <br/>
-                            <select className="modal_input" value={applicantId} onChange={e => setApplicantId(Number.parseInt(e.target.value))}>
-                                {applicants.map(({id, name}) => (
-                                    <option key={id} value={id}>{name}</option>
-                                ))}
-                            </select>
-                        </tr>
-                        <tr>
-                            <br/><label className="modal_label">Team Leader</label>
-                            <br/>
-                            <select className="modal_input" value={teamLeaderId} onChange={e => setTeamLeaderId(Number.parseInt(e.target.value))}>
-                                {teamLeaders.map(({id, name}) => (
-                                    <option key={id} value={id}>{name}</option>
-                                ))}
-                            </select>
-                        </tr>
-                        <tr>
-                            <br/><label className="modal_label">Line Manager</label>
-                            <br/>
-                            <select className="modal_input" value={lineManagerId} onChange={e => setLineManagerId(Number.parseInt(e.target.value))}>
-                                {lineManagers.map(({id, name}) => (
-                                    <option key={id} value={id}>{name}</option>
-                                ))}
-                            </select>
-                        </tr>
-                    </td>
-                    <td className="modal_table_td">
-                        <tr>
-                            <label className="modal_label">Logic test</label>
-                            <br/>
-                            <select className="modal_input" value={logicTestId} onChange={e => setLogicTestId(Number.parseInt(e.target.value))}>
-                                {logicTests.map(({id, name}) => (
-                                    <option key={id} value={id}>{name}</option>
-                                ))}
-                            </select>
-                        </tr>
-                        <tr>
-                            <br/><label className="modal_label">Programming test</label>
-                            <br/>
-                            <select className="modal_input" value={programmingTestId} onChange={e => setProgrammingTestId(Number.parseInt(e.target.value))}>
-                                {programmingTests.map(({id, name}) => (
-                                    <option key={id} value={id}>{name}</option>
-                                ))}
-                            </select>
-                        </tr>
-                        <tr>
-                            <br/><label className="modal_label">Foreign language test</label>
-                            <br/>
-                            <select className="modal_input" value={foreignLanguageTestId} onChange={e => setForeignLanguageTestId(Number.parseInt(e.target.value))}>
-                                {foreignLanguageTests.map(({id, name}) => (
-                                    <option key={id} value={id}>{name}</option>
-                                ))}
-                            </select>
-                        </tr>
-                    </td>
-                    <td className="modal_table_td">
-                        <tr>
-                            <label className="modal_label">Interview date</label>
-                            <br/>
-                            <input type="text" className="modal_input" required
-                                onChange={e => setDate(e.target.value)}
-                            />  
-                        </tr>
-                    </td>
-                </table>
-                <br/><button className="modal_button" type="submit">Create</button>
-            </form>
-        </ModalWindow>
-        </>
-    )
-}
+	const onFinish = (values: any) => {
+		CreateHiring(props.token, values, props.setActive);
+		window.location.reload();
+	};
+
+	return (
+		<ModalWindow
+			title={ModalTitles.CREATE_HIRING}
+			isActive={props.active}
+			setActive={props.setActive}
+		>
+			<Form form={form} style={{ padding: 10 }} onFinish={onFinish}>
+				<Row gutter={25}>
+					<Col span={12} key={1}>
+						<Form.Item
+							name={`applicant`}
+							label={`Applicant`}
+							rules={[
+								{
+									required: true,
+									message: "Empty field",
+								},
+							]}
+						>
+							<Select
+								showSearch
+								style={{ width: 200 }}
+								onChange={applicantChange}
+								optionFilterProp="children"
+							>
+								{applicants.map((item) => (
+									<Select.Option
+										key={item.id}
+										value={item.id}
+									>
+										{item.name}
+									</Select.Option>
+								))}
+							</Select>
+						</Form.Item>
+					</Col>
+					<Col span={12} key={2}>
+						<Form.Item
+							name={`position`}
+							label={`Position`}
+							rules={[
+								{
+									required: true,
+									message: "Empty field",
+								},
+							]}
+						>
+							<Select
+								showSearch
+								style={{ width: 200 }}
+								optionFilterProp="children"
+							>
+								{positions.map((item) => (
+									<Select.Option
+										key={item.id}
+										value={item.id}
+									>
+										{item.name}
+									</Select.Option>
+								))}
+							</Select>
+						</Form.Item>
+					</Col>
+				</Row>
+				<Row>
+					<Col span={20}>
+						<Form.Item
+							labelCol={{
+								span: 15,
+							}}
+							name={`interviewDate`}
+							label={`Interview date`}
+							rules={[
+								{
+									required: true,
+									message: "Empty field",
+								},
+							]}
+						>
+							<DatePicker />
+						</Form.Item>
+					</Col>
+				</Row>
+				<Divider plain>Interviewers</Divider>
+				<Form.List
+					name="interviewers"
+					initialValue={[{ first: "", last: "" }]}
+				>
+					{(fields, { add, remove }) => (
+						<>
+							{fields.map(({ key, name, ...restField }) => (
+								<Space
+									key={key}
+									style={{ display: "flex", marginBottom: 8 }}
+									align="baseline"
+								>
+									<Form.Item
+										{...restField}
+										name={[name, "position"]}
+										rules={[
+											{
+												required: true,
+												message: "Missing",
+											},
+										]}
+									>
+										<Select
+											showSearch
+											style={{ width: 200 }}
+											onChange={positionChange}
+											optionFilterProp="children"
+											placeholder="Position"
+										>
+											{interviewerPositions.map(
+												(item) => (
+													<Select.Option
+														key={item.id}
+														value={item.id}
+													>
+														{item.name}
+													</Select.Option>
+												)
+											)}
+										</Select>
+									</Form.Item>
+									<Form.Item
+										{...restField}
+										name={[name, "interviewer"]}
+										rules={[
+											{
+												required: true,
+												message: "Missing",
+											},
+											({ getFieldValue }) => ({
+												validator(_, value) {
+													if (
+														value &&
+														getFieldValue(
+															"interviewers"
+														)?.filter(
+															(item: {
+																interviewer: string;
+															}) =>
+																item.interviewer ===
+																value
+														).length !== 1
+													) {
+														return Promise.reject(
+															new Error(
+																"Duplicate values are not allowed."
+															)
+														);
+													} else {
+														return Promise.resolve();
+													}
+												},
+											}),
+										]}
+									>
+										<Select
+											showSearch
+											style={{ width: 200 }}
+											optionFilterProp="children"
+											placeholder="Interviewer"
+										>
+											{currentInterviewers?.map(
+												(item) => (
+													<Select.Option
+														key={item.id}
+														value={item.id}
+													>
+														{item.name}
+													</Select.Option>
+												)
+											)}
+										</Select>
+									</Form.Item>
+									<MinusCircleOutlined
+										onClick={() => remove(name)}
+									/>
+								</Space>
+							))}
+							<Form.Item>
+								<Button
+									type="dashed"
+									onClick={() => {
+										add();
+										setCurrentInterviewers([]);
+									}}
+									block
+									icon={<PlusOutlined />}
+								>
+									Add
+								</Button>
+							</Form.Item>
+						</>
+					)}
+				</Form.List>
+				<Divider plain>Tests</Divider>
+				<Form.List name="tests">
+					{(fields, { add, remove }) => (
+						<>
+							{fields.map(({ key, name, ...restField }) => (
+								<Space
+									key={key}
+									style={{ display: "flex", marginBottom: 8 }}
+									align="baseline"
+								>
+									<Form.Item
+										{...restField}
+										name={[name, "type"]}
+										rules={[
+											{
+												required: true,
+												message: "Missing",
+											},
+											({ getFieldValue }) => ({
+												validator(_, value) {
+													if (
+														value &&
+														getFieldValue(
+															"tests"
+														)?.filter(
+															(item: {
+																type: string;
+															}) =>
+																item.type ===
+																value
+														).length !== 1
+													) {
+														return Promise.reject(
+															new Error(
+																"Duplicate values are not allowed."
+															)
+														);
+													} else {
+														return Promise.resolve();
+													}
+												},
+											}),
+										]}
+									>
+										<Select
+											showSearch
+											style={{ width: 200 }}
+											onChange={typeChange}
+											optionFilterProp="children"
+											placeholder="Type"
+										>
+											{testTypes.map((item) => (
+												<Select.Option
+													key={item.id}
+													value={item.name}
+												>
+													{item.name}
+												</Select.Option>
+											))}
+										</Select>
+									</Form.Item>
+									<Form.Item
+										{...restField}
+										name={[name, "result"]}
+										rules={[
+											{
+												required: true,
+												message: "Missing",
+											},
+										]}
+									>
+										<Select
+											showSearch
+											style={{ width: 200 }}
+											optionFilterProp="children"
+											placeholder="Result"
+										>
+											{currentResults?.map((item) => (
+												<Select.Option
+													key={item.id}
+													value={item.id}
+												>
+													{item.name}
+												</Select.Option>
+											))}
+										</Select>
+									</Form.Item>
+									<MinusCircleOutlined
+										onClick={() => remove(name)}
+									/>
+								</Space>
+							))}
+							<Form.Item>
+								<Button
+									type="dashed"
+									onClick={() => {
+										add();
+										setCurrentResults([]);
+									}}
+									block
+									icon={<PlusOutlined />}
+								>
+									Add
+								</Button>
+							</Form.Item>
+						</>
+					)}
+				</Form.List>
+				<Row>
+					<Col span={24} style={{ textAlign: "right" }}>
+						<Button type="primary" htmlType="submit">
+							Create
+						</Button>
+						<Button
+							style={{ margin: "0 8px" }}
+							onClick={() => {
+								form.resetFields();
+							}}
+						>
+							Clear
+						</Button>
+					</Col>
+				</Row>
+			</Form>
+		</ModalWindow>
+	);
+};
 
 export default HiringAdd;

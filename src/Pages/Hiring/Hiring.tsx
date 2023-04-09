@@ -1,18 +1,68 @@
-import React, { useState, useEffect, SyntheticEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import'../../App.css';
-import { Navigate } from 'react-router-dom';
 import HirinAdd from './HiringAdd';
 import HiringDetails from './HiringDetails';
 import * as AiIcons from 'react-icons/ai';
 import Sidebar from '../../Components/Sidebar/Sidebar';
+import { Button, Layout, Space, TableProps } from 'antd';
+import Table, { ColumnsType } from 'antd/es/table';
+import { GetAllHirings, HiringInterface } from '../../Actions/HiringActions';
 
 const Hiring = (props: {role: string, userId: string, token: string}) => {
-    const [hirings, setHirings] = useState([]);
+    const [hirings, setHirings] = useState<HiringInterface[]>([]);
     const [modalAddActive, setModalAddActive] = useState(false);
     const [modalDetailsActive, setModalDetailsActive] = useState(false);
-    const [hitingData, setHiringData] = useState([]);
+    const [hiringId, setHiringId] = useState('');
+    const { Content } = Layout;
 
-    const [id, setId] = useState('');
+    interface DataType {
+        key: React.Key;
+        applicant: string;
+        date: string;
+        position: string;
+        status: string;
+    }
+
+    const columns: ColumnsType<DataType> = [
+        {
+            title: 'Applicant',
+            dataIndex: 'applicant',
+            key: 'applicant',
+            sorter: {
+                compare: (a, b) => (a.applicant.toLowerCase() < b.applicant.toLowerCase()) ? 1 : -1,
+            },
+        },
+        {
+            title: 'Position',
+            dataIndex: 'position',
+            key: 'position',
+            sorter: {
+                compare: (a, b) => (a.position.toLowerCase() < b.position.toLowerCase()) ? 1 : -1,
+            },
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            key: 'date',
+            sorter: {
+                compare: (a, b) => Date.parse(b.date) - Date.parse(a.date) ? 1 : -1,
+            },
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+        },
+        {
+            title: '',
+            key: 'action',
+            render: (_, record) => (
+                <Space size="middle">
+                    <Button type='text' onClick={() => hiringDetails(record.key.toString())}><AiIcons.AiOutlineUnorderedList/></Button>
+                </Space>
+            )
+        },
+    ];
 
     useEffect(() => {(
         load => {
@@ -22,77 +72,32 @@ const Hiring = (props: {role: string, userId: string, token: string}) => {
             }
             else
             {
-                 fetch("http://localhost:8000/api/Hiring/GetAll", {
-                method: 'GET',
-                headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token,'Content-Type': 'application/json', userId: props.userId, role: props.role},
-                credentials: 'include'
-            })
-                .then(response => response.json())
-                .then(data => setHirings(data));
+                GetAllHirings(props.token, props.role, props.userId).then(result => setHirings(result));
             }
-
-           
-            
         })();        
     }, [props.token, props.userId, props.role]);
 
-    const hiringtData = async (id: string, e: SyntheticEvent) => {
-        e.preventDefault();
-        
-        await fetch("http://localhost:8000/api/Hiring/GetById", {
-            method: 'GET',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id},
-            credentials: 'include'
-        })
-            .then(response => response.json())
-            .then(data => setHiringData(data))
-
-        setId(id);
+    const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
+        console.log('params', pagination, filters, sorter, extra);
+    };
+    
+    const hiringDetails = async (id: string) => {
+        setHiringId(id);
         setModalDetailsActive(true);
     };
 
     return (
-        <>
+        <Layout className='layout'>
             <Sidebar role={props.role}/>
-            <div className='pages'>
-            {props.role === "Admin" || props.role === "HR" ? <button className='button_link' onClick={() => setModalAddActive(true)}>Create New</button> : ''}
-                <table className='pages-table'>
-                    <thead>
-                        <tr>
-                            <th>
-                                Applicant
-                            </th>
-                            <th>
-                                Interviewers
-                            </th>
-                            <th>
-                                Position
-                            </th>
-                            <th>
-                                Date
-                            </th>
-                            <th>
-                                Status
-                            </th>
-                        </tr> 
-                    </thead>
-                    <tbody>
-                        {hirings.length !== 0 ? hirings.map(({id, applicant, lineManager, teamLeader, date, status}, index) => (
-                            <tr key={index}>
-                                <td>{applicant['name']}</td>
-                                <td>{lineManager['name']}</td>
-                                <td>{teamLeader['name']}</td>
-                                <td>{JSON.stringify(date).split("T")[0].split('"')[1]}</td>
-                                <td>{status['name']}</td>
-                                <td><button className='button_table' onClick={(e) => hiringtData(id, e)}><AiIcons.AiOutlineUnorderedList/></button></td>
-                            </tr>
-                        )) : ''}
-                    </tbody>
-                </table>
-                <HirinAdd active={modalAddActive} setActive={setModalAddActive} token={props.token}/>
-                <HiringDetails active={modalDetailsActive} hiringId={id} setActive={setModalDetailsActive} hitingData={hitingData} role={props.role} token={props.token}/>
-            </div>
-        </>
+            <Layout className='page-layout'>
+                <Content>
+                    {(props.role === "Admin" || props.role === "HR") ? <Button type="link" onClick={() => setModalAddActive(true)}>Create New</Button> : ''}
+                    <Table columns={columns} dataSource={hirings} onChange={onChange} />
+                    <HirinAdd active={modalAddActive} setActive={setModalAddActive} token={props.token}/>
+                    <HiringDetails active={modalDetailsActive} hiringId={hiringId} setActive={setModalDetailsActive} role={props.role} token={props.token}/>
+                </Content>
+            </Layout>
+        </Layout>
     );
 };
 

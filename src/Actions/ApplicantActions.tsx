@@ -39,12 +39,12 @@ export interface TestData {
     }]
 }
 
-export interface Language {
+export interface Short {
     id: number,
     name: string
 }
 
-export function GetAllApplicant(token: string) : Promise<Applicant[]>
+export function GetAllApplicants(token: string) : Promise<Applicant[]>
 {
     return fetch("http://localhost:8000/api/Applicant/GetAll", {
         method: 'GET',
@@ -176,24 +176,24 @@ export async function GetApplicantTestData(token: string, id:string) : Promise<T
 }
 
 //Tests
-export async function GetForeignLanguages(token: string | null) : Promise<Language[]>
+export async function GetForeignLanguages(token: string | null) : Promise<Short[]>
 {
     return await fetch("http://localhost:8000/api/SuperDictionary/GetForeignLanguages", {
             method: "GET",
             headers: {'Accept': '*/*', "Authorization": "Bearer " + token}
         })
             .then(response => response.json())
-            .then(data => {return data as Language[]})
+            .then(data => {return data as Short[]})
 }
 
-export async function GetProgrammingLanguages(token: string | null) : Promise<Language[]>
+export async function GetProgrammingLanguages(token: string | null) : Promise<Short[]>
 {
     return await fetch("http://localhost:8000/api/SuperDictionary/GetProgrammingLanguages", {
             method: "GET",
             headers: {'Accept': '*/*', "Authorization": "Bearer " + token}
         })
             .then(response => response.json())
-            .then(data => {return data as Language[]})
+            .then(data => {return data as Short[]})
 }
 
 export async function CreateForeignLanguageTest(token:string | null, formValues: any, setActive: (active: boolean) => void, applicantId: string) : Promise<void> 

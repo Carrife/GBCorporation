@@ -3,6 +3,7 @@ export enum Errors {
     InternalError = 500,
     SameLoginExists = 1,
     HiringExists = 2,
+    InvalidData = 3,
 }
 
 export enum ErrorTitles {
