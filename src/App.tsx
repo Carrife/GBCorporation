@@ -3,7 +3,7 @@ import "./App.css";
 import Navbar from "./Components/Navbar/Navbar";
 import Login from "./Pages/Login";
 import Employee from "./Pages/Employees/Employees";
-import Template from "./Pages/Templates/Template";
+import Templates from "./Pages/Templates/Template";
 import Test from "./Pages/Tests/Test";
 import Setting from "./Pages/Setting";
 import Applicant from "./Pages/Applicants/Applicant";
@@ -64,7 +64,7 @@ function App() {
 						/>
 						<Route
 							path="/templates"
-							element={<Template role={role} token={token} />}
+							element={<Templates role={role} token={token} />}
 						/>
 						<Route
 							path="/tests"

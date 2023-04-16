@@ -1,96 +1,150 @@
-import React, { useState, useEffect, SyntheticEvent } from 'react';
-import { Navigate } from 'react-router-dom';
-import'../../App.css';
-import TemplateAdd from './TemplateAdd';
-import TemplateUpload from './TemplateUpload';
-import fileDownload from 'js-file-download';
-import * as AiIcons from 'react-icons/ai';
-import Sidebar from '../../Components/Sidebar/Sidebar';
+import React, { useState, useEffect } from "react";
+import "../../App.css";
+import TemplateAdd from "./TemplateAdd";
+import TemplateUpload from "./TemplateUpload";
+import * as AiIcons from "react-icons/ai";
+import Sidebar from "../../Components/Sidebar/Sidebar";
+import {
+	GetAllTemplates,
+	Template,
+	TemplateDelete,
+	TemplateDownload,
+} from "../../Actions/TemplateActions";
+import { Button, Layout, Space, Table } from "antd";
+import { ColumnsType, TableProps } from "antd/es/table";
 
-const Template = (props: {role: string, token:string}) => {
-    const [templates, setTemplates] = useState([]);
-    const [modalAddActive, setModalAddActive] = useState(false);
-    const [modalUploadActive, setModalUploadActive] = useState(false);
-    const [id, setId] = useState('');
+const Templates = (props: { role: string; token: string }) => {
+	const [id, setId] = useState("");
+	const [link, setLink] = useState("");
+	const [templates, setTemplates] = useState<Template[]>([]);
+	const [modalAddActive, setModalAddActive] = useState(false);
+	const [modalUploadActive, setModalUploadActive] = useState(false);
+	const { Content } = Layout;
 
-        useEffect(() => {
-            fetch("http://localhost:8000/api/Template/GetAll", {
-                method: "GET",
-                headers: {'Accept': '*/*', "Authorization": "Bearer " + props.token},
-                credentials: 'include'
-            })
-                .then(response => response.json())
-                .then(data => setTemplates(data))
-        }, []);
+	interface DataType {
+		key: React.Key;
+		name: string;
+		link: string;
+		lastUpdate: string;
+	}
 
-        const templateDelete = async (id: string, e: SyntheticEvent) => {
-            e.preventDefault();
-    
-            const response = await fetch("http://localhost:8000/api/Template/Delete", {                
-                method: 'POST',
-                headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id },
-                credentials: 'include'
-            });
-    
-            if(response.ok)
-            {
-                window.location.reload();
-            }
-        };
+	const columns: ColumnsType<DataType> = [
+		{
+			title: "Title",
+			dataIndex: "name",
+			key: "title",
+			sorter: {
+				compare: (a, b) =>
+					a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1,
+			},
+		},
+		{
+			title: "Link",
+			key: "link",
+			render: (_, record) => (
+				<Button
+					type="link"
+					onClick={() =>
+						templateDownload(record.key.toString(), record.name)
+					}
+				>
+					{record.link != null ? "Link" : ""}
+				</Button>
+			),
+		},
+		{
+			title: "Last Update",
+			dataIndex: "lastUpdate",
+			key: "lastUpdate",
+		},
+		{
+			title: "",
+			key: "action",
+			render: (_, record) => (
+				<Space size="middle">
+					<Button
+						type="text"
+						onClick={() =>
+							templateUpload(record.key.toString(), record.link)
+						}
+					>
+						<AiIcons.AiOutlineUpload />
+					</Button>
+					<Button
+						type="text"
+						onClick={() => templateDelete(record.key.toString())}
+					>
+						<AiIcons.AiOutlineDelete />
+					</Button>
+				</Space>
+			),
+		},
+	];
 
-        const templateDownload = async (id: string, title: string, e: SyntheticEvent) => {
-            e.preventDefault();
-    
-            const response = await fetch("http://localhost:8000/api/Template/Download", {                
-                method: 'GET',
-                headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id },
-            })
-            
-            if(response.ok)
-            {
-                response.blob().then(res => fileDownload(res, title + '.xml'));
-                <Navigate to="/templates"/>
-            }
-        };
+	useEffect(() => {
+		((load) => {
+			if (window.localStorage.getItem("token") === "undefined") {
+				window.location.href = "/";
+			} else {
+				GetAllTemplates(props.token).then((result) =>
+					setTemplates(result)
+				);
+			}
+		})();
+	}, [props.token]);
 
-    return (
-        <>
-            <Sidebar role={props.role}/>
-        <div className='pages'> 
-            <button className='button_link' onClick={() => setModalAddActive(true)}>Create New</button>
-            <br/>
-            <table className='pages-table'>
-                <thead>
-                    <tr>
-                        <th>
-                            Title
-                        </th>
-                        <th>
-                            Link
-                        </th>
-                        <th>
-                            Last Update
-                        </th>
-                    </tr> 
-                </thead>
-                <tbody>
-                    {templates.map(({id, name, link, lastUpdate}) => (
-                        <tr key={id}>
-                        <td>{name}</td>
-                        <td>{link ? <button className='button_link' onClick={(e) => {setId(id); templateDownload(id, name, e)}}>Link</button> : ''}</td>
-                        <td>{JSON.stringify(lastUpdate).split("T")[0].split('"')[1]}</td>
-                        <td><button className='button_link' onClick={() => {setModalUploadActive(true); setId(id)}}>Upload</button></td>
-                        <td><button className='button_link' onClick={(e) => templateDelete(id, e)}>Delete</button></td>
-                    </tr>
-                    )
-                    )}
-                </tbody>
-            </table>
-            <TemplateAdd active={modalAddActive} setActive={setModalAddActive} token={props.token}/>
-            <TemplateUpload active={modalUploadActive} setActive={setModalUploadActive} id={id} token={props.token}/>
-        </div>
-        </>
-    );
+	const templateDelete = async (id: string) => {
+		TemplateDelete(props.token, id);
+	};
+
+	const templateDownload = async (id: string, title: string) => {
+		TemplateDownload(props.token, id, title);
+	};
+
+	const templateUpload = async (id: string, link: string) => {
+		setLink(link);
+		setId(id);
+		setModalUploadActive(true);
+	};
+
+	const onChange: TableProps<DataType>["onChange"] = (
+		pagination,
+		filters,
+		sorter,
+		extra
+	) => {
+		console.log("params", pagination, filters, sorter, extra);
+	};
+
+	return (
+		<Layout className="layout">
+			<Sidebar role={props.role} />
+			<Layout className="page-layout">
+				<Content>
+					<Button type="link" onClick={() => setModalAddActive(true)}>
+						Create New
+					</Button>
+					<Table
+						columns={columns}
+						dataSource={templates}
+						onChange={onChange}
+					/>
+					<TemplateAdd
+						active={modalAddActive}
+						setActive={setModalAddActive}
+						token={props.token}
+					/>
+					<TemplateUpload
+						active={modalUploadActive}
+						setActive={setModalUploadActive}
+						id={id}
+						link={link}
+						token={props.token}
+					/>
+				</Content>
+			</Layout>
+		</Layout>
+	);
 };
 
-export default Template;
+export default Templates;

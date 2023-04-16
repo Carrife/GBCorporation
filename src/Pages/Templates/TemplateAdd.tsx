@@ -1,49 +1,53 @@
-import { SyntheticEvent, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
+import { CreateTemplate } from "../../Actions/TemplateActions";
+import { Button, Col, Form, Input } from "antd";
+import ModalTitles from "../../Enums/ModalTitles";
 
-const TemplateAdd = (props: {active: boolean, setActive: (active: boolean) => void, token: string | null}) => {
-    const [name, setName] = useState('');
+const TemplateAdd = (props: {
+	active: boolean;
+	setActive: (active: boolean) => void;
+	token: string | null;
+}) => {
+	const [form] = Form.useForm();
 
-    const submit = async (e: SyntheticEvent) => {
-        e.preventDefault();
+	const onFinish = (values: any) => {
+		CreateTemplate(props.token, values.name, props.setActive);
+	};
 
-        const response = await fetch("http://localhost:8000/api/Template/Create", {
-            method: 'POST',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({
-                name
-            })
-        });
-
-        if(!response.ok)
-        {
-            console.log('Error');
-        }
-
-        props.setActive(false);
-        window.location.reload();
-    }
-    
-    return (
-        <ModalWindow title='' isActive={props.active} setActive={props.setActive}>
-            <form onSubmit={submit}>
-                <table>
-                    <td className="modal_table_td">
-                        <tr>
-                            <label className="modal_label">Title</label>
-                            <br/>
-                            <input type="text" className="modal_input" required
-                                onChange={e => setName(e.target.value)}
-                            />
-                        </tr>
-                    </td>
-                </table>
-
-                <br/><button className="modal_button" type="submit">Create</button>
-            </form>
-        </ModalWindow>
-    )
-}
+	return (
+		<ModalWindow
+			title={ModalTitles.CREATE_TEMPLATE}
+			isActive={props.active}
+			setActive={props.setActive}
+		>
+			<Form
+				form={form}
+				style={{ padding: 10 }}
+				onFinish={onFinish}
+				labelCol={{ flex: "114px" }}
+				labelAlign="left"
+				labelWrap
+			>
+				<Form.Item
+					name={`name`}
+					label={`Title`}
+					rules={[
+						{
+							required: true,
+							message: "Empty field",
+						},
+					]}
+				>
+					<Input />
+				</Form.Item>
+				<Col span={24} style={{ textAlign: "right" }}>
+					<Button type="primary" htmlType="submit">
+						Create
+					</Button>
+				</Col>
+			</Form>
+		</ModalWindow>
+	);
+};
 
 export default TemplateAdd;

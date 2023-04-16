@@ -12,6 +12,9 @@ enum ModalTitles {
     CREATE_EMPLOYEE = "Create Employee",
     EDIT_EMPLOYEE = "Update Employee",
     EMPLOYEE_DATA = "Employee data",
+    CREATE_TEMPLATE = "Create Template",
+    UPLOAD_TEMPLATE = "Upload Template",
+
 }
 
 export default ModalTitles;

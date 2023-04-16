@@ -1,33 +1,86 @@
-import { ChangeEvent} from "react";
 import ModalWindow from "../../Components/Modal/Modal";
+import { UploadTemplate } from "../../Actions/TemplateActions";
+import ModalTitles from "../../Enums/ModalTitles";
+import { Button, Col, Form, Upload, UploadFile, UploadProps } from "antd";
+import * as AiIcons from "react-icons/ai";
+import { useEffect, useState } from "react";
 
-const TemplateUpload = (props: {active: boolean, setActive: (active: boolean) => void, id:string, token: string | null}) => {
-    const id = props.id;
-    
-    const templateUpload = (e: ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();    
-        const userFile = (e.target.files as FileList)[0];
-            
-        const formData = new FormData();
-        formData.append('file', userFile);
-        //console.log('file: '+userFile);
-                       
-        fetch("http://localhost:8000/api/Template/Upload", {                
-            method: 'POST',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, id },
-            body: formData        
-        });
-            
-        window.location.reload();
-    };
-    
-    return (
-        <ModalWindow title='' isActive={props.active} setActive={props.setActive}>
-                <label className="modal_label">File</label>
-                <br/>     
-                <input type="file" name="file" onChange={(e) => templateUpload(e)}/>  
-        </ModalWindow>             
-    )
-}
+const TemplateUpload = (props: {
+	active: boolean;
+	setActive: (active: boolean) => void;
+	id: string;
+	link: string;
+	token: string | null;
+}) => {
+	const [fileList, setFileList] = useState<UploadFile[]>([]);
+	const [form] = Form.useForm();
+
+	useEffect(() => {
+		console.log(props.link);
+		if (props.link) {
+			setFileList([
+				{
+					uid: "1",
+					name: props.link,
+					status: "done",
+				},
+			]);
+		} else {
+			setFileList([]);
+		}
+	}, [props.link, props.id, form]);
+
+	const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
+		setFileList(newFileList);
+
+	const onFinish = (values: any) => {
+		let file = values.file?.file !== undefined ? values.file.file : null;
+		UploadTemplate(props.token, props.id, file, props.setActive);
+	};
+
+	return (
+		<ModalWindow
+			title={ModalTitles.UPLOAD_TEMPLATE}
+			isActive={props.active}
+			setActive={props.setActive}
+		>
+			<Form
+				form={form}
+				style={{ padding: 10 }}
+				onFinish={onFinish}
+				labelCol={{ flex: "55px" }}
+				labelAlign="left"
+				labelWrap
+			>
+				<Form.Item name={`file`} label={"File"}>
+					<Upload
+						fileList={fileList}
+						maxCount={1}
+						showUploadList={{ showRemoveIcon: false }}
+						accept=".xml"
+						beforeUpload={(file) => {
+							if (file.type.includes("xml")) {
+								return false;
+							} else {
+								return true;
+							}
+						}}
+						onChange={handleChange}
+					>
+						<Button
+							style={{ width: 100 }}
+							icon={<AiIcons.AiOutlineUpload />}
+						/>
+					</Upload>
+				</Form.Item>
+				<Col span={24} style={{ textAlign: "right" }}>
+					<Button type="primary" htmlType="submit">
+						Submit
+					</Button>
+				</Col>
+			</Form>
+		</ModalWindow>
+	);
+};
 
 export default TemplateUpload;
