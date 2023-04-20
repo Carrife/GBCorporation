@@ -1,64 +1,97 @@
-import React, { useState, useEffect, SyntheticEvent } from 'react';
-import'../../App.css';
-import Sidebar from '../../Components/Sidebar/Sidebar';
-import TestStart from './TestStart';
+import React, { useState, useEffect } from "react";
+import "../../App.css";
+import Sidebar from "../../Components/Sidebar/Sidebar";
+import TestStart from "./TestStart";
+import { GetAllTests, Test, StartTest,TestData } from "../../Actions/TestActions";
+import { Button, Layout, Space, Table } from "antd";
+import { ColumnsType, TableProps } from "antd/es/table";
+import * as AiIcons from "react-icons/ai";
 
-const Test = (props: {username: string, role: string, token:string}) => {
-    const [templates, setTemplates] = useState([]);
-    const [modalStartActive, setModalStartActive] = useState(false);
-    const [testName, setTestName] = useState('');
-    const [testData, setTestData] = useState([{question:'', answers: []}]);
+const Tests = (props: { userId: string; role: string; token: string }) => {
+	const [templates, setTemplates] = useState<Test[]>([]);
+	const [modalStartActive, setModalStartActive] = useState(false);
+	const [testName, setTestName] = useState("");
+	const [testData, setTestData] = useState<TestData[]>([]);
+	const { Content } = Layout;
 
-    useEffect(() => {
-        fetch("http://localhost:8000/api/Template/GetAll", {
-            method: "GET",
-            headers: {'Accept': '*/*', "Authorization": "Bearer " + props.token}
-        })
-            .then(response => response.json())
-            .then(data => setTemplates(data))
-    }, []);
+	interface DataType {
+		key: React.Key;
+		name: string;
+	}
 
-    const startTest = async (id: string, e: SyntheticEvent, name: string) => {
-        e.preventDefault();
-        
-        await fetch("http://localhost:8000/api/TestCompetencies/Start", {
-            method: 'GET',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json', id},
-            credentials: 'include'
-        })
-            .then(response => response.json())
-            .then(data => setTestData(data))
-        
-        setTestName(name);
-        setModalStartActive(true);
-    };
+	const columns: ColumnsType<DataType> = [
+		{
+			title: "Title",
+			dataIndex: "name",
+			key: "title",
+			sorter: {
+				compare: (a, b) =>
+					a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1,
+			},
+		},
+		{
+			title: "",
+			key: "action",
+			render: (_, record) => (
+				<Space size="middle">
+					<Button
+						type="text"
+						onClick={() =>
+							startTest(record.key.toString(), record.name)
+						}
+					>
+						<AiIcons.AiOutlineAudit />
+					</Button>
+				</Space>
+			),
+		},
+	];
 
-    return (
-        <>
-            <Sidebar role={props.role}/>
-        <div className='pages'>
-            <table className='pages-table'>
-                <thead>
-                    <tr>
-                        <th>
-                            Title
-                        </th>
-                    </tr> 
-                </thead>
-                <tbody>
-                    {templates.map(({id, name}, index) => (
-                        <tr key={index}>
-                        <td>{name}</td>
-                        <td><button className='button_link' onClick={(e) => {startTest(id, e, name)}}>Start</button></td>
-                    </tr>
-                    )
-                    )}
-                </tbody>
-            </table>
-            <TestStart active={modalStartActive} setActive={setModalStartActive} testData={testData} testName={testName} username={props.username} token={props.token}/>
-        </div>
-        </>
-    );
+	useEffect(() => {
+		if (window.localStorage.getItem("token") === "undefined") {
+			window.location.href = "/";
+		} else {
+			GetAllTests(props.token).then((result) => setTemplates(result));
+		}
+	}, [props.token]);
+
+	const startTest = async (id: string, name: string) => {
+		StartTest(props.token, id).then((result) => setTestData(result));
+		setTestName(name);
+		setModalStartActive(true);
+	};
+
+	const onChange: TableProps<DataType>["onChange"] = (
+		pagination,
+		filters,
+		sorter,
+		extra
+	) => {
+		console.log("params", pagination, filters, sorter, extra);
+	};        
+    
+	return (
+		<Layout className="layout">
+			<Sidebar role={props.role} />
+			<Layout className="page-layout">
+				<Content>
+					<Table
+						columns={columns}
+						dataSource={templates}
+						onChange={onChange}
+					/>
+					<TestStart
+						active={modalStartActive}
+						setActive={setModalStartActive}
+						testData={testData}
+						testName={testName}
+						userId={props.userId}
+						token={props.token}
+					/>
+				</Content>
+			</Layout>
+		</Layout>
+	);
 };
 
-export default Test;
+export default Tests;

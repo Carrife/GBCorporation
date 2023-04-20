@@ -1,137 +1,118 @@
-import { SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
+import { TestData, TestComplete } from "../../Actions/TestActions";
+import { Button, Form, Checkbox, Space, Row, Col } from "antd";
+import "./Test.css";
 
-const TestStart = (props: {active: boolean, setActive: (active: boolean) => void, testData: {question:string, answers: never[]}[], testName: string, username: string, token: string | null}) => {
-    const testData = props.testData;
-    const [isNotConfirmed, setIsNotConfirmed] = useState(true);
-    const title = props.testName;
-    const [answersState, setAnswersState] = useState({answers: [{question: '', value: '', checked: false, isCorrect: false}]});
-    const user = props.username;
-    const [result, setResult] = useState(0);
-    const [ minutes, setMinutes ] = useState(30);
-    const [ seconds, setSeconds ] = useState(0);
-    const [ timerActive, setTimerActive ] = useState(true);
-    const [answersData, setAnswersData] = useState(true);
+const TestStart = (props: {
+	active: boolean;
+	setActive: (active: boolean) => void;
+	testData: TestData[];
+	testName: string;
+	userId: string;
+	token: string | null;
+}) => {
+	const testData = props.testData;
+	const [isConfirmed, setIsConfirmed] = useState(false);
+	const [result, setResult] = useState(0);
+	const [minutes, setMinutes] = useState(30);
+	const [seconds, setSeconds] = useState(0);
+	const [timerActive, setTimerActive] = useState(true);
+	const [form] = Form.useForm();
 
-    useEffect(() => {
-        if (seconds > 0 && timerActive) {
-            setTimeout(setSeconds, 1000, seconds - 1);
-        }
-        else if(seconds === 0 && timerActive)
-        {
-            setMinutes(minutes - 1);
-            setSeconds(59);
-        }
-    }, [seconds, minutes, timerActive]);
+	useEffect(() => {
+		if (minutes === 0 && seconds === 0 && timerActive) {
+			onFinish(form.getFieldsValue());
+		} else if (seconds > 0 && timerActive) {
+			setTimeout(setSeconds, 1000, seconds - 1);
+		} else if (seconds === 0 && timerActive) {
+			setMinutes(minutes - 1);
+			setSeconds(59);
+		}
+	}, [seconds, minutes, timerActive]);
 
-    const handleChange = (value: string, checked: boolean) => {
-        if(answersData)
-        {
-            testData.map(item => (
-                    item.answers.map(answerItem => (
-                        answersState.answers.push({question: item['question'], value: answerItem['answer'], checked: false, isCorrect: answerItem['isCorrect']})
-                    ))
-                ));
-            console.log(answersState.answers);
-            setAnswersData(false);
-        }
-        
-        answersState.answers.forEach((item) => {
-            if (item.value === value) item.checked = checked;
-        });        
-    }
+	const onFinish = (values: any) => {
+		setTimerActive(false);
 
-    const submit = async (e: SyntheticEvent) => {
-        e.preventDefault();
+		let numCorrectByUser = 0;
+		let numCorrectAnswers = 0;
 
-        setTimerActive(false);
+		testData?.forEach((item) => {
+			item.answers?.forEach((answerItem) => {
+				if (
+					answerItem.isCorrect &&
+					values[item.key]?.includes(answerItem.key)
+				) {
+					numCorrectByUser++;
+				}
 
-        let numCorrectByUser = 0;
-        let numIsCorrectAnswers = 0;
+				if (answerItem.isCorrect === true) numCorrectAnswers++;
+			});
+		});
 
-        answersState.answers.forEach((item, index, answers) => {
-            if (item.checked === true && item.isCorrect === true) numCorrectByUser++;
+		let res = Math.round((numCorrectByUser * 100) / numCorrectAnswers);
 
-            if (item.isCorrect === true) numIsCorrectAnswers++;
-        });
+		TestComplete(props.token, props.testName, props.userId, res);
 
-        setResult(Math.round((numCorrectByUser * 100) / numIsCorrectAnswers));
+		setResult(res);
 
-        const response = await fetch("http://localhost:8000/api/TestCompetencies/Complete", {
-            method: 'POST',
-            headers: { 'Accept': '*/*', "Authorization": "Bearer " + props.token, 'Content-Type': 'application/json'},
-            credentials: 'include',
-            body: JSON.stringify({
-                title,
-                user,
-                result: Math.round((numCorrectByUser * 100) / numIsCorrectAnswers),
-            })
-        });
+		setIsConfirmed(true);
+	};
 
-        if(!response.ok)
-        {
-            console.log('Error');
-        }
-
-        setIsNotConfirmed(false);
-    }
-    
-    return (
-        <ModalWindow title='' isActive={props.active} setActive={props.setActive}>
-            {isNotConfirmed ?
-            <form onSubmit={submit}>
-                <table className="modal_table_tests">
-                    <td>
-                        <label className="modal_label">Time: {seconds >= 10 ? minutes+':'+seconds : minutes+':0'+seconds}</label>
-                        {testData.map(item => (
-                            <tr>
-                                <label className="modal_label">{item.question}</label>
-                                {item.answers.map(answerItem => ( 
-                                    <div>
-                                        <input type="checkbox" className="modal_label" onChange={(e) => handleChange(e.target.value, e.target.checked)} value={answerItem['answer']}/>
-                                        &nbsp;
-                                        <label className="modal_label">{answerItem['answer']}</label>
-                                    </div>
-                                ))}
-                                <br/>
-                            </tr>
-                        ))}
-                    </td>
-                </table>
-                <button className="modal_button" type="submit" name="submit">Confirm</button>
-            </form>
-            : 
-            <form>
-                <label className="modal_label">Result: {result}%</label>
-                <br/>
-                <label className="modal_label">Designations: <label className="modal_label_green">Correct</label> <label className="modal_label_orange">Not selected correctly</label> <label className="modal_label_red">Incorrect</label></label>
-                    
-                <table className="modal_table_tests">
-                    <td>
-                        <br/>
-                        {testData.map(item => (
-                            <tr>
-                                <label className="modal_label">{item.question}</label>
-                                {item.answers.map(answerItem => ( 
-                                    <div>
-                                        <label className={(answersState.answers.find(x => x.value === answerItem['answer'] && x.checked === true && 
-                                            x.isCorrect === true) != null) ? "modal_label_green" : 
-                                            (answersState.answers.find(x => x.value === answerItem['answer'] && x.checked === true && 
-                                            x.isCorrect === false) != null ? "modal_label_red" :
-                                            (answersState.answers.find(x => x.value === answerItem['answer'] && x.checked === false && 
-                                            x.isCorrect === true) != null ? "modal_label_orange" :
-                                            "modal_label")) }>{answerItem['answer']}</label>
-                                    </div>
-                                ))}
-                                <br/>
-                            </tr>
-                        ))}
-                    </td>
-                </table>
-            </form>
-            }
-        </ModalWindow>
-    )
-}
+	return (
+		<ModalWindow
+			title={props.testName}
+			isActive={props.active}
+			setActive={props.setActive}
+		>
+			<>
+				{!isConfirmed ? (
+					<div className={minutes > 2 ? "modal_time" : "modal_time_runout" }>
+						Time:{" "}
+						{seconds >= 10
+							? minutes + ":" + seconds
+							: minutes + ":0" + seconds}
+					</div>
+				) : (
+					<div className="modal_result">Result: {result}%</div>
+				)}
+				<Form form={form} onFinish={onFinish} layout={"vertical"}>
+					{testData?.map((item) => (
+						<Form.Item name={item.key} label={item.question}>
+							<Checkbox.Group>
+								<Space direction="vertical">
+									{item.answers.map((answerItem) => (
+										<Checkbox
+											disabled={isConfirmed}
+											value={answerItem.key}
+											key={answerItem.key}
+										>
+											{answerItem.answer}
+										</Checkbox>
+									))}
+								</Space>
+							</Checkbox.Group>
+						</Form.Item>
+					))}
+					<Row>
+						<Col span={24} style={{ textAlign: "center" }}>
+							{!isConfirmed ? (
+								<Button
+									type="primary"
+									htmlType="submit"
+									className="modal_button"
+								>
+									Confirm
+								</Button>
+							) : (
+								""
+							)}
+						</Col>
+					</Row>
+				</Form>
+			</>
+		</ModalWindow>
+	);
+};
 
 export default TestStart;

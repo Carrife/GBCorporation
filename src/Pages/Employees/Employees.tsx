@@ -12,11 +12,14 @@ import {
 	EmployeeFired,
 	GetAllEmployee,
 	GetEmployeeById,
+	GetTestData,
+	EmployeeTestData,
 } from "../../Actions/EmployeeActions";
 import { Button, Layout, Space, Table } from "antd";
 
-const Employees = (props: { role: string; token: string }) => {
+const Employees = (props: { role: string; token: string; userId: string }) => {
 	const [employees, setEmployees] = useState<Employee[]>([]);
+	const [testData, setTestData] = useState<EmployeeTestData[]>([]);
 	const [employee, setEmployee] = useState<EmployeeData>();
 	const [modalAddActive, setModalAddActive] = useState(false);
 	const [modalEditActive, setModalEditActive] = useState(false);
@@ -161,6 +164,7 @@ const Employees = (props: { role: string; token: string }) => {
 
 	const employeeData = async (id: string) => {
 		GetEmployeeById(props.token, id).then((result) => setEmployee(result));
+		GetTestData(props.token, id).then((result) => setTestData(result));
 		setModalDataActive(true);
 	};
 
@@ -193,6 +197,9 @@ const Employees = (props: { role: string; token: string }) => {
 						active={modalDataActive}
 						setActive={setModalDataActive}
 						employee={employee}
+						userId={props.userId}
+						role={props.role}
+						testData={testData}
 					/>
 					<EmployeeEdit
 						active={modalEditActive}

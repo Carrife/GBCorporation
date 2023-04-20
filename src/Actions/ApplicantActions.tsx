@@ -43,6 +43,7 @@ export interface TestData {
 }
 
 export interface Short {
+	key: string;
 	id: number;
 	name: string;
 }
@@ -213,6 +214,9 @@ export async function GetForeignLanguages(
 	)
 		.then((response) => response.json())
 		.then((data) => {
+			(data as Short[]).forEach((el) =>
+				Object.assign(el, { key: el.id.toString() })
+			);
 			return data as Short[];
 		});
 }
@@ -229,6 +233,9 @@ export async function GetProgrammingLanguages(
 	)
 		.then((response) => response.json())
 		.then((data) => {
+			(data as Short[]).forEach((el) =>
+				Object.assign(el, { key: el.id.toString() })
+			);
 			return data as Short[];
 		});
 }

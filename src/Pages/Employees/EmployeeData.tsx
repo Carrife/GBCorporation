@@ -1,12 +1,16 @@
 import { Col, Divider, Row, Space, Typography } from "antd";
-import { EmployeeData } from "../../Actions/EmployeeActions";
+import { EmployeeData, EmployeeTestData } from "../../Actions/EmployeeActions";
 import ModalWindow from "../../Components/Modal/Modal";
 import ModalTitles from "../../Enums/ModalTitles";
+import Role from "../../Enums/RoleEnum";
 
 const EmployeeDetails = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	employee: EmployeeData | undefined;
+	userId: string;
+	role: string;
+	testData: EmployeeTestData[];
 }) => {
 	const { Text } = Typography;
 
@@ -108,6 +112,29 @@ const EmployeeDetails = (props: {
 							<Text>{props.employee?.workPhone}</Text>
 						</Col>
 					</Row>
+				) : (
+					""
+				)}
+				{props.employee?.id.toString() === props.userId ||
+				props.role === Role.LM ||
+				props.role === Role.ADMIN ? (
+					<>
+						<Divider plain>Test data</Divider>
+						{console.log(props.testData)}
+						{props.testData?.map((item) => (
+							<Row>
+								<Col span={15}>
+									<Text>{item.title}</Text>
+								</Col>
+								<Col span={5}>
+									<Text>{item.testResult}</Text>
+								</Col>
+								<Col>
+									<Text>{item.date}</Text>
+								</Col>
+							</Row>
+						))}
+					</>
 				) : (
 					""
 				)}

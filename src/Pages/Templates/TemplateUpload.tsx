@@ -21,7 +21,7 @@ const TemplateUpload = (props: {
 			setFileList([
 				{
 					uid: "1",
-					name: props.link,
+					name: props.link.split('/').pop() ?? '',
 					status: "done",
 				},
 			]);

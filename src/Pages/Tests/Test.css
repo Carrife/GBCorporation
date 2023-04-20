@@ -1,0 +1,23 @@
+.modal_time {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.modal_time_runout {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: 500;
+    color: red;
+}
+
+.modal_result {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-style: italic;
+    font-weight: 600;
+}
+
+.modal_button {
+    text-align: center;
+}

@@ -31,6 +31,13 @@ export interface EmployeeData {
 	language: { id: number; name: string };
 }
 
+export interface EmployeeTestData {
+	key: string;
+	title: string;
+	testResult: string;
+	date: string;
+}
+
 export function GetAllEmployee(token: string): Promise<Employee[]> {
 	return fetch("http://localhost:8000/api/Employee/GetAll", {
 		method: "GET",
@@ -205,4 +212,24 @@ export async function EmployeeFired(token: string, id: string): Promise<void> {
 
 		window.location.reload();
 	}
+}
+
+export async function GetTestData(
+	token: string | null,
+	id: string
+): Promise<EmployeeTestData[]> {
+	return await fetch("http://localhost:8000/api/TestCompetencies/GetByUserId", {
+		method: "GET",
+		headers: {
+			Accept: "*/*",
+			Authorization: "Bearer " + token,
+			"Content-Type": "application/json",
+			id,
+		},
+		credentials: "include",
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			return data as EmployeeTestData[];
+		});
 }

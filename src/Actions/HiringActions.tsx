@@ -31,74 +31,25 @@ export interface HiringData {
 }
 
 export interface TestData {
-	foreignTest: [
-		{
-			id: number;
-			name: string;
-		}
-	];
-	logicTest: [
-		{
-			id: number;
-			name: string;
-		}
-	];
-	programmingTest: [
-		{
-			id: number;
-			name: string;
-		}
-	];
+	foreignTest: Short[];
+	logicTest: Short[];
+	programmingTest: Short[];
 }
 
 export interface Short {
+	key: string;
 	id: number;
 	name: string;
 }
 
 export interface Interviewers {
-	teamLeaders: [
-		{
-			id: number;
-			name: string;
-		}
-	];
-	lineManagers: [
-		{
-			id: number;
-			name: string;
-		}
-	];
-	hRs: [
-		{
-			id: number;
-			name: string;
-		}
-	];
-	ceo: [
-		{
-			id: number;
-			name: string;
-		}
-	];
-	chiefAccountant: [
-		{
-			id: number;
-			name: string;
-		}
-	];
-	bAs: [
-		{
-			id: number;
-			name: string;
-		}
-	];
-	admins: [
-		{
-			id: number;
-			name: string;
-		}
-	];
+	teamLeaders: Short[];
+	lineManagers: Short[];
+	hRs: Short[];
+	ceo: Short[];
+	chiefAccountant: Short[];
+	bAs: Short[];
+	admins: Short[];
 }
 
 interface hiringCreate {
@@ -273,6 +224,9 @@ export function GetActiveApplicants(token: string | null): Promise<Short[]> {
 	})
 		.then((response) => response.json())
 		.then((data) => {
+			(data as Short[]).forEach((el) =>
+				Object.assign(el, { key: el.id.toString() })
+			);
 			return data as Short[];
 		});
 }
@@ -316,6 +270,9 @@ export function GetInterviewerPositions(
 	})
 		.then((response) => response.json())
 		.then((data) => {
+			(data as Short[]).forEach((el) =>
+				Object.assign(el, { key: el.id.toString() })
+			);
 			return data as Short[];
 		});
 }
@@ -327,6 +284,9 @@ export function GetPositions(token: string | null): Promise<Short[]> {
 	})
 		.then((response) => response.json())
 		.then((data) => {
+			(data as Short[]).forEach((el) =>
+				Object.assign(el, { key: el.id.toString() })
+			);
 			return data as Short[];
 		});
 }
@@ -338,6 +298,9 @@ export function GetDepartments(token: string | null): Promise<Short[]> {
 	})
 		.then((response) => response.json())
 		.then((data) => {
+			(data as Short[]).forEach((el) =>
+				Object.assign(el, { key: el.id.toString() })
+			);
 			return data as Short[];
 		});
 }

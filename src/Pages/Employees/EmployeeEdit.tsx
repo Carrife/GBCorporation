@@ -193,7 +193,7 @@ const EmployeeEdit = (props: {
 								{positions.map((item) => (
 									<Select.Option
 										value={item.id}
-										key={item.id}
+										key={item.key}
 									>
 										{item.name}
 									</Select.Option>
@@ -214,7 +214,7 @@ const EmployeeEdit = (props: {
 						>
 							<Select showSearch optionFilterProp="children">
 								{departments.map((item) => (
-									<Select.Option value={item.id}>
+									<Select.Option value={item.id} key={item.key}>
 										{item.name}
 									</Select.Option>
 								))}
@@ -227,7 +227,7 @@ const EmployeeEdit = (props: {
 								disabled={isDisabled}
 							>
 								{languages.map((item) => (
-									<Select.Option value={item.id}>
+									<Select.Option value={item.id} key={item.key}>
 										{item.name}
 									</Select.Option>
 								))}

@@ -167,7 +167,7 @@ const EmployeeAdd = (props: {
 								onChange={onChangePosition}
 							>
 								{positions.map((item) => (
-									<Select.Option value={item.id}>
+									<Select.Option value={item.id} key={item.key}>
 										{item.name}
 									</Select.Option>
 								))}
@@ -187,7 +187,7 @@ const EmployeeAdd = (props: {
 						>
 							<Select showSearch optionFilterProp="children">
 								{departments.map((item) => (
-									<Select.Option value={item.id}>
+									<Select.Option value={item.id} key={item.key}>
 										{item.name}
 									</Select.Option>
 								))}
@@ -200,7 +200,7 @@ const EmployeeAdd = (props: {
 								disabled={isDisabled}
 							>
 								{languages.map((item) => (
-									<Select.Option value={item.id}>
+									<Select.Option value={item.id} key={item.key}>
 										{item.name}
 									</Select.Option>
 								))}
