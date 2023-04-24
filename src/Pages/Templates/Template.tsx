@@ -60,6 +60,7 @@ const Templates = (props: { role: string; token: string }) => {
 		{
 			title: "",
 			key: "action",
+			width: 100,
 			render: (_, record) => (
 				<Space size="middle">
 					<Button

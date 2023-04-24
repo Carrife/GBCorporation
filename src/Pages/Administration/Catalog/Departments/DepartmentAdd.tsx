@@ -1,9 +1,9 @@
-import ModalWindow from "../../Components/Modal/Modal";
-import { CreateTemplate } from "../../Actions/TemplateActions";
-import { Button, Col, Form, Input } from "antd";
-import ModalTitles from "../../Enums/ModalTitles";
+import { Button, Col, Form, Input, Row } from "antd";
+import ModalWindow from "../../../../Components/Modal/Modal";
+import ModalTitles from "../../../../Enums/ModalTitles";
+import { CreateDepartment } from "../../../../Actions/AdministrationActions";
 
-const TemplateAdd = (props: {
+const DepartmentAdd = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	token: string | null;
@@ -11,12 +11,12 @@ const TemplateAdd = (props: {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: any) => {
-		CreateTemplate(props.token, values.name, props.setActive);
+		CreateDepartment(props.token, values.title, props.setActive);
 	};
 
 	return (
 		<ModalWindow
-			title={ModalTitles.CREATE_TEMPLATE}
+			title={ModalTitles.CREAT_DEPARTMENT}
 			isActive={props.active}
 			setActive={props.setActive}
 		>
@@ -29,7 +29,7 @@ const TemplateAdd = (props: {
 				labelWrap
 			>
 				<Form.Item
-					name={`name`}
+					name={`title`}
 					label={`Title`}
 					rules={[
 						{
@@ -40,14 +40,16 @@ const TemplateAdd = (props: {
 				>
 					<Input />
 				</Form.Item>
-				<Col span={24} style={{ textAlign: "right" }}>
-					<Button type="primary" htmlType="submit">
-						Create
-					</Button>
-				</Col>
+				<Row>
+					<Col span={24} style={{ textAlign: "right" }}>
+						<Button type="primary" htmlType="submit">
+							Create
+						</Button>
+					</Col>
+				</Row>
 			</Form>
 		</ModalWindow>
 	);
 };
 
-export default TemplateAdd;
+export default DepartmentAdd;

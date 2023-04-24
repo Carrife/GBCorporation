@@ -24,6 +24,7 @@ const Tests = (props: { userId: string; role: string; token: string }) => {
 			title: "Title",
 			dataIndex: "name",
 			key: "title",
+			width: 900,
 			sorter: {
 				compare: (a, b) =>
 					a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1,

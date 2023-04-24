@@ -10,6 +10,7 @@ import Applicant from "./Pages/Applicants/Applicant";
 import Hiring from "./Pages/Hiring/Hiring";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Logout from "./Pages/Logout";
+import Administration from "./Pages/Administration/Administartion";
 
 function App() {
 	const [name, setName] = useState("");
@@ -46,7 +47,13 @@ function App() {
 						<Route path="/" element={<Login setName={setName} />} />
 						<Route
 							path="/employees"
-							element={<Employee role={role} token={token} userId={userId} />}
+							element={
+								<Employee
+									role={role}
+									token={token}
+									userId={userId}
+								/>
+							}
 						/>
 						<Route
 							path="/applicants"
@@ -70,6 +77,16 @@ function App() {
 							path="/tests"
 							element={
 								<Tests
+									userId={userId}
+									role={role}
+									token={token}
+								/>
+							}
+						/>
+						<Route
+							path="/admin"
+							element={
+								<Administration
 									userId={userId}
 									role={role}
 									token={token}

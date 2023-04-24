@@ -32,6 +32,12 @@ export const SidebarData = [
         cName: 'nav-text'
     },
     {
+        title: 'Administration',
+        path: '/admin',
+        icon: <AiIcons.AiOutlineLaptop/>,
+        cName: 'nav-text'
+    },
+    {
         title: 'Settings',
         path: '/settings',
         icon: <AiIcons.AiOutlineSetting/>,
