@@ -661,8 +661,6 @@ export async function UpdateUser(
 	setActive: (active: boolean) => void,
 	id: number
 ): Promise<void> {
-	console.log(formValues);
-	console.log(id);
 	const response = await fetch(
 		"http://localhost:8000/api/Employee/UpdateUser",
 		{

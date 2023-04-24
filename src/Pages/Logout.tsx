@@ -1,18 +1,20 @@
-import { Navigate  } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
+import { LogOut } from "../Actions/AuthActions";
 
-const Logout = (props: {name: string, setName: (name: string) => void, role: string, setRole: (role: string) => void}) => {
+const Logout = (props: {
+	setName: (name: string) => void;
+	setRole: (role: string) => void;
+	setToken: (role: string) => void;
+    setUserId: (role: string) => void;
+}) => {
+    LogOut();
+	
+	props.setName("");
+	props.setRole("");
+	props.setToken("");
+	props.setUserId("");
 
-        fetch("http://localhost:8000/api/Auth/Logout", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include'
-        });
-
-        props.setName('');
-        props.setRole('');
-        window.localStorage.setItem('token', '');
-
-        return <Navigate to="/"/>
-}
+	return <Navigate to="/" />;
+};
 
 export default Logout;

@@ -315,7 +315,6 @@ export async function CreateLogicTest(
 	);
 
 	if (!response.ok) {
-		console.log(response);
 		if (response.status !== undefined) {
 			notification.error({
 				message: ErrorTitles.ERROR,

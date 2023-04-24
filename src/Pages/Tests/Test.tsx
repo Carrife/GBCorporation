@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "../../App.css";
-import Sidebar from "../../Components/Sidebar/Sidebar";
 import TestStart from "./TestStart";
-import { GetAllTests, Test, StartTest,TestData } from "../../Actions/TestActions";
+import {
+	GetAllTests,
+	Test,
+	StartTest,
+	TestData,
+} from "../../Actions/TestActions";
 import { Button, Layout, Space, Table } from "antd";
 import { ColumnsType, TableProps } from "antd/es/table";
 import * as AiIcons from "react-icons/ai";
+import Sidebar from "../../Components/Sidebar/Sidebar";
 
 const Tests = (props: { userId: string; role: string; token: string }) => {
 	const [templates, setTemplates] = useState<Test[]>([]);
@@ -49,11 +54,7 @@ const Tests = (props: { userId: string; role: string; token: string }) => {
 	];
 
 	useEffect(() => {
-		if (window.localStorage.getItem("token") === "undefined") {
-			window.location.href = "/";
-		} else {
-			GetAllTests(props.token).then((result) => setTemplates(result));
-		}
+		GetAllTests(props.token).then((result) => setTemplates(result));
 	}, [props.token]);
 
 	const startTest = async (id: string, name: string) => {
@@ -69,8 +70,8 @@ const Tests = (props: { userId: string; role: string; token: string }) => {
 		extra
 	) => {
 		console.log("params", pagination, filters, sorter, extra);
-	};        
-    
+	};
+
 	return (
 		<Layout className="layout">
 			<Sidebar role={props.role} />

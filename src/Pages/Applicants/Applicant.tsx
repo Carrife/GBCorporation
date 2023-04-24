@@ -4,7 +4,6 @@ import ApplicantAdd from "./ApplicantAdd";
 import ApplicantEdit from "./ApplicantEdit";
 import ApplicantTestData from "./ApplicantTestData";
 import * as AiIcons from "react-icons/ai";
-import Sidebar from "../../Components/Sidebar/Sidebar";
 import { Layout, Table, Space, Button } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import {
@@ -14,6 +13,7 @@ import {
 	GetApplicantById,
 	TestData,
 } from "../../Actions/ApplicantActions";
+import Sidebar from "../../Components/Sidebar/Sidebar";
 
 const Applicants = (props: { role: string; token: string }) => {
 	const [applicants, setApplicants] = useState<Applicant[]>([]);
@@ -95,15 +95,7 @@ const Applicants = (props: { role: string; token: string }) => {
 	];
 
 	useEffect(() => {
-		((load) => {
-			if (window.localStorage.getItem("token") === "undefined") {
-				window.location.href = "/";
-			} else {
-				GetAllApplicants(props.token).then((result) =>
-					setApplicants(result)
-				);
-			}
-		})();
+		GetAllApplicants(props.token).then((result) => setApplicants(result));
 	}, [props.token]);
 
 	const onChange: TableProps<DataType>["onChange"] = (

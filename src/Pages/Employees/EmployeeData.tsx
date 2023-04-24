@@ -120,7 +120,6 @@ const EmployeeDetails = (props: {
 				props.role === Role.ADMIN ? (
 					<>
 						<Divider plain>Test data</Divider>
-						{console.log(props.testData)}
 						{props.testData?.map((item) => (
 							<Row>
 								<Col span={15}>

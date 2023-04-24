@@ -29,12 +29,19 @@ function App() {
 			);
 
 			const content = await response.json();
-
-			setName(content.name);
-			setRole(content.role);
-			setUserId(content.id);
-			window.localStorage.setItem("token", content.token);
-			setToken(content.token);
+			if (content?.status === 401) {
+				if (window.location.pathname !== "/") {
+					window.location.href = "/";
+				}
+			} else {
+				setName(content.name);
+				setRole(content.role);
+				setUserId(content.id);
+				setToken(content.token);
+				if (window.location.pathname === "/") {
+					window.location.href = "/employees";
+				}
+			}
 		})();
 	}, []);
 
@@ -44,7 +51,7 @@ function App() {
 				<Navbar name={name} role={role} />
 				<main>
 					<Routes>
-						<Route path="/" element={<Login setName={setName} />} />
+						<Route path="/" element={<Login />} />
 						<Route
 							path="/employees"
 							element={
@@ -107,10 +114,10 @@ function App() {
 							path="/logout"
 							element={
 								<Logout
-									name={name}
 									setName={setName}
-									role={role}
 									setRole={setRole}
+									setToken={setToken}
+									setUserId={setUserId}
 								/>
 							}
 						/>

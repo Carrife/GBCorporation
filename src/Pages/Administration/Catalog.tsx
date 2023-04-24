@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import { Tabs, TabsProps } from "antd";
 import Positions from "./Catalog/Positions/Positions";
 import Departments from "./Catalog/Departments/Departments";
@@ -7,12 +5,6 @@ import ForeignLanguages from "./Catalog/ForeignLanguages/ForeignLanguages";
 import ProgrammingLanguages from "./Catalog/ProgrammingLanguages/ProgrammingLanguages";
 
 const Catalog = (props: { userId: string; role: string; token: string }) => {
-	useEffect(() => {
-		if (window.localStorage.getItem("token") === "undefined") {
-			window.location.href = "/";
-		}
-	}, [props.token]);
-
 	const tabItems: TabsProps["items"] = [
 		{
 			key: "1",

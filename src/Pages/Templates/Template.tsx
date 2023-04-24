@@ -3,7 +3,6 @@ import "../../App.css";
 import TemplateAdd from "./TemplateAdd";
 import TemplateUpload from "./TemplateUpload";
 import * as AiIcons from "react-icons/ai";
-import Sidebar from "../../Components/Sidebar/Sidebar";
 import {
 	GetAllTemplates,
 	Template,
@@ -12,6 +11,7 @@ import {
 } from "../../Actions/TemplateActions";
 import { Button, Layout, Space, Table } from "antd";
 import { ColumnsType, TableProps } from "antd/es/table";
+import Sidebar from "../../Components/Sidebar/Sidebar";
 
 const Templates = (props: { role: string; token: string }) => {
 	const [id, setId] = useState("");
@@ -83,15 +83,7 @@ const Templates = (props: { role: string; token: string }) => {
 	];
 
 	useEffect(() => {
-		((load) => {
-			if (window.localStorage.getItem("token") === "undefined") {
-				window.location.href = "/";
-			} else {
-				GetAllTemplates(props.token).then((result) =>
-					setTemplates(result)
-				);
-			}
-		})();
+		GetAllTemplates(props.token).then((result) => setTemplates(result));
 	}, [props.token]);
 
 	const templateDelete = async (id: string) => {

@@ -16,7 +16,6 @@ const TemplateUpload = (props: {
 	const [form] = Form.useForm();
 
 	useEffect(() => {
-		console.log(props.link);
 		if (props.link) {
 			setFileList([
 				{

@@ -4,7 +4,6 @@ import EmployeeAdd from "./EmployeeAdd";
 import EmployeeEdit from "./EmployeeEdit";
 import EmployeeDetails from "./EmployeeData";
 import * as AiIcons from "react-icons/ai";
-import Sidebar from "../../Components/Sidebar/Sidebar";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import {
 	Employee,
@@ -16,6 +15,7 @@ import {
 	EmployeeTestData,
 } from "../../Actions/EmployeeActions";
 import { Button, Layout, Space, Table } from "antd";
+import Sidebar from "../../Components/Sidebar/Sidebar";
 
 const Employees = (props: { role: string; token: string; userId: string }) => {
 	const [employees, setEmployees] = useState<Employee[]>([]);
@@ -126,22 +126,7 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 	];
 
 	useEffect(() => {
-		((load) => {
-			if (window.localStorage.getItem("login") === "true") {
-				window.localStorage.setItem("login", "false");
-				window.location.reload();
-			}
-
-			if (window.localStorage.getItem("login") === "false") {
-				if (window.localStorage.getItem("token") === "undefined") {
-					window.location.href = "/";
-				} else {
-					GetAllEmployee(props.token).then((result) =>
-						setEmployees(result)
-					);
-				}
-			}
-		})();
+		GetAllEmployee(props.token).then((result) => setEmployees(result));
 	}, [props.token]);
 
 	const onChange: TableProps<DataType>["onChange"] = (
