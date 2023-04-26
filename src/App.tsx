@@ -52,75 +52,83 @@ function App() {
 				<main>
 					<Routes>
 						<Route path="/" element={<Login />} />
-						<Route
-							path="/employees"
-							element={
-								<Employee
-									role={role}
-									token={token}
-									userId={userId}
+						{token && (
+							<>
+								<Route
+									path="/employees"
+									element={
+										<Employee
+											role={role}
+											token={token}
+											userId={userId}
+										/>
+									}
 								/>
-							}
-						/>
-						<Route
-							path="/applicants"
-							element={<Applicant role={role} token={token} />}
-						/>
-						<Route
-							path="/hiring"
-							element={
-								<Hiring
-									role={role}
-									userId={userId}
-									token={token}
+								<Route
+									path="/applicants"
+									element={
+										<Applicant role={role} token={token} />
+									}
 								/>
-							}
-						/>
-						<Route
-							path="/templates"
-							element={<Templates role={role} token={token} />}
-						/>
-						<Route
-							path="/tests"
-							element={
-								<Tests
-									userId={userId}
-									role={role}
-									token={token}
+								<Route
+									path="/hiring"
+									element={
+										<Hiring
+											role={role}
+											userId={userId}
+											token={token}
+										/>
+									}
 								/>
-							}
-						/>
-						<Route
-							path="/admin"
-							element={
-								<Administration
-									userId={userId}
-									role={role}
-									token={token}
+								<Route
+									path="/templates"
+									element={
+										<Templates role={role} token={token} />
+									}
 								/>
-							}
-						/>
-						<Route
-							path="/settings"
-							element={
-								<Setting
-									userId={userId}
-									role={role}
-									token={token}
+								<Route
+									path="/tests"
+									element={
+										<Tests
+											userId={userId}
+											role={role}
+											token={token}
+										/>
+									}
 								/>
-							}
-						/>
-						<Route
-							path="/logout"
-							element={
-								<Logout
-									setName={setName}
-									setRole={setRole}
-									setToken={setToken}
-									setUserId={setUserId}
+								<Route
+									path="/admin"
+									element={
+										<Administration
+											userId={userId}
+											role={role}
+											token={token}
+										/>
+									}
 								/>
-							}
-						/>
+								<Route
+									path="/settings"
+									element={
+										<Setting
+											userId={userId}
+											role={role}
+											token={token}
+										/>
+									}
+								/>
+								<Route
+									path="/logout"
+									element={
+										<Logout
+											setName={setName}
+											setRole={setRole}
+											setToken={setToken}
+											setUserId={setUserId}
+										/>
+									}
+								/>
+							</>
+						)}
 					</Routes>
 				</main>
 			</BrowserRouter>

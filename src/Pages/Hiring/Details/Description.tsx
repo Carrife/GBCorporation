@@ -13,10 +13,6 @@ const Description = (props: {
 }) => {
 	const [form] = Form.useForm();
 
-	form.setFieldsValue({
-		description: props.description,
-	});
-
 	const onFinish = (values: any) => {
 		UpdateDescription(
 			props.token,
@@ -42,6 +38,7 @@ const Description = (props: {
 							message: "Empty field",
 						},
 					]}
+					initialValue={props.description}
 				>
 					<TextArea
 						autoSize={{ minRows: 4, maxRows: 4 }}
@@ -60,7 +57,7 @@ const Description = (props: {
 								form.resetFields();
 							}}
 						>
-							Clear
+							Reset
 						</Button>
 					</Col>
 				</Row>

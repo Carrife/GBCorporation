@@ -40,11 +40,11 @@ const HiringDetails = (props: {
 	};
 
 	useEffect(() => {
-		((load) => {
+		if (props.hiringId) {
 			GetHiringById(props.token, props.hiringId).then((result) =>
 				setHiringData(result)
 			);
-		})();
+		}
 	}, [props.token, props.hiringId]);
 
 	return (

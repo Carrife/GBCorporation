@@ -39,6 +39,7 @@ const EmployeeEdit = (props: {
 			setIsDisabled(true);
 		}
 	};
+	
 	const reset = () => {
 		form.setFieldsValue({
 			surnameRu: props.employee?.surnameRu,

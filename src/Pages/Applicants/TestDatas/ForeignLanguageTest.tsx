@@ -58,7 +58,10 @@ const ForeignLanguageTest = (props: {
 						>
 							<Select>
 								{languages.map((item) => (
-									<Select.Option value={item.id}>
+									<Select.Option
+										value={item.id}
+										key={item.key}
+									>
 										{item.name}
 									</Select.Option>
 								))}

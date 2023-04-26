@@ -39,25 +39,23 @@ const ApplicantHire = (props: {
 		)
 			setIsDisabled(false);
 		else {
-			form.resetFields(["programmingLanguage"])
+			form.resetFields(["programmingLanguage"]);
 			setIsDisabled(true);
 		}
 	};
 
 	useEffect(() => {
-		((load) => {
+		if (props.hiringId) {
 			GetApplicantHiringData(props.token, props.hiringId).then((result) =>
 				setApplicant(result)
 			);
-			GetPositions(props.token).then((result) => setPositions(result));
-			GetDepartments(props.token).then((result) =>
-				setDepartments(result)
-			);
-			GetProgrammingLanguages(props.token).then((result) =>
-				setLanguages(result)
-			);
-			onChangePosition(applicant?.positionId);
-		})();
+		}
+		GetPositions(props.token).then((result) => setPositions(result));
+		GetDepartments(props.token).then((result) => setDepartments(result));
+		GetProgrammingLanguages(props.token).then((result) =>
+			setLanguages(result)
+		);
+		onChangePosition(applicant?.positionId);
 	}, [props.token, props.hiringId, applicant?.positionId]);
 
 	return (

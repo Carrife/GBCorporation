@@ -100,28 +100,22 @@ const HiringAdd = (props: {
 	};
 
 	useEffect(() => {
-		((load) => {
-			GetActiveApplicants(props.token).then((result) =>
-				setApplicants(result)
-			);
-			GetInterviewers(props.token).then((result) =>
-				setInterviewers(result)
-			);
-			GetInterviewerPositions(props.token).then((result) =>
-				setInterviewerPositions(result)
-			);
-			GetPositions(props.token).then((result) => setPositions(result));
-		})();
+		GetActiveApplicants(props.token).then((result) =>
+			setApplicants(result)
+		);
+		GetInterviewers(props.token).then((result) => setInterviewers(result));
+		GetInterviewerPositions(props.token).then((result) =>
+			setInterviewerPositions(result)
+		);
+		GetPositions(props.token).then((result) => setPositions(result));
 	}, [props.token]);
 
 	useEffect(() => {
-		((load) => {
-			if (applicants.length > 0) {
-				GetTestData(props.token, applicantId).then((result) =>
-					setTestData(result)
-				);
-			}
-		})();
+		if (applicants.length > 0 && applicantId) {
+			GetTestData(props.token, applicantId).then((result) =>
+				setTestData(result)
+			);
+		}
 	}, [applicantId, props.token, applicants]);
 
 	const onFinish = (values: any) => {

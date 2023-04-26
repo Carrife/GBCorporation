@@ -67,7 +67,11 @@ const TestStart = (props: {
 		>
 			<>
 				{!isConfirmed ? (
-					<div className={minutes > 2 ? "modal_time" : "modal_time_runout" }>
+					<div
+						className={
+							minutes > 2 ? "modal_time" : "modal_time_runout"
+						}
+					>
 						Time:{" "}
 						{seconds >= 10
 							? minutes + ":" + seconds
