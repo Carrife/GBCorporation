@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import {
 	CreateProgrammingLanguageTest,
 	GetProgrammingLanguages,
-	Short,
 } from "../../../Actions/ApplicantActions";
 import ModalWindow from "../../../Components/Modal/Modal";
 import ModalTitles from "../../../Enums/ModalTitles";
+import { Short } from "../../../Interfaces/Data";
 
 const ProgrammingTest = (props: {
 	active: boolean;
@@ -60,7 +60,10 @@ const ProgrammingTest = (props: {
 						>
 							<Select>
 								{languages.map((item) => (
-									<Select.Option value={item.id} key={item.key}>
+									<Select.Option
+										value={item.id}
+										key={item.key}
+									>
 										{item.name}
 									</Select.Option>
 								))}

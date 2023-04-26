@@ -2,7 +2,8 @@ import { Button, Col, Form, Input, Row, Select } from "antd";
 import { useEffect, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
 import ModalTitles from "../../Enums/ModalTitles";
-import { GetRoles, Short, UpdateUser } from "../../Actions/AdministrationActions";
+import { GetRoles, UpdateUser } from "../../Actions/AdministrationActions";
+import { Short } from "../../Interfaces/Data";
 
 const UserEdit = (props: {
 	active: boolean;

@@ -4,14 +4,13 @@ import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
 import PositionEdit from "./PositionEdit";
 import PositionAdd from "./PositionAdd";
-import { DeletePosition, GetPositions, Short } from "../../../../Actions/AdministrationActions";
+import {
+	DeletePosition,
+	GetPositions,
+} from "../../../../Actions/AdministrationActions";
 import { SorterResult } from "antd/es/table/interface";
-
-interface TableParams {
-	pagination?: TablePaginationConfig;
-	sortField?: string;
-	sortOrder?: string;
-}
+import { TableParams } from "../../../../Interfaces/Table";
+import { Short } from "../../../../Interfaces/Data";
 
 interface DataType {
 	key: React.Key;
@@ -75,7 +74,10 @@ const Positions = (props: { userId: string; role: string; token: string }) => {
 					<Button
 						type="text"
 						onClick={() =>
-							positionEdit(record.key.toString(), record.name.toString())
+							positionEdit(
+								record.key.toString(),
+								record.name.toString()
+							)
 						}
 					>
 						<AiIcons.AiOutlineEdit />

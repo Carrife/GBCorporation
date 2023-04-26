@@ -4,7 +4,7 @@ import EmployeeAdd from "./EmployeeAdd";
 import EmployeeEdit from "./EmployeeEdit";
 import EmployeeDetails from "./EmployeeData";
 import * as AiIcons from "react-icons/ai";
-import type { ColumnsType, TableProps } from "antd/es/table";
+import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import {
 	Employee,
 	EmployeeData,
@@ -16,6 +16,20 @@ import {
 } from "../../Actions/EmployeeActions";
 import { Button, Layout, Space, Table } from "antd";
 import Sidebar from "../../Components/Sidebar/Sidebar";
+import { TableParams } from "../../Interfaces/Table";
+import { SorterResult } from "antd/es/table/interface";
+
+interface DataType {
+	key: React.Key;
+	nameRu: string;
+	nameEn: string;
+	login: string;
+	phone: string;
+	email: string;
+	department: string;
+	position: string;
+	status: string;
+}
 
 const Employees = (props: { role: string; token: string; userId: string }) => {
 	const [employees, setEmployees] = useState<Employee[]>([]);
@@ -24,19 +38,13 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 	const [modalAddActive, setModalAddActive] = useState(false);
 	const [modalEditActive, setModalEditActive] = useState(false);
 	const [modalDataActive, setModalDataActive] = useState(false);
+	const [tableParams, setTableParams] = useState<TableParams>({
+		pagination: {
+			current: 1,
+			pageSize: 6,
+		},
+	});
 	const { Content } = Layout;
-
-	interface DataType {
-		key: React.Key;
-		nameRu: string;
-		nameEn: string;
-		login: string;
-		phone: string;
-		email: string;
-		department: string;
-		position: string;
-		status: string;
-	}
 
 	const columns: ColumnsType<DataType> = [
 		{
@@ -129,13 +137,14 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 		GetAllEmployee(props.token).then((result) => setEmployees(result));
 	}, [props.token]);
 
-	const onChange: TableProps<DataType>["onChange"] = (
-		pagination,
-		filters,
-		sorter,
-		extra
+	const handleTableChange = (
+		pagination: TablePaginationConfig,
+		sorter: SorterResult<DataType>
 	) => {
-		console.log("params", pagination, filters, sorter, extra);
+		setTableParams({
+			pagination,
+			...sorter,
+		});
 	};
 
 	const employeeFired = async (id: string) => {
@@ -171,7 +180,8 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 					<Table
 						columns={columns}
 						dataSource={employees}
-						onChange={onChange}
+						pagination={tableParams.pagination}
+						onChange={handleTableChange}
 					/>
 					<EmployeeAdd
 						active={modalAddActive}

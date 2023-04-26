@@ -1,6 +1,7 @@
 import { Errors, ErrorTitles } from "../Enums/Errors";
 import { notification } from "antd";
 import TestTypeEnum from "../Enums/TestTypeEnum";
+import { Short } from "../Interfaces/Data";
 
 export interface HiringInterface {
 	key: string;
@@ -34,12 +35,6 @@ export interface TestData {
 	foreignTest: Short[];
 	logicTest: Short[];
 	programmingTest: Short[];
-}
-
-export interface Short {
-	key: string;
-	id: number;
-	name: string;
 }
 
 export interface Interviewers {

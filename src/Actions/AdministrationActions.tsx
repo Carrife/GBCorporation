@@ -1,11 +1,6 @@
 import { Errors, ErrorTitles } from "../Enums/Errors";
 import { notification } from "antd";
-
-export interface Short {
-	key: string;
-	id: number;
-	name: string;
-}
+import { Short } from "../Interfaces/Data";
 
 export interface User {
 	key: string;

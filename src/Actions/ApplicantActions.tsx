@@ -1,5 +1,6 @@
 import { Errors, ErrorTitles } from "../Enums/Errors";
 import { notification } from "antd";
+import { Short } from "../Interfaces/Data";
 
 export interface Applicant {
 	key: string;
@@ -40,12 +41,6 @@ export interface TestData {
 			id: number;
 		}
 	];
-}
-
-export interface Short {
-	key: string;
-	id: number;
-	name: string;
 }
 
 export function GetAllApplicants(token: string): Promise<Applicant[]> {

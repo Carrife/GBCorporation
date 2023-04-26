@@ -5,7 +5,7 @@ import ApplicantEdit from "./ApplicantEdit";
 import ApplicantTestData from "./ApplicantTestData";
 import * as AiIcons from "react-icons/ai";
 import { Layout, Table, Space, Button } from "antd";
-import type { ColumnsType, TableProps } from "antd/es/table";
+import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import {
 	GetAllApplicants,
 	GetApplicantTestData,
@@ -14,6 +14,17 @@ import {
 	TestData,
 } from "../../Actions/ApplicantActions";
 import Sidebar from "../../Components/Sidebar/Sidebar";
+import { TableParams } from "../../Interfaces/Table";
+import { SorterResult } from "antd/es/table/interface";
+
+interface DataType {
+	key: React.Key;
+	nameRu: string;
+	nameEn: string;
+	login: string;
+	phone: string;
+	status: string;
+}
 
 const Applicants = (props: { role: string; token: string }) => {
 	const [applicants, setApplicants] = useState<Applicant[]>([]);
@@ -23,16 +34,13 @@ const Applicants = (props: { role: string; token: string }) => {
 	const [modalEditActive, setModalEditActive] = useState(false);
 	const [modalTestDataActive, setModalTestDataActive] = useState(false);
 	const [testData, setTestData] = useState<TestData>();
+	const [tableParams, setTableParams] = useState<TableParams>({
+		pagination: {
+			current: 1,
+			pageSize: 6,
+		},
+	});
 	const { Content } = Layout;
-
-	interface DataType {
-		key: React.Key;
-		nameRu: string;
-		nameEn: string;
-		login: string;
-		phone: string;
-		status: string;
-	}
 
 	const columns: ColumnsType<DataType> = [
 		{
@@ -98,13 +106,14 @@ const Applicants = (props: { role: string; token: string }) => {
 		GetAllApplicants(props.token).then((result) => setApplicants(result));
 	}, [props.token]);
 
-	const onChange: TableProps<DataType>["onChange"] = (
-		pagination,
-		filters,
-		sorter,
-		extra
+	const handleTableChange = (
+		pagination: TablePaginationConfig,
+		sorter: SorterResult<DataType>
 	) => {
-		console.log("params", pagination, filters, sorter, extra);
+		setTableParams({
+			pagination,
+			...sorter,
+		});
 	};
 
 	const applicantEdit = async (id: string) => {
@@ -132,7 +141,8 @@ const Applicants = (props: { role: string; token: string }) => {
 					<Table
 						columns={columns}
 						dataSource={applicants}
-						onChange={onChange}
+						pagination={tableParams.pagination}
+						onChange={handleTableChange}
 					/>
 					<ApplicantAdd
 						active={modalAddActive}

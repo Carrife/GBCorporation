@@ -2,11 +2,11 @@ import { Button, Col, DatePicker, Form, InputNumber, Row, Select } from "antd";
 import { useEffect, useState } from "react";
 import {
 	CreateForeignLanguageTest,
-	Short,
 	GetForeignLanguages,
 } from "../../../Actions/ApplicantActions";
 import ModalWindow from "../../../Components/Modal/Modal";
 import ModalTitles from "../../../Enums/ModalTitles";
+import { Short } from "../../../Interfaces/Data";
 
 const ForeignLanguageTest = (props: {
 	active: boolean;

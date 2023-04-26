@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import { Button, Space, TablePaginationConfig } from "antd";
-import { DeleteDepartment, GetDepartments, Short } from "../../../../Actions/AdministrationActions";
+import {
+	DeleteDepartment,
+	GetDepartments,
+} from "../../../../Actions/AdministrationActions";
 import Table, { ColumnsType } from "antd/es/table";
 import { SorterResult } from "antd/es/table/interface";
 import * as AiIcons from "react-icons/ai";
 import DepartmentEdit from "./DepartmentEdit";
 import DepartmentAdd from "./DepartmentAdd";
-
-interface TableParams {
-	pagination?: TablePaginationConfig;
-	sortField?: string;
-	sortOrder?: string;
-}
+import { TableParams } from "../../../../Interfaces/Table";
+import { Short } from "../../../../Interfaces/Data";
 
 interface DataType {
 	key: React.Key;

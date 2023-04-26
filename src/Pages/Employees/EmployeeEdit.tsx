@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
 import { Button, Col, Divider, Form, Input, Row, Select } from "antd";
-import { GetProgrammingLanguages, Short } from "../../Actions/ApplicantActions";
+import { GetProgrammingLanguages } from "../../Actions/ApplicantActions";
 import { GetDepartments, GetPositions } from "../../Actions/HiringActions";
 import { UpdateEmployee } from "../../Actions/EmployeeActions";
 import ModalTitles from "../../Enums/ModalTitles";
+import { Short } from "../../Interfaces/Data";
 
 const EmployeeEdit = (props: {
 	active: boolean;
@@ -39,7 +40,7 @@ const EmployeeEdit = (props: {
 			setIsDisabled(true);
 		}
 	};
-	
+
 	const reset = () => {
 		form.setFieldsValue({
 			surnameRu: props.employee?.surnameRu,
@@ -215,7 +216,10 @@ const EmployeeEdit = (props: {
 						>
 							<Select showSearch optionFilterProp="children">
 								{departments.map((item) => (
-									<Select.Option value={item.id} key={item.key}>
+									<Select.Option
+										value={item.id}
+										key={item.key}
+									>
 										{item.name}
 									</Select.Option>
 								))}
@@ -228,7 +232,10 @@ const EmployeeEdit = (props: {
 								disabled={isDisabled}
 							>
 								{languages.map((item) => (
-									<Select.Option value={item.id} key={item.key}>
+									<Select.Option
+										value={item.id}
+										key={item.key}
+									>
 										{item.name}
 									</Select.Option>
 								))}

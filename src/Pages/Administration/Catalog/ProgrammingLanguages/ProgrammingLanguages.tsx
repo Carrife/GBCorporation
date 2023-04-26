@@ -3,22 +3,25 @@ import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
 import { SorterResult } from "antd/es/table/interface";
-import { DeleteProgrammingLanguage, GetProgrammingLanguages, Short } from "../../../../Actions/AdministrationActions";
+import {
+	DeleteProgrammingLanguage,
+	GetProgrammingLanguages,
+} from "../../../../Actions/AdministrationActions";
 import ProgrammingLanguageEdit from "./ProgrammingLanguageEdit";
 import ProgrammingLanguageAdd from "./ProgrammingLanguageAdd";
-
-interface TableParams {
-	pagination?: TablePaginationConfig;
-	sortField?: string;
-	sortOrder?: string;
-}
+import { TableParams } from "../../../../Interfaces/Table";
+import { Short } from "../../../../Interfaces/Data";
 
 interface DataType {
 	key: React.Key;
 	name: string;
 }
 
-const ProgrammingLanguages = (props: { userId: string; role: string; token: string }) => {
+const ProgrammingLanguages = (props: {
+	userId: string;
+	role: string;
+	token: string;
+}) => {
 	const [languages, setLanguages] = useState<Short[]>([]);
 	const [language, setLanguage] = useState({});
 	const [modalEditActive, setModalEditActive] = useState(false);
@@ -31,7 +34,9 @@ const ProgrammingLanguages = (props: { userId: string; role: string; token: stri
 	});
 
 	useEffect(() => {
-		GetProgrammingLanguages(props.token).then((result) => setLanguages(result));
+		GetProgrammingLanguages(props.token).then((result) =>
+			setLanguages(result)
+		);
 	}, [props.token]);
 
 	const positionEdit = async (id: string, title: string) => {
@@ -75,7 +80,10 @@ const ProgrammingLanguages = (props: { userId: string; role: string; token: stri
 					<Button
 						type="text"
 						onClick={() =>
-							positionEdit(record.key.toString(), record.name.toString())
+							positionEdit(
+								record.key.toString(),
+								record.name.toString()
+							)
 						}
 					>
 						<AiIcons.AiOutlineEdit />

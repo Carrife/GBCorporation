@@ -2,23 +2,26 @@ import { Button, Space } from "antd";
 import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
-import { DeleteForeignLanguage, GetForeignLanguages, Short } from "../../../../Actions/AdministrationActions";
+import {
+	DeleteForeignLanguage,
+	GetForeignLanguages,
+} from "../../../../Actions/AdministrationActions";
 import { SorterResult } from "antd/es/table/interface";
 import ForeignLanguageEdit from "./ForeignLanguageEdit";
 import ForeignLanguageAdd from "./ForeignLanguageAdd";
-
-interface TableParams {
-	pagination?: TablePaginationConfig;
-	sortField?: string;
-	sortOrder?: string;
-}
+import { TableParams } from "../../../../Interfaces/Table";
+import { Short } from "../../../../Interfaces/Data";
 
 interface DataType {
 	key: React.Key;
 	name: string;
 }
 
-const ForeignLanguages = (props: { userId: string; role: string; token: string }) => {
+const ForeignLanguages = (props: {
+	userId: string;
+	role: string;
+	token: string;
+}) => {
 	const [languages, setLanguages] = useState<Short[]>([]);
 	const [language, setLanguage] = useState({});
 	const [modalEditActive, setModalEditActive] = useState(false);
@@ -75,7 +78,10 @@ const ForeignLanguages = (props: { userId: string; role: string; token: string }
 					<Button
 						type="text"
 						onClick={() =>
-							positionEdit(record.key.toString(), record.name.toString())
+							positionEdit(
+								record.key.toString(),
+								record.name.toString()
+							)
 						}
 					>
 						<AiIcons.AiOutlineEdit />

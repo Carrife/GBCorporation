@@ -3,7 +3,6 @@ import ModalWindow from "../../Components/Modal/Modal";
 import {
 	GetActiveApplicants,
 	Interviewers,
-	Short,
 	GetInterviewers,
 	GetTestData,
 	TestData,
@@ -25,6 +24,7 @@ import ModalTitles from "../../Enums/ModalTitles";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import Role from "../../Enums/RoleEnum";
 import TestTypeEnum from "../../Enums/TestTypeEnum";
+import { Short } from "../../Interfaces/Data";
 
 const HiringAdd = (props: {
 	active: boolean;

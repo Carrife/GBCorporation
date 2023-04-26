@@ -3,25 +3,33 @@ import "../../App.css";
 import HirinAdd from "./HiringAdd";
 import HiringDetails from "./HiringDetails";
 import * as AiIcons from "react-icons/ai";
-import { Button, Layout, Space, TableProps } from "antd";
-import Table, { ColumnsType } from "antd/es/table";
+import { Button, Layout, Space } from "antd";
+import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { GetAllHirings, HiringInterface } from "../../Actions/HiringActions";
 import Sidebar from "../../Components/Sidebar/Sidebar";
+import { TableParams } from "../../Interfaces/Table";
+import { SorterResult } from "antd/es/table/interface";
+
+interface DataType {
+	key: React.Key;
+	applicant: string;
+	date: string;
+	position: string;
+	status: string;
+}
 
 const Hiring = (props: { role: string; userId: string; token: string }) => {
 	const [hirings, setHirings] = useState<HiringInterface[]>([]);
 	const [modalAddActive, setModalAddActive] = useState(false);
 	const [modalDetailsActive, setModalDetailsActive] = useState(false);
 	const [hiringId, setHiringId] = useState("");
+	const [tableParams, setTableParams] = useState<TableParams>({
+		pagination: {
+			current: 1,
+			pageSize: 6,
+		},
+	});
 	const { Content } = Layout;
-
-	interface DataType {
-		key: React.Key;
-		applicant: string;
-		date: string;
-		position: string;
-		status: string;
-	}
 
 	const columns: ColumnsType<DataType> = [
 		{
@@ -82,13 +90,14 @@ const Hiring = (props: { role: string; userId: string; token: string }) => {
 		);
 	}, [props.token, props.userId, props.role]);
 
-	const onChange: TableProps<DataType>["onChange"] = (
-		pagination,
-		filters,
-		sorter,
-		extra
+	const handleTableChange = (
+		pagination: TablePaginationConfig,
+		sorter: SorterResult<DataType>
 	) => {
-		console.log("params", pagination, filters, sorter, extra);
+		setTableParams({
+			pagination,
+			...sorter,
+		});
 	};
 
 	const hiringDetails = async (id: string) => {
@@ -114,7 +123,8 @@ const Hiring = (props: { role: string; userId: string; token: string }) => {
 					<Table
 						columns={columns}
 						dataSource={hirings}
-						onChange={onChange}
+						pagination={tableParams.pagination}
+						onChange={handleTableChange}
 					/>
 					<HirinAdd
 						active={modalAddActive}

@@ -5,12 +5,7 @@ import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
 import { GetUsers, User } from "../../Actions/AdministrationActions";
 import UserEdit from "./UserEdit";
-
-interface TableParams {
-	pagination?: TablePaginationConfig;
-	sortField?: string;
-	sortOrder?: string;
-}
+import { TableParams } from "../../Interfaces/Table";
 
 interface DataType {
 	key: React.Key;

@@ -8,21 +8,29 @@ import {
 	TestData,
 } from "../../Actions/TestActions";
 import { Button, Layout, Space, Table } from "antd";
-import { ColumnsType, TableProps } from "antd/es/table";
+import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import * as AiIcons from "react-icons/ai";
 import Sidebar from "../../Components/Sidebar/Sidebar";
+import { TableParams } from "../../Interfaces/Table";
+import { SorterResult } from "antd/es/table/interface";
+
+interface DataType {
+	key: React.Key;
+	name: string;
+}
 
 const Tests = (props: { userId: string; role: string; token: string }) => {
 	const [templates, setTemplates] = useState<Test[]>([]);
 	const [modalStartActive, setModalStartActive] = useState(false);
 	const [testName, setTestName] = useState("");
 	const [testData, setTestData] = useState<TestData[]>([]);
+	const [tableParams, setTableParams] = useState<TableParams>({
+		pagination: {
+			current: 1,
+			pageSize: 6,
+		},
+	});
 	const { Content } = Layout;
-
-	interface DataType {
-		key: React.Key;
-		name: string;
-	}
 
 	const columns: ColumnsType<DataType> = [
 		{
@@ -63,13 +71,14 @@ const Tests = (props: { userId: string; role: string; token: string }) => {
 		setModalStartActive(true);
 	};
 
-	const onChange: TableProps<DataType>["onChange"] = (
-		pagination,
-		filters,
-		sorter,
-		extra
+	const handleTableChange = (
+		pagination: TablePaginationConfig,
+		sorter: SorterResult<DataType>
 	) => {
-		console.log("params", pagination, filters, sorter, extra);
+		setTableParams({
+			pagination,
+			...sorter,
+		});
 	};
 
 	return (
@@ -80,7 +89,8 @@ const Tests = (props: { userId: string; role: string; token: string }) => {
 					<Table
 						columns={columns}
 						dataSource={templates}
-						onChange={onChange}
+						pagination={tableParams.pagination}
+						onChange={handleTableChange}
 					/>
 					<TestStart
 						active={modalStartActive}

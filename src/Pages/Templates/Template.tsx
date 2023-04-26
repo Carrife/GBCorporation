@@ -10,8 +10,17 @@ import {
 	TemplateDownload,
 } from "../../Actions/TemplateActions";
 import { Button, Layout, Space, Table } from "antd";
-import { ColumnsType, TableProps } from "antd/es/table";
+import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import Sidebar from "../../Components/Sidebar/Sidebar";
+import { TableParams } from "../../Interfaces/Table";
+import { SorterResult } from "antd/es/table/interface";
+
+interface DataType {
+	key: React.Key;
+	name: string;
+	link: string;
+	lastUpdate: string;
+}
 
 const Templates = (props: { role: string; token: string }) => {
 	const [id, setId] = useState("");
@@ -19,14 +28,13 @@ const Templates = (props: { role: string; token: string }) => {
 	const [templates, setTemplates] = useState<Template[]>([]);
 	const [modalAddActive, setModalAddActive] = useState(false);
 	const [modalUploadActive, setModalUploadActive] = useState(false);
+	const [tableParams, setTableParams] = useState<TableParams>({
+		pagination: {
+			current: 1,
+			pageSize: 6,
+		},
+	});
 	const { Content } = Layout;
-
-	interface DataType {
-		key: React.Key;
-		name: string;
-		link: string;
-		lastUpdate: string;
-	}
 
 	const columns: ColumnsType<DataType> = [
 		{
@@ -100,13 +108,14 @@ const Templates = (props: { role: string; token: string }) => {
 		setModalUploadActive(true);
 	};
 
-	const onChange: TableProps<DataType>["onChange"] = (
-		pagination,
-		filters,
-		sorter,
-		extra
+	const handleTableChange = (
+		pagination: TablePaginationConfig,
+		sorter: SorterResult<DataType>
 	) => {
-		console.log("params", pagination, filters, sorter, extra);
+		setTableParams({
+			pagination,
+			...sorter,
+		});
 	};
 
 	return (
@@ -120,7 +129,8 @@ const Templates = (props: { role: string; token: string }) => {
 					<Table
 						columns={columns}
 						dataSource={templates}
-						onChange={onChange}
+						pagination={tableParams.pagination}
+						onChange={handleTableChange}
 					/>
 					<TemplateAdd
 						active={modalAddActive}
