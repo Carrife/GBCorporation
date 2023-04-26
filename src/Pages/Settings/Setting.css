@@ -1,0 +1,17 @@
+.setting-layout {
+    margin-top: 4rem;
+    margin-left: 15rem;
+    background-color: #ffffff;
+    min-height: 20vh;
+    height: 80vh;
+    min-width: 10vw;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.form-setting {
+    max-width: 25rem;
+    min-width: 10rem;
+    margin-top: 25vh;
+    margin-left: 27vw;
+}

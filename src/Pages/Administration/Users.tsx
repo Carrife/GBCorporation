@@ -29,7 +29,7 @@ const Users = (props: { userId: string; role: string; token: string }) => {
 	const [tableParams, setTableParams] = useState<TableParams>({
 		pagination: {
 			current: 1,
-			pageSize: 5,
+			pageSize: 6,
 		},
 	});
 

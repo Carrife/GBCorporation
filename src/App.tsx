@@ -5,7 +5,7 @@ import Login from "./Pages/Login";
 import Employee from "./Pages/Employees/Employees";
 import Templates from "./Pages/Templates/Template";
 import Tests from "./Pages/Tests/Test";
-import Setting from "./Pages/Setting";
+import Setting from "./Pages/Settings/Setting";
 import Applicant from "./Pages/Applicants/Applicant";
 import Hiring from "./Pages/Hiring/Hiring";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -104,7 +104,7 @@ function App() {
 							path="/settings"
 							element={
 								<Setting
-									name={name}
+									userId={userId}
 									role={role}
 									token={token}
 								/>

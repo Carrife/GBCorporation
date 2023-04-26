@@ -271,7 +271,7 @@ const HiringAdd = (props: {
 															(item: {
 																interviewer: string;
 															}) =>
-																item.interviewer ===
+																item?.interviewer ===
 																value
 														).length !== 1
 													) {
