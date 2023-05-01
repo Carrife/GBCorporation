@@ -16,7 +16,7 @@ export const SidebarData = [
     {
         title: 'Hiring',
         path: '/hiring',
-        icon: <AiIcons.AiOutlineBook/>,
+        icon: <AiIcons.AiOutlineSolution/>,
         cName: 'nav-text'
     },
     {

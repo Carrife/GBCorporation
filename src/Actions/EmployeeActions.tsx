@@ -283,6 +283,10 @@ export async function GetTestData(
 	)
 		.then((response) => response.json())
 		.then((data) => {
+			var i = 0;
+			(data as EmployeeTestData[])?.forEach((el) =>
+				Object.assign(el, { key: (i++).toString() })
+			);
 			return data as EmployeeTestData[];
 		});
 }

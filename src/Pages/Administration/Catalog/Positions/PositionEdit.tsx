@@ -14,7 +14,7 @@ const PositionEdit = (props: {
 
 	useEffect(() => {
 		reset();
-	}, [form, props.position]);
+	}, [props.position]);
 
 	const reset = () => {
 		form.setFieldsValue({

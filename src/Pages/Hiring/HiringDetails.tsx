@@ -122,13 +122,13 @@ const HiringDetails = (props: {
 					)}
 					<Divider plain>Interviewers</Divider>
 					{hiringData?.interviewers?.map((item) => (
-						<>
+						<Col key={item.id}>
 							<Row>
 								<Col span={10}>
-									<Text>{item?.position?.name}</Text>
+									<Text>{item.position?.name}</Text>
 								</Col>
 								<Col span={10}>
-									<Text>{item?.interviewer?.name}</Text>
+									<Text>{item.interviewer?.name}</Text>
 								</Col>
 							</Row>
 							<Row>
@@ -136,51 +136,50 @@ const HiringDetails = (props: {
 									<Text>Description</Text>
 								</Col>
 								<Col span={10}>
-									<Text>{item?.description}</Text>
+									<Text>{item.description}</Text>
 								</Col>
 								<Col>
-									{(props.role === item?.position?.name ||
+									{(props.role === item.position?.name ||
 										props.role === Role.ADMIN) &&
-									hiringData?.status !== "Closed" ? (
-										<Button
-											type="text"
-											onClick={() =>
-												addDescription(
-													item?.description,
-													item?.id.toString()
-												)
-											}
-										>
-											<AiIcons.AiOutlineEdit />
-										</Button>
-									) : (
-										""
-									)}
+										hiringData?.status !== "Closed" && (
+											<Button
+												type="text"
+												onClick={() =>
+													addDescription(
+														item.description,
+														item.id?.toString()
+													)
+												}
+											>
+												<AiIcons.AiOutlineEdit />
+											</Button>
+										)}
 								</Col>
 							</Row>
-						</>
+						</Col>
 					))}
 					{(props.role === Role.HR || props.role === Role.ADMIN) &&
-					hiringData?.interviewers?.every(
-						(item) => item.description != null
-					) &&
-					hiringData?.status !== "Closed" ? (
-						<Row style={{ marginTop: 15 }}>
-							<Col span={24} style={{ textAlign: "right" }}>
-								<Button type="primary" onClick={() => hire()}>
-									Hire
-								</Button>
-								<Button
-									style={{ margin: "0 8px" }}
-									onClick={() => reject()}
-								>
-									Reject
-								</Button>
-							</Col>
-						</Row>
-					) : (
-						""
-					)}
+						hiringData?.interviewers?.every(
+							(item) => item.description != null
+						) &&
+						hiringData?.status !== "Closed" && (
+							<Row style={{ marginTop: 15 }}>
+								<Col span={24} style={{ textAlign: "right" }}>
+									<Button
+										type="primary"
+										onClick={() => hire()}
+									>
+										Hire
+									</Button>
+									<Button
+										style={{ margin: "0 8px" }}
+										onClick={() => reject()}
+									>
+										Reject
+									</Button>
+								</Col>
+							</Row>
+						)}
 				</Space>
 			</ModalWindow>
 			<Description

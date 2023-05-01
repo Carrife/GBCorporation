@@ -14,7 +14,7 @@ const ApplicantEdit = (props: {
 
 	useEffect(() => {
 		reset();
-	}, [form, props.applicant]);
+	}, [props.applicant]);
 
 	const reset = () => {
 		form.setFieldsValue({

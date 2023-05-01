@@ -59,13 +59,13 @@ const ApplicantTestData = (props: {
 							<Space direction="vertical">
 								<Text>Result</Text>
 								{props.testData?.logicTests.map((item) => (
-									<Text>{item["result"]}%</Text>
+									<Text key={item.id}>{item.result}%</Text>
 								))}
 							</Space>
 							<Space direction="vertical">
 								<Text>Date</Text>
 								{props.testData?.logicTests.map((item) => (
-									<Text>{item["date"]}</Text>
+									<Text key={item.id}>{item.date}</Text>
 								))}
 							</Space>
 						</Space>
@@ -87,8 +87,8 @@ const ApplicantTestData = (props: {
 								<Text>Language</Text>
 								{props.testData?.programmingTests.map(
 									(item) => (
-										<Text>
-											{item["programmingLanguage"]}
+										<Text key={item.id}>
+											{item.programmingLanguage}
 										</Text>
 									)
 								)}
@@ -97,7 +97,9 @@ const ApplicantTestData = (props: {
 								<Text>Result</Text>
 								{props.testData?.programmingTests.map(
 									(item) => (
-										<Text>{item["result"]}%</Text>
+										<Text key={item.id}>
+											{item.result}%
+										</Text>
 									)
 								)}
 							</Space>
@@ -105,7 +107,7 @@ const ApplicantTestData = (props: {
 								<Text>Date</Text>
 								{props.testData?.programmingTests.map(
 									(item) => (
-										<Text>{item["date"]}</Text>
+										<Text key={item.id}>{item.date}</Text>
 									)
 								)}
 							</Space>
@@ -128,7 +130,9 @@ const ApplicantTestData = (props: {
 								<Text>Language</Text>
 								{props.testData?.foreignLanguageTests.map(
 									(item) => (
-										<Text>{item["foreignLanguage"]}</Text>
+										<Text key={item.id}>
+											{item.foreignLanguage}
+										</Text>
 									)
 								)}
 							</Space>
@@ -136,7 +140,9 @@ const ApplicantTestData = (props: {
 								<Text>Result</Text>
 								{props.testData?.foreignLanguageTests.map(
 									(item) => (
-										<Text>{item["result"]}%</Text>
+										<Text key={item.id}>
+											{item.result}%
+										</Text>
 									)
 								)}
 							</Space>
@@ -144,7 +150,7 @@ const ApplicantTestData = (props: {
 								<Text>Date</Text>
 								{props.testData?.foreignLanguageTests.map(
 									(item) => (
-										<Text>{item["date"]}</Text>
+										<Text key={item.id}>{item.date}</Text>
 									)
 								)}
 							</Space>

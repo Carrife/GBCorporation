@@ -20,7 +20,7 @@ const UserEdit = (props: {
 
 	useEffect(() => {
 		reset();
-	}, [form, props.user]);
+	}, [props.user]);
 
 	const reset = () => {
 		form.setFieldsValue({

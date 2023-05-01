@@ -14,7 +14,7 @@ const ProgrammingLanguageEdit = (props: {
 
 	useEffect(() => {
 		reset();
-	}, [form, props.language]);
+	}, [props.language]);
 
 	const reset = () => {
 		form.setFieldsValue({

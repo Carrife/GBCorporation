@@ -1,18 +1,22 @@
 .navbar {
     background-color: #23252a;
-    width:100vw;
+    width: 100vw;
     display: flex;
     position: fixed;
-    top: 0px;
+    top: 0;
     left: 0;
 }
 
-.navbar-space-vertical {
+.nav-space-vertical {
     width: 100%;
-    max-width: 100%;
     text-align: right;
 }
 
 .nav-space-horizontal {
     width: 100%;
+}
+
+.nav-image{
+    margin-left: 1.7rem;
+    height: 56px;
 }

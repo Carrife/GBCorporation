@@ -121,15 +121,13 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 			key: "action",
 			render: (_, record) => (
 				<Space size="middle">
-					{props.role === "Admin" ? (
+					{props.role === "Admin" && (
 						<Button
 							type="text"
 							onClick={() => employeeEdit(record.key.toString())}
 						>
 							<AiIcons.AiOutlineEdit />
 						</Button>
-					) : (
-						""
 					)}
 					<Button
 						type="text"
@@ -137,15 +135,13 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 					>
 						<AiIcons.AiOutlineUnorderedList />
 					</Button>
-					{props.role === "Admin" ? (
+					{props.role === "Admin" && (
 						<Button
 							type="text"
 							onClick={() => employeeFired(record.key.toString())}
 						>
 							<AiIcons.AiOutlineDelete />
 						</Button>
-					) : (
-						""
 					)}
 				</Space>
 			),
@@ -153,7 +149,9 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 	];
 
 	useEffect(() => {
-		GetAllEmployee(props.token, null).then((result) => setEmployees(result));
+		GetAllEmployee(props.token, null).then((result) =>
+			setEmployees(result)
+		);
 		GetDepartments(props.token).then((result) => setDepartments(result));
 		GetPositions(props.token).then((result) => setPositions(result));
 		GetEmployeeStatuses(props.token).then((result) => setStatuses(result));
@@ -189,12 +187,16 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 	};
 
 	const onFilterSearch = (values: any) => {
-		GetAllEmployee(props.token, values).then((result) => setEmployees(result));
+		GetAllEmployee(props.token, values).then((result) =>
+			setEmployees(result)
+		);
 		setIsFilterActive(false);
 	};
 
 	const onFilterReset = () => {
-		GetAllEmployee(props.token, null).then((result) => setEmployees(result));
+		GetAllEmployee(props.token, null).then((result) =>
+			setEmployees(result)
+		);
 		form.resetFields();
 	};
 
@@ -203,15 +205,13 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 			<Sidebar role={props.role} />
 			<Layout className="page-layout">
 				<Content>
-					{props.role === "Admin" ? (
+					{props.role === "Admin" && (
 						<Button
 							type="link"
 							onClick={() => setModalAddActive(true)}
 						>
 							Create New
 						</Button>
-					) : (
-						""
 					)}
 					<Table
 						columns={columns}
@@ -237,56 +237,68 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 							<Form.Item name={`nameRu`} label={`Name (Ru)`}>
 								<Input />
 							</Form.Item>
-							<Form.Item name={`surnameRu`} label={`Surname (Ru)`}>
+							<Form.Item
+								name={`surnameRu`}
+								label={`Surname (Ru)`}
+							>
 								<Input />
 							</Form.Item>
-							<Form.Item name={`patronymicRu`} label={`Patronymic (Ru)`}>
+							<Form.Item
+								name={`patronymicRu`}
+								label={`Patronymic (Ru)`}
+							>
 								<Input />
 							</Form.Item>
 							<Form.Item name={`nameEn`} label={`Name (En)`}>
 								<Input />
 							</Form.Item>
-							<Form.Item name={`surnameEn`} label={`Surname (En)`}>
+							<Form.Item
+								name={`surnameEn`}
+								label={`Surname (En)`}
+							>
 								<Input />
 							</Form.Item>
 							<Form.Item name={`login`} label={`Login`}>
 								<Input />
 							</Form.Item>
-							<Form.Item name={`departmentIds`} label={`Department`}>
-							<Select>
-								{departments.map((item) => (
-									<Select.Option
-										value={item.id}
-										key={item.key}
-									>
-										{item.name}
-									</Select.Option>
-								))}
-							</Select>
+							<Form.Item
+								name={`departmentIds`}
+								label={`Department`}
+							>
+								<Select>
+									{departments.map((item) => (
+										<Select.Option
+											value={item.id}
+											key={item.key}
+										>
+											{item.name}
+										</Select.Option>
+									))}
+								</Select>
 							</Form.Item>
 							<Form.Item name={`positionIds`} label={`Position`}>
-							<Select>
-								{positions.map((item) => (
-									<Select.Option
-										value={item.id}
-										key={item.key}
-									>
-										{item.name}
-									</Select.Option>
-								))}
-							</Select>
+								<Select>
+									{positions.map((item) => (
+										<Select.Option
+											value={item.id}
+											key={item.key}
+										>
+											{item.name}
+										</Select.Option>
+									))}
+								</Select>
 							</Form.Item>
 							<Form.Item name={`statusIds`} label={`Status`}>
-							<Select>
-								{statuses.map((item) => (
-									<Select.Option
-										value={item.id}
-										key={item.key}
-									>
-										{item.name}
-									</Select.Option>
-								))}
-							</Select>
+								<Select>
+									{statuses.map((item) => (
+										<Select.Option
+											value={item.id}
+											key={item.key}
+										>
+											{item.name}
+										</Select.Option>
+									))}
+								</Select>
 							</Form.Item>
 							<Col span={24} style={{ textAlign: "right" }}>
 								<Button type="primary" htmlType="submit">

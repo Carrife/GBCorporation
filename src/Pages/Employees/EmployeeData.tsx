@@ -91,7 +91,7 @@ const EmployeeDetails = (props: {
 						<Text>{props.employee?.position?.name}</Text>
 					</Col>
 				</Row>
-				{props.employee?.language?.name ? (
+				{props.employee?.language?.name && (
 					<Row>
 						<Col span={10}>
 							<Text>Language</Text>
@@ -100,10 +100,8 @@ const EmployeeDetails = (props: {
 							<Text>{props.employee?.language?.name}</Text>
 						</Col>
 					</Row>
-				) : (
-					""
 				)}
-				{props.employee?.workPhone ? (
+				{props.employee?.workPhone && (
 					<Row>
 						<Col span={10}>
 							<Text>Work Phone</Text>
@@ -112,16 +110,14 @@ const EmployeeDetails = (props: {
 							<Text>{props.employee?.workPhone}</Text>
 						</Col>
 					</Row>
-				) : (
-					""
 				)}
-				{props.employee?.id.toString() === props.userId ||
-				props.role === Role.LM ||
-				props.role === Role.ADMIN ? (
+				{(props.employee?.id.toString() === props.userId ||
+					props.role === Role.LM ||
+					props.role === Role.ADMIN) && (
 					<>
 						<Divider plain>Test data</Divider>
 						{props.testData?.map((item) => (
-							<Row>
+							<Row key={item.key}>
 								<Col span={10}>
 									<Text>{item.title}</Text>
 								</Col>
@@ -134,8 +130,6 @@ const EmployeeDetails = (props: {
 							</Row>
 						))}
 					</>
-				) : (
-					""
 				)}
 			</Space>
 		</ModalWindow>

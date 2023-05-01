@@ -14,7 +14,7 @@ const DepartmentEdit = (props: {
 
 	useEffect(() => {
 		reset();
-	}, [form, props.department]);
+	}, [props.department]);
 
 	const reset = () => {
 		form.setFieldsValue({

@@ -3,9 +3,23 @@ import "../../App.css";
 import HirinAdd from "./HiringAdd";
 import HiringDetails from "./HiringDetails";
 import * as AiIcons from "react-icons/ai";
-import { Button, Col, FloatButton, Form, Input, Layout, Select, Space } from "antd";
+import {
+	Button,
+	Col,
+	FloatButton,
+	Form,
+	Input,
+	Layout,
+	Select,
+	Space,
+} from "antd";
 import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
-import { GetAllHirings, GetHiringStatuses, GetPositions, HiringInterface } from "../../Actions/HiringActions";
+import {
+	GetAllHirings,
+	GetHiringStatuses,
+	GetPositions,
+	HiringInterface,
+} from "../../Actions/HiringActions";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import { TableParams } from "../../Interfaces/Table";
 import { SorterResult } from "antd/es/table/interface";
@@ -91,8 +105,8 @@ const Hiring = (props: { role: string; userId: string; token: string }) => {
 	];
 
 	useEffect(() => {
-		GetAllHirings(props.token, props.role, props.userId, null).then((result) =>
-			setHirings(result)
+		GetAllHirings(props.token, props.role, props.userId, null).then(
+			(result) => setHirings(result)
 		);
 		GetPositions(props.token).then((result) => setPositions(result));
 		GetHiringStatuses(props.token).then((result) => setStatuses(result));
@@ -118,12 +132,16 @@ const Hiring = (props: { role: string; userId: string; token: string }) => {
 	};
 
 	const onFilterSearch = (values: any) => {
-		GetAllHirings(props.token, props.role, props.userId, values).then((result) => setHirings(result));
+		GetAllHirings(props.token, props.role, props.userId, values).then(
+			(result) => setHirings(result)
+		);
 		setIsFilterActive(false);
 	};
 
 	const onFilterReset = () => {
-		GetAllHirings(props.token, props.role, props.userId, null).then((result) => setHirings(result));
+		GetAllHirings(props.token, props.role, props.userId, null).then(
+			(result) => setHirings(result)
+		);
 		form.resetFields();
 	};
 
@@ -132,15 +150,13 @@ const Hiring = (props: { role: string; userId: string; token: string }) => {
 			<Sidebar role={props.role} />
 			<Layout className="page-layout">
 				<Content>
-					{props.role === "Admin" || props.role === "HR" ? (
+					{(props.role === "Admin" || props.role === "HR") && (
 						<Button
 							type="link"
 							onClick={() => setModalAddActive(true)}
 						>
 							Create New
 						</Button>
-					) : (
-						""
 					)}
 					<Table
 						columns={columns}
@@ -166,35 +182,38 @@ const Hiring = (props: { role: string; userId: string; token: string }) => {
 							<Form.Item name={`nameEn`} label={`Name (En)`}>
 								<Input />
 							</Form.Item>
-							<Form.Item name={`surnameEn`} label={`Surname (En)`}>
+							<Form.Item
+								name={`surnameEn`}
+								label={`Surname (En)`}
+							>
 								<Input />
 							</Form.Item>
 							<Form.Item name={`login`} label={`Login`}>
 								<Input />
 							</Form.Item>
 							<Form.Item name={`positionIds`} label={`Position`}>
-							<Select>
-								{positions.map((item) => (
-									<Select.Option
-										value={item.id}
-										key={item.key}
-									>
-										{item.name}
-									</Select.Option>
-								))}
-							</Select>
+								<Select>
+									{positions.map((item) => (
+										<Select.Option
+											value={item.id}
+											key={item.key}
+										>
+											{item.name}
+										</Select.Option>
+									))}
+								</Select>
 							</Form.Item>
 							<Form.Item name={`statusIds`} label={`Status`}>
-							<Select>
-								{statuses.map((item) => (
-									<Select.Option
-										value={item.id}
-										key={item.key}
-									>
-										{item.name}
-									</Select.Option>
-								))}
-							</Select>
+								<Select>
+									{statuses.map((item) => (
+										<Select.Option
+											value={item.id}
+											key={item.key}
+										>
+											{item.name}
+										</Select.Option>
+									))}
+								</Select>
 							</Form.Item>
 							<Col span={24} style={{ textAlign: "right" }}>
 								<Button type="primary" htmlType="submit">

@@ -63,13 +63,13 @@ const EmployeeEdit = (props: {
 
 	useEffect(() => {
 		reset();
-	}, [form, props.employee?.position]);
+	}, [props.employee]);
 
 	const onFinish = (values: any) => {
 		UpdateEmployee(props.token, values, props.setActive, props.employee.id);
 	};
 
-	return props.employee?.nameRu ? (
+	return (
 		<ModalWindow
 			title={ModalTitles.EDIT_EMPLOYEE}
 			isActive={props.active}
@@ -260,8 +260,6 @@ const EmployeeEdit = (props: {
 				</Row>
 			</Form>
 		</ModalWindow>
-	) : (
-		<></>
 	);
 };
 

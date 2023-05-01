@@ -82,7 +82,7 @@ const TestStart = (props: {
 				)}
 				<Form form={form} onFinish={onFinish} layout={"vertical"}>
 					{testData?.map((item) => (
-						<Form.Item name={item.key} label={item.question}>
+						<Form.Item name={item.key} label={item.question} key={item.key}>
 							<Checkbox.Group>
 								<Space direction="vertical">
 									{item.answers.map((answerItem) => (
@@ -100,7 +100,7 @@ const TestStart = (props: {
 					))}
 					<Row>
 						<Col span={24} style={{ textAlign: "center" }}>
-							{!isConfirmed ? (
+							{!isConfirmed && (
 								<Button
 									type="primary"
 									htmlType="submit"
@@ -108,8 +108,6 @@ const TestStart = (props: {
 								>
 									Confirm
 								</Button>
-							) : (
-								""
 							)}
 						</Col>
 					</Row>
