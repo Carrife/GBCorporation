@@ -31,6 +31,14 @@ const TestStart = (props: {
 		}
 	}, [seconds, minutes, timerActive]);
 
+	useEffect(() => {
+		if (!props.active) {
+			setTimerActive(false);
+		} else {
+			setTimerActive(true);
+		}
+	}, [props.active]);
+
 	const onFinish = (values: any) => {
 		setTimerActive(false);
 
@@ -82,7 +90,11 @@ const TestStart = (props: {
 				)}
 				<Form form={form} onFinish={onFinish} layout={"vertical"}>
 					{testData?.map((item) => (
-						<Form.Item name={item.key} label={item.question} key={item.key}>
+						<Form.Item
+							name={item.key}
+							label={item.question}
+							key={item.key}
+						>
 							<Checkbox.Group>
 								<Space direction="vertical">
 									{item.answers.map((answerItem) => (

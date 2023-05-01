@@ -9,7 +9,15 @@ import {
 	TemplateDelete,
 	TemplateDownload,
 } from "../../Actions/TemplateActions";
-import { Button, Input, InputRef, Layout, Space, Table } from "antd";
+import {
+	Button,
+	Input,
+	InputRef,
+	Layout,
+	Popconfirm,
+	Space,
+	Table,
+} from "antd";
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import { TableParams } from "../../Interfaces/Table";
@@ -98,7 +106,10 @@ const Templates = (props: { role: string; token: string }) => {
 			</div>
 		),
 		filterIcon: (filtered: boolean) => (
-			<div className="table-search" style={{ width: 100, paddingLeft: 40 }}>
+			<div
+				className="table-search"
+				style={{ width: 100, paddingLeft: 40 }}
+			>
 				<AiIcons.AiOutlineSearch
 					style={{ color: filtered ? "#1890ff" : undefined }}
 				/>
@@ -160,12 +171,14 @@ const Templates = (props: { role: string; token: string }) => {
 					>
 						<AiIcons.AiOutlineUpload />
 					</Button>
-					<Button
-						type="text"
-						onClick={() => templateDelete(record.key.toString())}
+					<Popconfirm
+						title="Sure to delete?"
+						onConfirm={() => templateDelete(record.key.toString())}
 					>
-						<AiIcons.AiOutlineDelete />
-					</Button>
+						<Button type="text">
+							<AiIcons.AiOutlineDelete />
+						</Button>
+					</Popconfirm>
 				</Space>
 			),
 		},

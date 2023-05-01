@@ -25,6 +25,7 @@ import {
 	Input,
 	Col,
 	Select,
+	Popconfirm,
 } from "antd";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import { TableParams } from "../../Interfaces/Table";
@@ -136,12 +137,16 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 						<AiIcons.AiOutlineUnorderedList />
 					</Button>
 					{props.role === "Admin" && (
-						<Button
-							type="text"
-							onClick={() => employeeFired(record.key.toString())}
+						<Popconfirm
+							title="Must be fired?"
+							onConfirm={() =>
+								employeeFired(record.key.toString())
+							}
 						>
-							<AiIcons.AiOutlineDelete />
-						</Button>
+							<Button type="text">
+								<AiIcons.AiOutlineDelete />
+							</Button>
+						</Popconfirm>
 					)}
 				</Space>
 			),

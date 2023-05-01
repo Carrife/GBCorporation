@@ -1,4 +1,4 @@
-import { Button, Input, InputRef, Space } from "antd";
+import { Button, Input, InputRef, Popconfirm, Space } from "antd";
 import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useEffect, useRef, useState } from "react";
 import * as AiIcons from "react-icons/ai";
@@ -6,7 +6,11 @@ import {
 	DeleteForeignLanguage,
 	GetForeignLanguages,
 } from "../../../../Actions/AdministrationActions";
-import { ColumnType, FilterConfirmProps, SorterResult } from "antd/es/table/interface";
+import {
+	ColumnType,
+	FilterConfirmProps,
+	SorterResult,
+} from "antd/es/table/interface";
 import ForeignLanguageEdit from "./ForeignLanguageEdit";
 import ForeignLanguageAdd from "./ForeignLanguageAdd";
 import { TableParams } from "../../../../Interfaces/Table";
@@ -91,7 +95,10 @@ const ForeignLanguages = (props: {
 			</div>
 		),
 		filterIcon: (filtered: boolean) => (
-			<div className="table-search" style={{ width: 100, paddingLeft: 40 }}>
+			<div
+				className="table-search"
+				style={{ width: 100, paddingLeft: 40 }}
+			>
 				<AiIcons.AiOutlineSearch
 					style={{ color: filtered ? "#1890ff" : undefined }}
 				/>
@@ -108,7 +115,7 @@ const ForeignLanguages = (props: {
 			}
 		},
 	});
-	
+
 	useEffect(() => {
 		GetForeignLanguages(props.token).then((result) => setLanguages(result));
 	}, [props.token]);
@@ -121,7 +128,7 @@ const ForeignLanguages = (props: {
 		setModalEditActive(true);
 	};
 
-	const positionDelete = async (id: string) => {
+	const foreignLanguageDelete = async (id: string) => {
 		DeleteForeignLanguage(props.token, id);
 	};
 
@@ -163,12 +170,14 @@ const ForeignLanguages = (props: {
 					>
 						<AiIcons.AiOutlineEdit />
 					</Button>
-					<Button
-						type="text"
-						onClick={() => positionDelete(record.key.toString())}
+					<Popconfirm
+						title="Sure to delete?"
+						onConfirm={() => foreignLanguageDelete(record.key.toString())}
 					>
-						<AiIcons.AiOutlineDelete />
-					</Button>
+						<Button type="text">
+							<AiIcons.AiOutlineDelete />
+						</Button>
+					</Popconfirm>
 				</Space>
 			),
 		},

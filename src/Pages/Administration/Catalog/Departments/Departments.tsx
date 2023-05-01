@@ -1,11 +1,22 @@
 import { useEffect, useRef, useState } from "react";
-import { Button, Input, InputRef, Space, TablePaginationConfig } from "antd";
+import {
+	Button,
+	Input,
+	InputRef,
+	Popconfirm,
+	Space,
+	TablePaginationConfig,
+} from "antd";
 import {
 	DeleteDepartment,
 	GetDepartments,
 } from "../../../../Actions/AdministrationActions";
 import Table, { ColumnsType } from "antd/es/table";
-import { ColumnType, FilterConfirmProps, SorterResult } from "antd/es/table/interface";
+import {
+	ColumnType,
+	FilterConfirmProps,
+	SorterResult,
+} from "antd/es/table/interface";
 import * as AiIcons from "react-icons/ai";
 import DepartmentEdit from "./DepartmentEdit";
 import DepartmentAdd from "./DepartmentAdd";
@@ -35,7 +46,7 @@ const Departments = (props: {
 		},
 	});
 	const searchInput = useRef<InputRef>(null);
-	
+
 	const handleSearch = (confirm: (param?: FilterConfirmProps) => void) => {
 		confirm();
 	};
@@ -91,7 +102,10 @@ const Departments = (props: {
 			</div>
 		),
 		filterIcon: (filtered: boolean) => (
-			<div className="table-search" style={{ width: 100, paddingLeft: 40 }}>
+			<div
+				className="table-search"
+				style={{ width: 100, paddingLeft: 40 }}
+			>
 				<AiIcons.AiOutlineSearch
 					style={{ color: filtered ? "#1890ff" : undefined }}
 				/>
@@ -108,7 +122,7 @@ const Departments = (props: {
 			}
 		},
 	});
-	
+
 	useEffect(() => {
 		GetDepartments(props.token).then((result) => setDepartments(result));
 	}, [props.token]);
@@ -121,7 +135,7 @@ const Departments = (props: {
 		setModalEditActive(true);
 	};
 
-	const positionDelete = async (id: string) => {
+	const departmentDelete = async (id: string) => {
 		DeleteDepartment(props.token, id);
 	};
 
@@ -163,12 +177,14 @@ const Departments = (props: {
 					>
 						<AiIcons.AiOutlineEdit />
 					</Button>
-					<Button
-						type="text"
-						onClick={() => positionDelete(record.key.toString())}
+					<Popconfirm
+						title="Sure to delete?"
+						onConfirm={() => departmentDelete(record.key.toString())}
 					>
-						<AiIcons.AiOutlineDelete />
-					</Button>
+						<Button type="text">
+							<AiIcons.AiOutlineDelete />
+						</Button>
+					</Popconfirm>
 				</Space>
 			),
 		},

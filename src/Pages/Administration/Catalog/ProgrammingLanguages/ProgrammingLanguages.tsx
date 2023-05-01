@@ -1,8 +1,12 @@
-import { Button, Input, InputRef, Space } from "antd";
+import { Button, Input, InputRef, Popconfirm, Space } from "antd";
 import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useEffect, useRef, useState } from "react";
 import * as AiIcons from "react-icons/ai";
-import { ColumnType, FilterConfirmProps, SorterResult } from "antd/es/table/interface";
+import {
+	ColumnType,
+	FilterConfirmProps,
+	SorterResult,
+} from "antd/es/table/interface";
 import {
 	DeleteProgrammingLanguage,
 	GetProgrammingLanguages,
@@ -91,7 +95,10 @@ const ProgrammingLanguages = (props: {
 			</div>
 		),
 		filterIcon: (filtered: boolean) => (
-			<div className="table-search" style={{ width: 100, paddingLeft: 40 }}>
+			<div
+				className="table-search"
+				style={{ width: 100, paddingLeft: 40 }}
+			>
 				<AiIcons.AiOutlineSearch
 					style={{ color: filtered ? "#1890ff" : undefined }}
 				/>
@@ -108,7 +115,7 @@ const ProgrammingLanguages = (props: {
 			}
 		},
 	});
-	
+
 	useEffect(() => {
 		GetProgrammingLanguages(props.token).then((result) =>
 			setLanguages(result)
@@ -123,7 +130,7 @@ const ProgrammingLanguages = (props: {
 		setModalEditActive(true);
 	};
 
-	const positionDelete = async (id: string) => {
+	const programmingLanguageDelete = async (id: string) => {
 		DeleteProgrammingLanguage(props.token, id);
 	};
 
@@ -165,12 +172,16 @@ const ProgrammingLanguages = (props: {
 					>
 						<AiIcons.AiOutlineEdit />
 					</Button>
-					<Button
-						type="text"
-						onClick={() => positionDelete(record.key.toString())}
+					<Popconfirm
+						title="Sure to delete?"
+						onConfirm={() =>
+							programmingLanguageDelete(record.key.toString())
+						}
 					>
-						<AiIcons.AiOutlineDelete />
-					</Button>
+						<Button type="text">
+							<AiIcons.AiOutlineDelete />
+						</Button>
+					</Popconfirm>
 				</Space>
 			),
 		},
