@@ -13,11 +13,25 @@ import {
 	GetEmployeeById,
 	GetTestData,
 	EmployeeTestData,
+	GetEmployeeStatuses,
 } from "../../Actions/EmployeeActions";
-import { Button, Layout, Space, Table } from "antd";
+import {
+	Button,
+	Layout,
+	Space,
+	Table,
+	FloatButton,
+	Form,
+	Input,
+	Col,
+	Select,
+} from "antd";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import { TableParams } from "../../Interfaces/Table";
 import { SorterResult } from "antd/es/table/interface";
+import Filter from "../../Components/Filter/Filter";
+import { Short } from "../../Interfaces/Data";
+import { GetDepartments, GetPositions } from "../../Actions/HiringActions";
 
 interface DataType {
 	key: React.Key;
@@ -32,12 +46,17 @@ interface DataType {
 }
 
 const Employees = (props: { role: string; token: string; userId: string }) => {
+	const [form] = Form.useForm();
 	const [employees, setEmployees] = useState<Employee[]>([]);
 	const [testData, setTestData] = useState<EmployeeTestData[]>([]);
 	const [employee, setEmployee] = useState<EmployeeData>();
+	const [departments, setDepartments] = useState<Short[]>([]);
+	const [positions, setPositions] = useState<Short[]>([]);
+	const [statuses, setStatuses] = useState<Short[]>([]);
 	const [modalAddActive, setModalAddActive] = useState(false);
 	const [modalEditActive, setModalEditActive] = useState(false);
 	const [modalDataActive, setModalDataActive] = useState(false);
+	const [isFilterActive, setIsFilterActive] = useState(false);
 	const [tableParams, setTableParams] = useState<TableParams>({
 		pagination: {
 			current: 1,
@@ -134,7 +153,10 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 	];
 
 	useEffect(() => {
-		GetAllEmployee(props.token).then((result) => setEmployees(result));
+		GetAllEmployee(props.token, null).then((result) => setEmployees(result));
+		GetDepartments(props.token).then((result) => setDepartments(result));
+		GetPositions(props.token).then((result) => setPositions(result));
+		GetEmployeeStatuses(props.token).then((result) => setStatuses(result));
 	}, [props.token]);
 
 	const handleTableChange = (
@@ -162,6 +184,20 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 		setModalDataActive(true);
 	};
 
+	const filterView = () => {
+		setIsFilterActive(true);
+	};
+
+	const onFilterSearch = (values: any) => {
+		GetAllEmployee(props.token, values).then((result) => setEmployees(result));
+		setIsFilterActive(false);
+	};
+
+	const onFilterReset = () => {
+		GetAllEmployee(props.token, null).then((result) => setEmployees(result));
+		form.resetFields();
+	};
+
 	return (
 		<Layout className="layout">
 			<Sidebar role={props.role} />
@@ -183,6 +219,90 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 						pagination={tableParams.pagination}
 						onChange={handleTableChange}
 					/>
+					<FloatButton
+						icon={<AiIcons.AiOutlineSearch />}
+						type="primary"
+						style={{ top: 90, right: 30 }}
+						onClick={filterView}
+					/>
+					<Filter
+						isActive={isFilterActive}
+						setActive={setIsFilterActive}
+					>
+						<Form
+							form={form}
+							onFinish={onFilterSearch}
+							layout={"vertical"}
+						>
+							<Form.Item name={`nameRu`} label={`Name (Ru)`}>
+								<Input />
+							</Form.Item>
+							<Form.Item name={`surnameRu`} label={`Surname (Ru)`}>
+								<Input />
+							</Form.Item>
+							<Form.Item name={`patronymicRu`} label={`Patronymic (Ru)`}>
+								<Input />
+							</Form.Item>
+							<Form.Item name={`nameEn`} label={`Name (En)`}>
+								<Input />
+							</Form.Item>
+							<Form.Item name={`surnameEn`} label={`Surname (En)`}>
+								<Input />
+							</Form.Item>
+							<Form.Item name={`login`} label={`Login`}>
+								<Input />
+							</Form.Item>
+							<Form.Item name={`departmentIds`} label={`Department`}>
+							<Select>
+								{departments.map((item) => (
+									<Select.Option
+										value={item.id}
+										key={item.key}
+									>
+										{item.name}
+									</Select.Option>
+								))}
+							</Select>
+							</Form.Item>
+							<Form.Item name={`positionIds`} label={`Position`}>
+							<Select>
+								{positions.map((item) => (
+									<Select.Option
+										value={item.id}
+										key={item.key}
+									>
+										{item.name}
+									</Select.Option>
+								))}
+							</Select>
+							</Form.Item>
+							<Form.Item name={`statusIds`} label={`Status`}>
+							<Select>
+								{statuses.map((item) => (
+									<Select.Option
+										value={item.id}
+										key={item.key}
+									>
+										{item.name}
+									</Select.Option>
+								))}
+							</Select>
+							</Form.Item>
+							<Col span={24} style={{ textAlign: "right" }}>
+								<Button type="primary" htmlType="submit">
+									Search
+								</Button>
+								<Button
+									style={{ margin: "0 8px" }}
+									onClick={() => {
+										onFilterReset();
+									}}
+								>
+									Clear
+								</Button>
+							</Col>
+						</Form>
+					</Filter>
 					<EmployeeAdd
 						active={modalAddActive}
 						setActive={setModalAddActive}

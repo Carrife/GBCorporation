@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../../App.css";
 import TemplateAdd from "./TemplateAdd";
 import TemplateUpload from "./TemplateUpload";
@@ -9,11 +9,15 @@ import {
 	TemplateDelete,
 	TemplateDownload,
 } from "../../Actions/TemplateActions";
-import { Button, Layout, Space, Table } from "antd";
+import { Button, Input, InputRef, Layout, Space, Table } from "antd";
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import { TableParams } from "../../Interfaces/Table";
-import { SorterResult } from "antd/es/table/interface";
+import {
+	ColumnType,
+	FilterConfirmProps,
+	SorterResult,
+} from "antd/es/table/interface";
 
 interface DataType {
 	key: React.Key;
@@ -21,6 +25,8 @@ interface DataType {
 	link: string;
 	lastUpdate: string;
 }
+
+type DataIndex = keyof DataType;
 
 const Templates = (props: { role: string; token: string }) => {
 	const [id, setId] = useState("");
@@ -34,7 +40,81 @@ const Templates = (props: { role: string; token: string }) => {
 			pageSize: 6,
 		},
 	});
+	const searchInput = useRef<InputRef>(null);
 	const { Content } = Layout;
+
+	const handleSearch = (confirm: (param?: FilterConfirmProps) => void) => {
+		confirm();
+	};
+
+	const handleReset = (
+		clearFilters: () => void,
+		confirm: (param?: FilterConfirmProps) => void
+	) => {
+		clearFilters();
+		confirm({ closeDropdown: false });
+	};
+
+	const getColumnSearchProps = (
+		dataIndex: DataIndex
+	): ColumnType<DataType> => ({
+		filterDropdown: ({
+			setSelectedKeys,
+			selectedKeys,
+			confirm,
+			clearFilters,
+		}) => (
+			<div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+				<Input
+					ref={searchInput}
+					placeholder={`Search title`}
+					value={selectedKeys[0]}
+					onChange={(e) =>
+						setSelectedKeys(e.target.value ? [e.target.value] : [])
+					}
+					onPressEnter={() => handleSearch(confirm)}
+					style={{ marginBottom: 8, display: "block" }}
+				/>
+				<Space>
+					<Button
+						type="primary"
+						onClick={() => handleSearch(confirm)}
+						icon={<AiIcons.AiOutlineSearch />}
+						size="small"
+						style={{ width: 90 }}
+					>
+						Search
+					</Button>
+					<Button
+						onClick={() => {
+							clearFilters && handleReset(clearFilters, confirm);
+						}}
+						size="small"
+						style={{ width: 90 }}
+					>
+						Reset
+					</Button>
+				</Space>
+			</div>
+		),
+		filterIcon: (filtered: boolean) => (
+			<div className="table-search" style={{ width: 100, paddingLeft: 40 }}>
+				<AiIcons.AiOutlineSearch
+					style={{ color: filtered ? "#1890ff" : undefined }}
+				/>
+			</div>
+		),
+		onFilter: (value, record) =>
+			record[dataIndex]
+				.toString()
+				.toLowerCase()
+				.includes((value as string).toLowerCase()),
+		onFilterDropdownOpenChange: (visible) => {
+			if (visible) {
+				setTimeout(() => searchInput.current?.select(), 100);
+			}
+		},
+	});
 
 	const columns: ColumnsType<DataType> = [
 		{
@@ -69,6 +149,7 @@ const Templates = (props: { role: string; token: string }) => {
 			title: "",
 			key: "action",
 			width: 100,
+			...getColumnSearchProps("name"),
 			render: (_, record) => (
 				<Space size="middle">
 					<Button

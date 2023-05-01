@@ -4,7 +4,7 @@ import ApplicantAdd from "./ApplicantAdd";
 import ApplicantEdit from "./ApplicantEdit";
 import ApplicantTestData from "./ApplicantTestData";
 import * as AiIcons from "react-icons/ai";
-import { Layout, Table, Space, Button } from "antd";
+import { Layout, Table, Space, Button, FloatButton, Form, Input, Col, Select } from "antd";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import {
 	GetAllApplicants,
@@ -12,10 +12,13 @@ import {
 	Applicant,
 	GetApplicantById,
 	TestData,
+	GetApplicantStatuses,
 } from "../../Actions/ApplicantActions";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import { TableParams } from "../../Interfaces/Table";
 import { SorterResult } from "antd/es/table/interface";
+import Filter from "../../Components/Filter/Filter";
+import { Short } from "../../Interfaces/Data";
 
 interface DataType {
 	key: React.Key;
@@ -27,12 +30,15 @@ interface DataType {
 }
 
 const Applicants = (props: { role: string; token: string }) => {
+	const [form] = Form.useForm();
 	const [applicants, setApplicants] = useState<Applicant[]>([]);
 	const [applicant, setApplicant] = useState<Applicant>();
+	const [statuses, setStatuses] = useState<Short[]>([]);
 	const [applicantId, setApplicantId] = useState("");
 	const [modalAddActive, setModalAddActive] = useState(false);
 	const [modalEditActive, setModalEditActive] = useState(false);
 	const [modalTestDataActive, setModalTestDataActive] = useState(false);
+	const [isFilterActive, setIsFilterActive] = useState(false);
 	const [testData, setTestData] = useState<TestData>();
 	const [tableParams, setTableParams] = useState<TableParams>({
 		pagination: {
@@ -103,7 +109,8 @@ const Applicants = (props: { role: string; token: string }) => {
 	];
 
 	useEffect(() => {
-		GetAllApplicants(props.token).then((result) => setApplicants(result));
+		GetAllApplicants(props.token, null).then((result) => setApplicants(result));
+		GetApplicantStatuses(props.token).then((result) => setStatuses(result));
 	}, [props.token]);
 
 	const handleTableChange = (
@@ -130,6 +137,20 @@ const Applicants = (props: { role: string; token: string }) => {
 		setModalTestDataActive(true);
 	};
 
+	const filterView = () => {
+		setIsFilterActive(true);
+	};
+
+	const onFilterSearch = (values: any) => {
+		GetAllApplicants(props.token, values).then((result) => setApplicants(result));
+		setIsFilterActive(false);
+	};
+
+	const onFilterReset = () => {
+		GetAllApplicants(props.token, null).then((result) => setApplicants(result));
+		form.resetFields();
+	};
+
 	return (
 		<Layout className="layout">
 			<Sidebar role={props.role} />
@@ -144,6 +165,66 @@ const Applicants = (props: { role: string; token: string }) => {
 						pagination={tableParams.pagination}
 						onChange={handleTableChange}
 					/>
+					<FloatButton
+						icon={<AiIcons.AiOutlineSearch />}
+						type="primary"
+						style={{ top: 90, right: 30 }}
+						onClick={filterView}
+					/>
+					<Filter
+						isActive={isFilterActive}
+						setActive={setIsFilterActive}
+					>
+						<Form
+							form={form}
+							onFinish={onFilterSearch}
+							layout={"vertical"}
+						>
+							<Form.Item name={`nameRu`} label={`Name (Ru)`}>
+								<Input />
+							</Form.Item>
+							<Form.Item name={`surnameRu`} label={`Surname (Ru)`}>
+								<Input />
+							</Form.Item>
+							<Form.Item name={`patronymicRu`} label={`Patronymic (Ru)`}>
+								<Input />
+							</Form.Item>
+							<Form.Item name={`nameEn`} label={`Name (En)`}>
+								<Input />
+							</Form.Item>
+							<Form.Item name={`surnameEn`} label={`Surname (En)`}>
+								<Input />
+							</Form.Item>
+							<Form.Item name={`login`} label={`Login`}>
+								<Input />
+							</Form.Item>
+							<Form.Item name={`statusIds`} label={`Status`}>
+							<Select>
+								{statuses.map((item) => (
+									<Select.Option
+										value={item.id}
+										key={item.key}
+									>
+										{item.name}
+									</Select.Option>
+								))}
+							</Select>
+							</Form.Item>
+							<Col span={24} style={{ textAlign: "right" }}>
+								<Button type="primary" htmlType="submit">
+									Search
+								</Button>
+								<Button
+									style={{ margin: "0 8px" }}
+									onClick={() => {
+										onFilterReset();
+									}}
+								>
+									Clear
+								</Button>
+							</Col>
+						</Form>
+					</Filter>
 					<ApplicantAdd
 						active={modalAddActive}
 						setActive={setModalAddActive}

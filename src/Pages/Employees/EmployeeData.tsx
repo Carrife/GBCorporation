@@ -122,11 +122,11 @@ const EmployeeDetails = (props: {
 						<Divider plain>Test data</Divider>
 						{props.testData?.map((item) => (
 							<Row>
-								<Col span={15}>
+								<Col span={10}>
 									<Text>{item.title}</Text>
 								</Col>
-								<Col span={5}>
-									<Text>{item.testResult}</Text>
+								<Col span={10}>
+									<Text>{item.testResult}%</Text>
 								</Col>
 								<Col>
 									<Text>{item.date}</Text>

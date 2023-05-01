@@ -88,30 +88,38 @@ const HiringDetails = (props: {
 						</Col>
 					</Row>
 					<Divider plain>Tests</Divider>
-					<Row>
-						<Col span={10}>
-							<Text>Foreign language</Text>
-						</Col>
-						<Col span={10}>
-							<Text>{hiringData?.foreignLanguageTest?.name}</Text>
-						</Col>
-					</Row>
-					<Row>
-						<Col span={10}>
-							<Text>Logic</Text>
-						</Col>
-						<Col span={10}>
-							<Text>{hiringData?.logicTest?.name}</Text>
-						</Col>
-					</Row>
-					<Row>
-						<Col span={10}>
-							<Text>Programming</Text>
-						</Col>
-						<Col span={10}>
-							<Text>{hiringData?.programmingTest?.name}</Text>
-						</Col>
-					</Row>
+					{hiringData?.foreignLanguageTest && (
+						<Row>
+							<Col span={10}>
+								<Text>Foreign language</Text>
+							</Col>
+							<Col span={10}>
+								<Text>
+									{hiringData?.foreignLanguageTest?.name}
+								</Text>
+							</Col>
+						</Row>
+					)}
+					{hiringData?.logicTest && (
+						<Row>
+							<Col span={10}>
+								<Text>Logic</Text>
+							</Col>
+							<Col span={10}>
+								<Text>{hiringData?.logicTest?.name}</Text>
+							</Col>
+						</Row>
+					)}
+					{hiringData?.programmingTest && (
+						<Row>
+							<Col span={10}>
+								<Text>Programming</Text>
+							</Col>
+							<Col span={10}>
+								<Text>{hiringData?.programmingTest?.name}</Text>
+							</Col>
+						</Row>
+					)}
 					<Divider plain>Interviewers</Divider>
 					{hiringData?.interviewers?.map((item) => (
 						<>

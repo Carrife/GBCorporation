@@ -75,19 +75,38 @@ export interface HiringAccept {
 export function GetAllHirings(
 	token: string,
 	role: string,
-	userId: string
+	userId: string,
+	filterForm: any | null
 ): Promise<HiringInterface[]> {
-	return fetch("http://localhost:8000/api/Hiring/GetAll", {
-		method: "GET",
-		headers: {
-			Accept: "*/*",
-			Authorization: "Bearer " + token,
-			"Content-Type": "application/json",
-			userId,
-			role,
-		},
-		credentials: "include",
-	})
+	var params = {
+		nameEn: filterForm?.nameEn ?? "",
+		surnameEn: filterForm?.surnameEn ?? "",
+		login: filterForm?.login ?? "",
+	};
+
+	if (filterForm?.positionIds) {
+		Object.assign(params, { positionIds: filterForm?.positionIds });
+	}
+
+	if (filterForm?.statusIds) {
+		Object.assign(params, { statusIds: filterForm?.statusIds });
+	}
+
+	return fetch(
+		"http://localhost:8000/api/Hiring/GetAll?" +
+			new URLSearchParams(params).toString(),
+		{
+			method: "GET",
+			headers: {
+				Accept: "*/*",
+				Authorization: "Bearer " + token,
+				"Content-Type": "application/json",
+				userId,
+				role,
+			},
+			credentials: "include",
+		}
+	)
 		.then((response) => response.json())
 		.then((data) => {
 			(data as HiringInterface[]).forEach((el) =>
@@ -291,6 +310,23 @@ export function GetDepartments(token: string | null): Promise<Short[]> {
 		method: "GET",
 		headers: { Accept: "*/*", Authorization: "Bearer " + token },
 	})
+		.then((response) => response.json())
+		.then((data) => {
+			(data as Short[]).forEach((el) =>
+				Object.assign(el, { key: el.id.toString() })
+			);
+			return data as Short[];
+		});
+}
+
+export function GetHiringStatuses(token: string | null): Promise<Short[]> {
+	return fetch(
+		"http://localhost:8000/api/SuperDictionary/GetHiringStatuses",
+		{
+			method: "GET",
+			headers: { Accept: "*/*", Authorization: "Bearer " + token },
+		}
+	)
 		.then((response) => response.json())
 		.then((data) => {
 			(data as Short[]).forEach((el) =>

@@ -1,5 +1,6 @@
 import { Errors, ErrorTitles } from "../Enums/Errors";
 import { notification } from "antd";
+import { Short } from "../Interfaces/Data";
 
 export interface Employee {
 	key: string;
@@ -38,14 +39,46 @@ export interface EmployeeTestData {
 	date: string;
 }
 
-export function GetAllEmployee(token: string): Promise<Employee[]> {
-	return fetch("http://localhost:8000/api/Employee/GetAll", {
-		method: "GET",
-		headers: { Accept: "*/*", Authorization: "Bearer " + token },
-	})
+export function GetAllEmployee(
+	token: string,
+	filterForm: any | null
+): Promise<Employee[]> {
+	var params = {
+		nameRu: filterForm?.nameRu ?? "",
+		surnameRu: filterForm?.surnameRu ?? "",
+		patronymicRu: filterForm?.patronymicRu ?? "",
+		nameEn: filterForm?.nameEn ?? "",
+		surnameEn: filterForm?.surnameEn ?? "",
+		login: filterForm?.login ?? "",
+	};
+
+	if (filterForm?.departmentIds) {
+		Object.assign(params, { departmentIds: filterForm?.departmentIds });
+	}
+
+	if (filterForm?.positionIds) {
+		Object.assign(params, { positionIds: filterForm?.positionIds });
+	}
+
+	if (filterForm?.statusIds) {
+		Object.assign(params, { statusIds: filterForm?.statusIds });
+	}
+
+	return fetch(
+		"http://localhost:8000/api/Employee/GetAll?" +
+			new URLSearchParams(params).toString(),
+		{
+			method: "GET",
+			headers: {
+				Accept: "*/*",
+				Authorization: "Bearer " + token,
+				filterForm,
+			},
+		}
+	)
 		.then((response) => response.json())
 		.then((data) => {
-			(data as Employee[]).forEach((el) =>
+			(data as Employee[])?.forEach((el) =>
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Employee[];
@@ -69,6 +102,23 @@ export async function GetEmployeeById(
 		.then((response) => response.json())
 		.then((data) => {
 			return data as EmployeeData;
+		});
+}
+
+export function GetEmployeeStatuses(token: string | null): Promise<Short[]> {
+	return fetch(
+		"http://localhost:8000/api/SuperDictionary/GetEmployeeStatuses",
+		{
+			method: "GET",
+			headers: { Accept: "*/*", Authorization: "Bearer " + token },
+		}
+	)
+		.then((response) => response.json())
+		.then((data) => {
+			(data as Short[]).forEach((el) =>
+				Object.assign(el, { key: el.id.toString() })
+			);
+			return data as Short[];
 		});
 }
 
@@ -218,16 +268,19 @@ export async function GetTestData(
 	token: string | null,
 	id: string
 ): Promise<EmployeeTestData[]> {
-	return await fetch("http://localhost:8000/api/TestCompetencies/GetByUserId", {
-		method: "GET",
-		headers: {
-			Accept: "*/*",
-			Authorization: "Bearer " + token,
-			"Content-Type": "application/json",
-			id,
-		},
-		credentials: "include",
-	})
+	return await fetch(
+		"http://localhost:8000/api/TestCompetencies/GetByUserId",
+		{
+			method: "GET",
+			headers: {
+				Accept: "*/*",
+				Authorization: "Bearer " + token,
+				"Content-Type": "application/json",
+				id,
+			},
+			credentials: "include",
+		}
+	)
 		.then((response) => response.json())
 		.then((data) => {
 			return data as EmployeeTestData[];

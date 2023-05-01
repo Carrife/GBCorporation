@@ -622,11 +622,31 @@ export async function DeleteProgrammingLanguage(
 	}
 }
 
-export function GetUsers(token: string): Promise<User[]> {
-	return fetch("http://localhost:8000/api/Employee/GetAllUsers", {
-		method: "GET",
-		headers: { Accept: "*/*", Authorization: "Bearer " + token },
-	})
+export function GetUsers(
+	token: string,
+	filterForm: any | null
+): Promise<User[]> {
+	var params = {
+		nameRu: filterForm?.nameRu ?? "",
+		surnameRu: filterForm?.surnameRu ?? "",
+		patronymicRu: filterForm?.patronymicRu ?? "",
+		nameEn: filterForm?.nameEn ?? "",
+		surnameEn: filterForm?.surnameEn ?? "",
+		login: filterForm?.login ?? "",
+	};
+
+	if (filterForm?.roleIds) {
+		Object.assign(params, { roleIds: filterForm?.roleIds });
+	}
+
+	return fetch(
+		"http://localhost:8000/api/Employee/GetAllUsers?" +
+			new URLSearchParams(params).toString(),
+		{
+			method: "GET",
+			headers: { Accept: "*/*", Authorization: "Bearer " + token },
+		}
+	)
 		.then((response) => response.json())
 		.then((data) => {
 			(data as User[]).forEach((el) =>

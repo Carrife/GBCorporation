@@ -43,17 +43,54 @@ export interface TestData {
 	];
 }
 
-export function GetAllApplicants(token: string): Promise<Applicant[]> {
-	return fetch("http://localhost:8000/api/Applicant/GetAll", {
-		method: "GET",
-		headers: { Accept: "*/*", Authorization: "Bearer " + token },
-	})
+export function GetAllApplicants(
+	token: string,
+	filterForm: any | null
+): Promise<Applicant[]> {
+	var params = {
+		nameRu: filterForm?.nameRu ?? "",
+		surnameRu: filterForm?.surnameRu ?? "",
+		patronymicRu: filterForm?.patronymicRu ?? "",
+		nameEn: filterForm?.nameEn ?? "",
+		surnameEn: filterForm?.surnameEn ?? "",
+		login: filterForm?.login ?? "",
+	};
+
+	if (filterForm?.statusIds) {
+		Object.assign(params, { statusIds: filterForm?.statusIds });
+	}
+
+	return fetch(
+		"http://localhost:8000/api/Applicant/GetAll?" +
+			new URLSearchParams(params).toString(),
+		{
+			method: "GET",
+			headers: { Accept: "*/*", Authorization: "Bearer " + token },
+		}
+	)
 		.then((response) => response.json())
 		.then((data) => {
 			(data as Applicant[]).forEach((el) =>
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Applicant[];
+		});
+}
+
+export function GetApplicantStatuses(token: string | null): Promise<Short[]> {
+	return fetch(
+		"http://localhost:8000/api/SuperDictionary/GetApplicantStatuses",
+		{
+			method: "GET",
+			headers: { Accept: "*/*", Authorization: "Bearer " + token },
+		}
+	)
+		.then((response) => response.json())
+		.then((data) => {
+			(data as Short[]).forEach((el) =>
+				Object.assign(el, { key: el.id.toString() })
+			);
+			return data as Short[];
 		});
 }
 

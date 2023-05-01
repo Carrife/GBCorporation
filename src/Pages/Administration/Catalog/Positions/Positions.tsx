@@ -1,6 +1,6 @@
-import { Button, Space } from "antd";
+import { Button, Input, InputRef, Space } from "antd";
 import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as AiIcons from "react-icons/ai";
 import PositionEdit from "./PositionEdit";
 import PositionAdd from "./PositionAdd";
@@ -8,7 +8,7 @@ import {
 	DeletePosition,
 	GetPositions,
 } from "../../../../Actions/AdministrationActions";
-import { SorterResult } from "antd/es/table/interface";
+import { ColumnType, FilterConfirmProps, SorterResult } from "antd/es/table/interface";
 import { TableParams } from "../../../../Interfaces/Table";
 import { Short } from "../../../../Interfaces/Data";
 
@@ -16,6 +16,8 @@ interface DataType {
 	key: React.Key;
 	name: string;
 }
+
+type DataIndex = keyof DataType;
 
 const Positions = (props: { userId: string; role: string; token: string }) => {
 	const [positions, setPositions] = useState<Short[]>([]);
@@ -28,7 +30,81 @@ const Positions = (props: { userId: string; role: string; token: string }) => {
 			pageSize: 5,
 		},
 	});
+	const searchInput = useRef<InputRef>(null);
+	
+	const handleSearch = (confirm: (param?: FilterConfirmProps) => void) => {
+		confirm();
+	};
 
+	const handleReset = (
+		clearFilters: () => void,
+		confirm: (param?: FilterConfirmProps) => void
+	) => {
+		clearFilters();
+		confirm({ closeDropdown: false });
+	};
+
+	const getColumnSearchProps = (
+		dataIndex: DataIndex
+	): ColumnType<DataType> => ({
+		filterDropdown: ({
+			setSelectedKeys,
+			selectedKeys,
+			confirm,
+			clearFilters,
+		}) => (
+			<div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+				<Input
+					ref={searchInput}
+					placeholder={`Search title`}
+					value={selectedKeys[0]}
+					onChange={(e) =>
+						setSelectedKeys(e.target.value ? [e.target.value] : [])
+					}
+					onPressEnter={() => handleSearch(confirm)}
+					style={{ marginBottom: 8, display: "block" }}
+				/>
+				<Space>
+					<Button
+						type="primary"
+						onClick={() => handleSearch(confirm)}
+						icon={<AiIcons.AiOutlineSearch />}
+						size="small"
+						style={{ width: 90 }}
+					>
+						Search
+					</Button>
+					<Button
+						onClick={() => {
+							clearFilters && handleReset(clearFilters, confirm);
+						}}
+						size="small"
+						style={{ width: 90 }}
+					>
+						Reset
+					</Button>
+				</Space>
+			</div>
+		),
+		filterIcon: (filtered: boolean) => (
+			<div className="table-search" style={{ width: 100, paddingLeft: 40 }}>
+				<AiIcons.AiOutlineSearch
+					style={{ color: filtered ? "#1890ff" : undefined }}
+				/>
+			</div>
+		),
+		onFilter: (value, record) =>
+			record[dataIndex]
+				.toString()
+				.toLowerCase()
+				.includes((value as string).toLowerCase()),
+		onFilterDropdownOpenChange: (visible) => {
+			if (visible) {
+				setTimeout(() => searchInput.current?.select(), 100);
+			}
+		},
+	});
+	
 	useEffect(() => {
 		GetPositions(props.token).then((result) => setPositions(result));
 	}, [props.token]);
@@ -69,6 +145,7 @@ const Positions = (props: { userId: string; role: string; token: string }) => {
 		{
 			title: "",
 			key: "action",
+			...getColumnSearchProps("name"),
 			render: (_, record) => (
 				<Space size="middle">
 					<Button

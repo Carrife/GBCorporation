@@ -37,6 +37,7 @@ function App() {
 				setName(content.name);
 				setRole(content.role);
 				setUserId(content.id);
+				window.localStorage.setItem("token", content.token);
 				setToken(content.token);
 				if (window.location.pathname === "/") {
 					window.location.href = "/employees";
