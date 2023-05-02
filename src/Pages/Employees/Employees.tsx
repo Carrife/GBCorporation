@@ -11,6 +11,7 @@ import {
 	GetEmployeeById,
 	GetTestData,
 	GetEmployeeStatuses,
+	GetEmployeeCV,
 } from "../../Actions/EmployeeActions";
 import {
 	Button,
@@ -119,33 +120,43 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 		{
 			title: "",
 			key: "action",
+			width: "10%",
 			render: (_, record) => (
 				<Space size="middle">
-					{props.role === "Admin" && (
-						<Button
-							type="text"
-							onClick={() => employeeEdit(record.key.toString())}
-						>
-							<AiIcons.AiOutlineEdit />
-						</Button>
-					)}
 					<Button
 						type="text"
 						onClick={() => employeeData(record.key.toString())}
 					>
 						<AiIcons.AiOutlineUnorderedList />
 					</Button>
+					<Button
+						type="text"
+						onClick={() => employeeCV(record.key.toString(), record.login)}
+					>
+						<AiIcons.AiOutlineAudit />
+					</Button>
 					{props.role === "Admin" && (
-						<Popconfirm
-							title="Must be fired?"
-							onConfirm={() =>
-								employeeFired(record.key.toString())
-							}
-						>
-							<Button type="text">
-								<AiIcons.AiOutlineDelete />
+						<>
+							<Button
+								type="text"
+								onClick={() =>
+									employeeEdit(record.key.toString())
+								}
+							>
+								<AiIcons.AiOutlineEdit />
 							</Button>
-						</Popconfirm>
+
+							<Popconfirm
+								title="Must be fired?"
+								onConfirm={() =>
+									employeeFired(record.key.toString())
+								}
+							>
+								<Button type="text">
+									<AiIcons.AiOutlineDelete />
+								</Button>
+							</Popconfirm>
+						</>
 					)}
 				</Space>
 			),
@@ -184,6 +195,10 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 		GetEmployeeById(props.token, id).then((result) => setEmployee(result));
 		GetTestData(props.token, id).then((result) => setTestData(result));
 		setModalDataActive(true);
+	};
+
+	const employeeCV = async (id: string, login: string) => {
+		GetEmployeeCV(props.token, id, login);
 	};
 
 	const filterView = () => {

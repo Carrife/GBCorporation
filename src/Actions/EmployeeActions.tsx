@@ -4,6 +4,7 @@ import { Short } from "../Interfaces/Short";
 import { ErrorHandler } from "./ErrorHandler/ErrorHandler";
 import { Employee, EmployeeData } from "../Interfaces/Employees";
 import { EmployeeTestData } from "../Interfaces/Tests";
+import fileDownload from "js-file-download";
 
 export function GetAllEmployee(
 	token: string,
@@ -277,4 +278,43 @@ export async function GetTestData(
 			});
 			return new Promise<EmployeeTestData[]>((reject) => {});
 		});
+}
+
+export async function GetEmployeeCV(
+	token: string | null,
+	id: string,
+	login: string
+): Promise<void> {
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/Employee/GetCV",
+			{
+				method: "GET",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+					id,
+				},
+			}
+		);
+
+		if (!response.ok) {
+			ErrorHandler(response);
+		} else {
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
+			});
+
+			response.blob().then(
+				res => fileDownload(res, `CV ${login}.docx`)
+			);
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
+	}
 }
