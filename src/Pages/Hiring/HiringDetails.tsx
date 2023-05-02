@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
 import * as AiIcons from "react-icons/ai";
-import { Reject, HiringData, GetHiringById } from "../../Actions/HiringActions";
+import { Reject, GetHiringById } from "../../Actions/HiringActions";
 import { Button, Col, Divider, Row, Space, Typography } from "antd";
 import ModalTitles from "../../Enums/ModalTitles";
 import Role from "../../Enums/RoleEnum";
 import Description from "./Details/Description";
 import ApplicantHire from "./Details/ApplicantHire";
+import { HiringData } from "../../Interfaces/Hirings";
 const { Text } = Typography;
 
 const HiringDetails = (props: {

@@ -1,19 +1,7 @@
-import { Errors, ErrorTitles } from "../Enums/Errors";
+import { ErrorTitles } from "../Enums/Errors";
 import { notification } from "antd";
-
-export interface Test {
-	key: string;
-	id: number;
-	name: string;
-	link: string;
-	lastUpdate: string;
-}
-
-export interface TestData {
-	key: string;
-	question: string;
-	answers: [{ key: string; answer: string; isCorrect: boolean }];
-}
+import { ErrorHandler } from "./ErrorHandler/ErrorHandler";
+import { Test, TestData } from "../Interfaces/Tests";
 
 export function GetAllTests(token: string): Promise<Test[]> {
 	return fetch("http://localhost:8000/api/TestCompetencies/GetAll", {
@@ -27,6 +15,13 @@ export function GetAllTests(token: string): Promise<Test[]> {
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Test[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Test[]>((reject) => {});
 		});
 }
 
@@ -56,6 +51,13 @@ export async function StartTest(
 			});
 
 			return data as TestData[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<TestData[]>((reject) => {});
 		});
 }
 
@@ -65,42 +67,37 @@ export async function TestComplete(
 	userId: string,
 	result: number
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/TestCompetencies/Complete",
-		{
-			method: "POST",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				title,
-				userId,
-				result,
-			}),
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/TestCompetencies/Complete",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					title,
+					userId,
+					result,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
 		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
 		});
 	}
 }

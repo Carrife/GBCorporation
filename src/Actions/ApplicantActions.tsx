@@ -1,47 +1,9 @@
-import { Errors, ErrorTitles } from "../Enums/Errors";
+import { ErrorTitles } from "../Enums/Errors";
 import { notification } from "antd";
-import { Short } from "../Interfaces/Data";
-
-export interface Applicant {
-	key: string;
-	id: number;
-	nameEn: string;
-	nameRu: string;
-	login: string;
-	phone: string;
-	status: string;
-}
-
-export interface TestData {
-	foreignLanguageTests: [
-		{
-			foreignLanguage: string;
-			foreignLanguageId: number;
-			result: number;
-			date: string;
-			applicantId: number;
-			id: number;
-		}
-	];
-	logicTests: [
-		{
-			result: number;
-			date: string;
-			applicantId: number;
-			id: number;
-		}
-	];
-	programmingTests: [
-		{
-			programmingLanguage: string;
-			programmingLanguageId: number;
-			result: number;
-			date: string;
-			applicantId: number;
-			id: number;
-		}
-	];
-}
+import { Short } from "../Interfaces/Short";
+import { ErrorHandler } from "./ErrorHandler/ErrorHandler";
+import { Applicant } from "../Interfaces/Applicants";
+import { TestResults } from "../Interfaces/Tests";
 
 export function GetAllApplicants(
 	token: string,
@@ -74,6 +36,13 @@ export function GetAllApplicants(
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Applicant[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Applicant[]>((reject) => {});
 		});
 }
 
@@ -91,6 +60,13 @@ export function GetApplicantStatuses(token: string | null): Promise<Short[]> {
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -99,47 +75,45 @@ export async function CreateApplicant(
 	formValues: any,
 	setActive: (active: boolean) => void
 ): Promise<void> {
-	const response = await fetch("http://localhost:8000/api/Applicant/Create", {
-		method: "POST",
-		headers: {
-			Accept: "*/*",
-			Authorization: "Bearer " + token,
-			"Content-Type": "application/json",
-		},
-		credentials: "include",
-		body: JSON.stringify({
-			NameRu: formValues.nameRu,
-			SurnameRu: formValues.surnameRu,
-			PatronymicRu: formValues.patronymicRu,
-			NameEn: formValues.nameEn,
-			SurnameEn: formValues.surnameEn,
-			Login: formValues.login,
-			Phone: formValues.phone,
-		}),
-	});
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/Applicant/Create",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					NameRu: formValues.nameRu,
+					SurnameRu: formValues.surnameRu,
+					PatronymicRu: formValues.patronymicRu,
+					NameEn: formValues.nameEn,
+					SurnameEn: formValues.surnameEn,
+					Login: formValues.login,
+					Phone: formValues.phone,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -160,6 +134,13 @@ export async function GetApplicantById(
 		.then((response) => response.json())
 		.then((data) => {
 			return data as Applicant;
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Applicant>((reject) => {});
 		});
 }
 
@@ -169,54 +150,52 @@ export async function UpdateApplicant(
 	setActive: (active: boolean) => void,
 	applicantId: number
 ): Promise<void> {
-	const response = await fetch("http://localhost:8000/api/Applicant/Update", {
-		method: "PUT",
-		headers: {
-			Accept: "*/*",
-			Authorization: "Bearer " + token,
-			"Content-Type": "application/json",
-		},
-		credentials: "include",
-		body: JSON.stringify({
-			id: applicantId,
-			NameRu: formValues.nameRu,
-			SurnameRu: formValues.surnameRu,
-			PatronymicRu: formValues.patronymicRu,
-			NameEn: formValues.nameEn,
-			SurnameEn: formValues.surnameEn,
-			Phone: formValues.phone,
-		}),
-	});
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/Applicant/Update",
+			{
+				method: "PUT",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					id: applicantId,
+					NameRu: formValues.nameRu,
+					SurnameRu: formValues.surnameRu,
+					PatronymicRu: formValues.patronymicRu,
+					NameEn: formValues.nameEn,
+					SurnameEn: formValues.surnameEn,
+					Phone: formValues.phone,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
 export async function GetApplicantTestData(
 	token: string,
 	id: string
-): Promise<TestData> {
+): Promise<TestResults> {
 	return await fetch("http://localhost:8000/api/Applicant/GetTestDatas", {
 		method: "GET",
 		headers: {
@@ -229,11 +208,17 @@ export async function GetApplicantTestData(
 	})
 		.then((response) => response.json())
 		.then((data) => {
-			return data as TestData;
+			return data as TestResults;
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<TestResults>((reject) => {});
 		});
 }
 
-//Tests
 export async function GetForeignLanguages(
 	token: string | null
 ): Promise<Short[]> {
@@ -250,6 +235,13 @@ export async function GetForeignLanguages(
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -269,6 +261,13 @@ export async function GetProgrammingLanguages(
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -278,47 +277,42 @@ export async function CreateForeignLanguageTest(
 	setActive: (active: boolean) => void,
 	applicantId: string
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/Applicant/CreateForeignLanguageTestData",
-		{
-			method: "POST",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				foreignLanguage: "",
-				foreignLanguageId: formValues.language,
-				result: formValues.result,
-				date: formValues.date,
-				applicantId,
-			}),
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/Applicant/CreateForeignLanguageTestData",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					foreignLanguage: "",
+					foreignLanguageId: formValues.language,
+					result: formValues.result,
+					date: formValues.date,
+					applicantId,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
+			setActive(false);
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -328,45 +322,40 @@ export async function CreateLogicTest(
 	setActive: (active: boolean) => void,
 	applicantId: string
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/Applicant/CreateLogicTestData",
-		{
-			method: "POST",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				result: formValues.result,
-				date: formValues.date,
-				applicantId,
-			}),
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/Applicant/CreateLogicTestData",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					result: formValues.result,
+					date: formValues.date,
+					applicantId,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
+			setActive(false);
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -376,46 +365,41 @@ export async function CreateProgrammingLanguageTest(
 	setActive: (active: boolean) => void,
 	applicantId: string
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/Applicant/CreateProgrammingTestData",
-		{
-			method: "POST",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				programmingLanguage: "",
-				programmingLanguageId: formValues.language,
-				result: formValues.result,
-				date: formValues.date,
-				applicantId,
-			}),
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/Applicant/CreateProgrammingTestData",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					programmingLanguage: "",
+					programmingLanguageId: formValues.language,
+					result: formValues.result,
+					date: formValues.date,
+					applicantId,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
+			setActive(false);
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }

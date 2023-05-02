@@ -5,7 +5,7 @@ import { GetProgrammingLanguages } from "../../Actions/ApplicantActions";
 import { GetDepartments, GetPositions } from "../../Actions/HiringActions";
 import { UpdateEmployee } from "../../Actions/EmployeeActions";
 import ModalTitles from "../../Enums/ModalTitles";
-import { Short } from "../../Interfaces/Data";
+import { Short } from "../../Interfaces/Short";
 
 const EmployeeEdit = (props: {
 	active: boolean;

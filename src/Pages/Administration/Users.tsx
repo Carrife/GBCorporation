@@ -1,13 +1,23 @@
-import { Button, Col, FloatButton, Form, Input, Layout, Select, Space } from "antd";
+import {
+	Button,
+	Col,
+	FloatButton,
+	Form,
+	Input,
+	Layout,
+	Select,
+	Space,
+} from "antd";
 import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { SorterResult } from "antd/es/table/interface";
 import { useEffect, useState } from "react";
 import * as AiIcons from "react-icons/ai";
-import { GetRoles, GetUsers, User } from "../../Actions/AdministrationActions";
+import { GetRoles, GetUsers } from "../../Actions/AdministrationActions";
 import UserEdit from "./UserEdit";
 import { TableParams } from "../../Interfaces/Table";
 import Filter from "../../Components/Filter/Filter";
-import { Short } from "../../Interfaces/Data";
+import { Short } from "../../Interfaces/Short";
+import { User } from "../../Interfaces/Users";
 
 interface DataType {
 	key: React.Key;

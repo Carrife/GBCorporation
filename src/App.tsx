@@ -7,7 +7,7 @@ import Templates from "./Pages/Templates/Template";
 import Tests from "./Pages/Tests/Test";
 import Setting from "./Pages/Settings/Setting";
 import Applicant from "./Pages/Applicants/Applicant";
-import Hiring from "./Pages/Hiring/Hiring";
+import Hirings from "./Pages/Hiring/Hiring";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Logout from "./Pages/Logout";
 import Administration from "./Pages/Administration/Administartion";
@@ -74,7 +74,7 @@ function App() {
 								<Route
 									path="/hiring"
 									element={
-										<Hiring
+										<Hirings
 											role={role}
 											userId={userId}
 											token={token}

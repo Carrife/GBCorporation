@@ -3,9 +3,7 @@ import "../../App.css";
 import TestStart from "./TestStart";
 import {
 	GetAllTests,
-	Test,
 	StartTest,
-	TestData,
 } from "../../Actions/TestActions";
 import { Button, Input, InputRef, Layout, Space, Table } from "antd";
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
@@ -17,6 +15,7 @@ import {
 	FilterConfirmProps,
 	SorterResult,
 } from "antd/es/table/interface";
+import { Test, TestData } from "../../Interfaces/Tests";
 
 interface DataType {
 	key: React.Key;

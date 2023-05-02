@@ -1,9 +1,16 @@
 export enum Errors {
     BadRequest = 400,
+    Unauthorized = 401,
     InternalError = 500,
-    SameLoginExists = 1,
-    HiringExists = 2,
-    InvalidData = 3,
+}
+
+export enum ErrorResponse {
+    'Same Login exists' = 1,
+    'Hiring exists' = 2,
+    'Invalid data' = 3,
+    'Same data exists' = 4,
+    'Invalid Email' = 5,
+    'Invalid Password' = 6
 }
 
 export enum ErrorTitles {

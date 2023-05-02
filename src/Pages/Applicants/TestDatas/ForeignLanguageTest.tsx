@@ -6,7 +6,7 @@ import {
 } from "../../../Actions/ApplicantActions";
 import ModalWindow from "../../../Components/Modal/Modal";
 import ModalTitles from "../../../Enums/ModalTitles";
-import { Short } from "../../../Interfaces/Data";
+import { Short } from "../../../Interfaces/Short";
 
 const ForeignLanguageTest = (props: {
 	active: boolean;

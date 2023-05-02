@@ -1,83 +1,24 @@
-import { Errors, ErrorTitles } from "../Enums/Errors";
+import { ErrorTitles } from "../Enums/Errors";
 import { notification } from "antd";
 import TestTypeEnum from "../Enums/TestTypeEnum";
-import { Short } from "../Interfaces/Data";
-
-export interface HiringInterface {
-	key: string;
-	id: number;
-	applicant: string;
-	position: string;
-	date: string;
-	status: string;
-}
-
-export interface HiringData {
-	applicant: { id: number; name: string };
-	date: string;
-	position: string;
-	status: string;
-	interviewers: [
-		{
-			interviewer: { id: number; name: string };
-			description: string;
-			position: { id: number; name: string };
-			id: number;
-		}
-	];
-	foreignLanguageTest: { id: number; name: string };
-	logicTest: { id: number; name: string };
-	programmingTest: { id: number; name: string };
-	id: number;
-}
-
-export interface TestData {
-	foreignTest: Short[];
-	logicTest: Short[];
-	programmingTest: Short[];
-}
-
-export interface Interviewers {
-	teamLeaders: Short[];
-	lineManagers: Short[];
-	hRs: Short[];
-	ceo: Short[];
-	chiefAccountant: Short[];
-	bAs: Short[];
-	admins: Short[];
-}
-
-interface hiringCreate {
-	applicant: number;
-	interviewDate: string;
-	position: number;
-	interviewers: [{ position: number; interviewer: number }];
-	tests: [{ type: string; result: number }];
-}
-
-interface DescriptionUpdate {
-	description: string;
-}
-
-export interface HiringAccept {
-	id: number;
-	nameRu: string;
-	nameEn: string;
-	surnameRu: string;
-	surnameEn: string;
-	patronymicRu: string;
-	phone: string;
-	departmentId: number;
-	languageId: number;
-	positionId: number;
-}
+import { Short } from "../Interfaces/Short";
+import { ErrorHandler } from "./ErrorHandler/ErrorHandler";
+import {
+	DescriptionUpdate,
+	HiringAccept,
+	HiringData,
+	Hiring,
+	Interviewers,
+	hiringCreate,
+} from "../Interfaces/Hirings";
+import { HiringTestData } from "../Interfaces/Tests";
 
 export function GetAllHirings(
 	token: string,
 	role: string,
 	userId: string,
 	filterForm: any | null
-): Promise<HiringInterface[]> {
+): Promise<Hiring[]> {
 	var params = {
 		nameEn: filterForm?.nameEn ?? "",
 		surnameEn: filterForm?.surnameEn ?? "",
@@ -109,10 +50,17 @@ export function GetAllHirings(
 	)
 		.then((response) => response.json())
 		.then((data) => {
-			(data as HiringInterface[]).forEach((el) =>
+			(data as Hiring[]).forEach((el) =>
 				Object.assign(el, { key: el.id.toString() })
 			);
-			return data as HiringInterface[];
+			return data as Hiring[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Hiring[]>((reject) => {});
 		});
 }
 
@@ -133,6 +81,13 @@ export function GetHiringById(
 		.then((response) => response.json())
 		.then((data) => {
 			return data as HiringData;
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<HiringData>((reject) => {});
 		});
 }
 
@@ -142,50 +97,45 @@ export async function Hire(
 	setActive: (active: boolean) => void,
 	formValues: any
 ): Promise<void> {
-	const response = await fetch("http://localhost:8000/api/Hiring/Hire", {
-		method: "PUT",
-		headers: {
-			Accept: "*/*",
-			Authorization: "Bearer " + token,
-			"Content-Type": "application/json",
-		},
-		credentials: "include",
-		body: JSON.stringify({
-			id: id,
-			nameRu: formValues.nameRu,
-			surnameRu: formValues.surnameRu,
-			patronymicRu: formValues.patronymicRu,
-			nameEn: formValues.nameEn,
-			surnameEn: formValues.surnameEn,
-			phone: formValues.phone,
-			departmentId: formValues.department,
-			languageId: formValues.programmingLanguage,
-			positionId: formValues.position,
-		}),
-	});
-
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
-		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
-			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
+	try {
+		const response = await fetch("http://localhost:8000/api/Hiring/Hire", {
+			method: "PUT",
+			headers: {
+				Accept: "*/*",
+				Authorization: "Bearer " + token,
+				"Content-Type": "application/json",
+			},
+			credentials: "include",
+			body: JSON.stringify({
+				id: id,
+				nameRu: formValues.nameRu,
+				surnameRu: formValues.surnameRu,
+				patronymicRu: formValues.patronymicRu,
+				nameEn: formValues.nameEn,
+				surnameEn: formValues.surnameEn,
+				phone: formValues.phone,
+				departmentId: formValues.department,
+				languageId: formValues.programmingLanguage,
+				positionId: formValues.position,
+			}),
 		});
 
-		setActive(false);
-		window.location.reload();
+		if (!response.ok) {
+			ErrorHandler(response);
+		} else {
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
+			});
+
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -194,43 +144,40 @@ export async function Reject(
 	id: string,
 	setActive: (active: boolean) => void
 ): Promise<void> {
-	const response = await fetch("http://localhost:8000/api/Hiring/Reject", {
-		method: "PUT",
-		headers: {
-			Accept: "*/*",
-			Authorization: "Bearer " + token,
-			"Content-Type": "application/json",
-			id,
-		},
-		credentials: "include",
-	});
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/Hiring/Reject",
+			{
+				method: "PUT",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+					id,
+				},
+				credentials: "include",
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
-//Interview
 export function GetActiveApplicants(token: string | null): Promise<Short[]> {
 	return fetch("http://localhost:8000/api/Applicant/GetActiveShort", {
 		method: "GET",
@@ -242,6 +189,13 @@ export function GetActiveApplicants(token: string | null): Promise<Short[]> {
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -253,13 +207,20 @@ export function GetInterviewers(token: string | null): Promise<Interviewers> {
 		.then((response) => response.json())
 		.then((data) => {
 			return data as Interviewers;
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Interviewers>((reject) => {});
 		});
 }
 
 export function GetTestData(
 	token: string | null,
 	id: string
-): Promise<TestData> {
+): Promise<HiringTestData> {
 	return fetch("http://localhost:8000/api/Hiring/GetTestData", {
 		method: "GET",
 		headers: {
@@ -271,7 +232,14 @@ export function GetTestData(
 	})
 		.then((response) => response.json())
 		.then((data) => {
-			return data as TestData;
+			return data as HiringTestData;
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<HiringTestData>((reject) => {});
 		});
 }
 
@@ -288,6 +256,13 @@ export function GetInterviewerPositions(
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -302,6 +277,13 @@ export function GetPositions(token: string | null): Promise<Short[]> {
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -316,6 +298,13 @@ export function GetDepartments(token: string | null): Promise<Short[]> {
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -333,6 +322,13 @@ export function GetHiringStatuses(token: string | null): Promise<Short[]> {
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -341,53 +337,53 @@ export async function CreateHiring(
 	formValues: hiringCreate,
 	setActive: (active: boolean) => void
 ): Promise<void> {
-	const response = await fetch("http://localhost:8000/api/Hiring/Create", {
-		method: "POST",
-		headers: {
-			Accept: "*/*",
-			Authorization: "Bearer " + token,
-			"Content-Type": "application/json",
-		},
-		credentials: "include",
-		body: JSON.stringify({
-			applicantId: formValues.applicant,
-			date: formValues.interviewDate,
-			positionId: formValues.position,
-			interviewers: formValues.interviewers?.map((x) => x.interviewer),
-			logicTestId: formValues.tests?.find(
-				(item) => item.type === TestTypeEnum.LOGIC
-			)?.result,
-			programmingTestId: formValues.tests?.find(
-				(item) => item.type === TestTypeEnum.PROGRAMMING
-			)?.result,
-			foreignLanguageTestId: formValues.tests?.find(
-				(item) => item.type === TestTypeEnum.FOREIGN
-			)?.result,
-		}),
-	});
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/Hiring/Create",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					applicantId: formValues.applicant,
+					date: formValues.interviewDate,
+					positionId: formValues.position,
+					interviewers: formValues.interviewers?.map(
+						(x) => x.interviewer
+					),
+					logicTestId: formValues.tests?.find(
+						(item) => item.type === TestTypeEnum.LOGIC
+					)?.result,
+					programmingTestId: formValues.tests?.find(
+						(item) => item.type === TestTypeEnum.PROGRAMMING
+					)?.result,
+					foreignLanguageTestId: formValues.tests?.find(
+						(item) => item.type === TestTypeEnum.FOREIGN
+					)?.result,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -397,44 +393,39 @@ export async function UpdateDescription(
 	formValues: DescriptionUpdate,
 	setActive: (active: boolean) => void
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/Hiring/UpdateDescription",
-		{
-			method: "PUT",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-				id: hiringId,
-				description: formValues.description,
-			},
-			credentials: "include",
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/Hiring/UpdateDescription",
+			{
+				method: "PUT",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+					id: hiringId,
+					description: formValues.description,
+				},
+				credentials: "include",
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
+
+			setActive(false);
+
+			window.location.reload();
 		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
 		});
-
-		setActive(false);
-
-		window.location.reload();
 	}
 }
 
@@ -454,5 +445,12 @@ export async function GetApplicantHiringData(
 		.then((response) => response.json())
 		.then((data) => {
 			return data as HiringAccept;
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<HiringAccept>((reject) => {});
 		});
 }

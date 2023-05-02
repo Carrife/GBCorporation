@@ -14,7 +14,7 @@ import {
 import ProgrammingLanguageEdit from "./ProgrammingLanguageEdit";
 import ProgrammingLanguageAdd from "./ProgrammingLanguageAdd";
 import { TableParams } from "../../../../Interfaces/Table";
-import { Short } from "../../../../Interfaces/Data";
+import { Short } from "../../../../Interfaces/Short";
 
 interface DataType {
 	key: React.Key;

@@ -1,16 +1,8 @@
-import { Errors, ErrorTitles } from "../Enums/Errors";
+import { ErrorTitles } from "../Enums/Errors";
 import { notification } from "antd";
-import { Short } from "../Interfaces/Data";
-
-export interface User {
-	key: string;
-	id: number;
-	nameRu: string;
-	nameEn: string;
-	login: string;
-	role: { name: string; id: number };
-	email: string;
-}
+import { Short } from "../Interfaces/Short";
+import { ErrorHandler } from "./ErrorHandler/ErrorHandler";
+import { User } from "../Interfaces/Users";
 
 export function GetPositions(token: string | null): Promise<Short[]> {
 	return fetch("http://localhost:8000/api/SuperDictionary/GetPositions", {
@@ -23,6 +15,13 @@ export function GetPositions(token: string | null): Promise<Short[]> {
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -31,44 +30,39 @@ export async function CreatePosition(
 	name: string,
 	setActive: (active: boolean) => void
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/SuperDictionary/CreatePosition",
-		{
-			method: "POST",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				name,
-			}),
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/SuperDictionary/CreatePosition",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					name,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -78,45 +72,40 @@ export async function UpdatePosition(
 	setActive: (active: boolean) => void,
 	id: number
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/SuperDictionary/UpdatePosition",
-		{
-			method: "PUT",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				id,
-				name,
-			}),
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/SuperDictionary/UpdatePosition",
+			{
+				method: "PUT",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					id,
+					name,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -124,41 +113,36 @@ export async function DeletePosition(
 	token: string | null,
 	id: string
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/SuperDictionary/DeletePosition",
-		{
-			method: "POST",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-				id,
-			},
-			credentials: "include",
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/SuperDictionary/DeletePosition",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+					id,
+				},
+				credentials: "include",
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		window.location.reload();
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -173,6 +157,13 @@ export function GetDepartments(token: string | null): Promise<Short[]> {
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -181,44 +172,39 @@ export async function CreateDepartment(
 	name: string,
 	setActive: (active: boolean) => void
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/SuperDictionary/CreateDepartment",
-		{
-			method: "POST",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				name,
-			}),
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/SuperDictionary/CreateDepartment",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					name,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -228,45 +214,40 @@ export async function UpdateDepartment(
 	setActive: (active: boolean) => void,
 	id: number
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/SuperDictionary/UpdateDepartment",
-		{
-			method: "PUT",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				id,
-				name,
-			}),
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/SuperDictionary/UpdateDepartment",
+			{
+				method: "PUT",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					id,
+					name,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -274,41 +255,36 @@ export async function DeleteDepartment(
 	token: string | null,
 	id: string
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/SuperDictionary/DeleteDepartment",
-		{
-			method: "POST",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-				id,
-			},
-			credentials: "include",
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/SuperDictionary/DeleteDepartment",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+					id,
+				},
+				credentials: "include",
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		window.location.reload();
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -328,6 +304,13 @@ export async function GetForeignLanguages(
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -336,44 +319,39 @@ export async function CreateForeignLanguage(
 	name: string,
 	setActive: (active: boolean) => void
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/SuperDictionary/CreateForeignLanguage",
-		{
-			method: "POST",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				name,
-			}),
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/SuperDictionary/CreateForeignLanguage",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					name,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -383,45 +361,40 @@ export async function UpdateForeignLanguage(
 	setActive: (active: boolean) => void,
 	id: number
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/SuperDictionary/UpdateForeignLanguage",
-		{
-			method: "PUT",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				id,
-				name,
-			}),
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/SuperDictionary/UpdateForeignLanguage",
+			{
+				method: "PUT",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					id,
+					name,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -429,41 +402,36 @@ export async function DeleteForeignLanguage(
 	token: string | null,
 	id: string
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/SuperDictionary/DeleteForeignLanguage",
-		{
-			method: "POST",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-				id,
-			},
-			credentials: "include",
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/SuperDictionary/DeleteForeignLanguage",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+					id,
+				},
+				credentials: "include",
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		window.location.reload();
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -483,6 +451,13 @@ export async function GetProgrammingLanguages(
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -491,44 +466,39 @@ export async function CreateProgrammingLanguage(
 	name: string,
 	setActive: (active: boolean) => void
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/SuperDictionary/CreateProgrammingLanguage",
-		{
-			method: "POST",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				name,
-			}),
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/SuperDictionary/CreateProgrammingLanguage",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					name,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -538,45 +508,40 @@ export async function UpdateProgrammingLanguage(
 	setActive: (active: boolean) => void,
 	id: number
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/SuperDictionary/UpdateProgrammingLanguage",
-		{
-			method: "PUT",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				id,
-				name,
-			}),
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/SuperDictionary/UpdateProgrammingLanguage",
+			{
+				method: "PUT",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					id,
+					name,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -584,41 +549,36 @@ export async function DeleteProgrammingLanguage(
 	token: string | null,
 	id: string
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/SuperDictionary/DeleteProgrammingLanguage",
-		{
-			method: "POST",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-				id,
-			},
-			credentials: "include",
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/SuperDictionary/DeleteProgrammingLanguage",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+					id,
+				},
+				credentials: "include",
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		window.location.reload();
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -653,6 +613,13 @@ export function GetUsers(
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as User[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<User[]>((reject) => {});
 		});
 }
 
@@ -667,6 +634,13 @@ export function GetRoles(token: string | null): Promise<Short[]> {
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -676,47 +650,42 @@ export async function UpdateUser(
 	setActive: (active: boolean) => void,
 	id: number
 ): Promise<void> {
-	const response = await fetch(
-		"http://localhost:8000/api/Employee/UpdateUser",
-		{
-			method: "PUT",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				id,
-				role: formValues.role,
-				email: formValues.email,
-				password:
-					formValues.password !== "" ? formValues.password : null,
-			}),
-		}
-	);
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/Employee/UpdateUser",
+			{
+				method: "PUT",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					id,
+					role: formValues.role,
+					email: formValues.email,
+					password:
+						formValues.password !== "" ? formValues.password : null,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }

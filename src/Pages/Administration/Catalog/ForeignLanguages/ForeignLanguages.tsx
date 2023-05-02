@@ -14,7 +14,7 @@ import {
 import ForeignLanguageEdit from "./ForeignLanguageEdit";
 import ForeignLanguageAdd from "./ForeignLanguageAdd";
 import { TableParams } from "../../../../Interfaces/Table";
-import { Short } from "../../../../Interfaces/Data";
+import { Short } from "../../../../Interfaces/Short";
 
 interface DataType {
 	key: React.Key;
@@ -172,7 +172,9 @@ const ForeignLanguages = (props: {
 					</Button>
 					<Popconfirm
 						title="Sure to delete?"
-						onConfirm={() => foreignLanguageDelete(record.key.toString())}
+						onConfirm={() =>
+							foreignLanguageDelete(record.key.toString())
+						}
 					>
 						<Button type="text">
 							<AiIcons.AiOutlineDelete />

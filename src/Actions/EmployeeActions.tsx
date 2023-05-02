@@ -1,43 +1,9 @@
-import { Errors, ErrorTitles } from "../Enums/Errors";
+import { ErrorTitles } from "../Enums/Errors";
 import { notification } from "antd";
-import { Short } from "../Interfaces/Data";
-
-export interface Employee {
-	key: string;
-	id: number;
-	nameEn: string;
-	nameRu: string;
-	login: string;
-	phone: string;
-	status: string;
-	email: string;
-	department: string;
-	position: string;
-}
-
-export interface EmployeeData {
-	id: number;
-	nameEn: string;
-	surnameEn: string;
-	patronymicRu: string;
-	nameRu: string;
-	surnameRu: string;
-	login: string;
-	phone: string;
-	workPhone: string;
-	status: { id: number; name: string };
-	email: string;
-	department: { id: number; name: string };
-	position: { id: number; name: string };
-	language: { id: number; name: string };
-}
-
-export interface EmployeeTestData {
-	key: string;
-	title: string;
-	testResult: string;
-	date: string;
-}
+import { Short } from "../Interfaces/Short";
+import { ErrorHandler } from "./ErrorHandler/ErrorHandler";
+import { Employee, EmployeeData } from "../Interfaces/Employees";
+import { EmployeeTestData } from "../Interfaces/Tests";
 
 export function GetAllEmployee(
 	token: string,
@@ -82,6 +48,13 @@ export function GetAllEmployee(
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Employee[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Employee[]>((reject) => {});
 		});
 }
 
@@ -102,6 +75,13 @@ export async function GetEmployeeById(
 		.then((response) => response.json())
 		.then((data) => {
 			return data as EmployeeData;
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<EmployeeData>((reject) => {});
 		});
 }
 
@@ -119,6 +99,13 @@ export function GetEmployeeStatuses(token: string | null): Promise<Short[]> {
 				Object.assign(el, { key: el.id.toString() })
 			);
 			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -127,50 +114,48 @@ export async function CreateEmployee(
 	formValues: any,
 	setActive: (active: boolean) => void
 ): Promise<void> {
-	const response = await fetch("http://localhost:8000/api/Employee/Create", {
-		method: "POST",
-		headers: {
-			Accept: "*/*",
-			Authorization: "Bearer " + token,
-			"Content-Type": "application/json",
-		},
-		credentials: "include",
-		body: JSON.stringify({
-			NameRu: formValues.nameRu,
-			SurnameRu: formValues.surnameRu,
-			PatronymicRu: formValues.patronymicRu,
-			NameEn: formValues.nameEn,
-			SurnameEn: formValues.surnameEn,
-			Login: formValues.login,
-			Phone: formValues.phone,
-			LanguageId: formValues.language,
-			DepartmentId: formValues.department,
-			PositionId: formValues.position,
-		}),
-	});
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/Employee/Create",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					NameRu: formValues.nameRu,
+					SurnameRu: formValues.surnameRu,
+					PatronymicRu: formValues.patronymicRu,
+					NameEn: formValues.nameEn,
+					SurnameEn: formValues.surnameEn,
+					Login: formValues.login,
+					Phone: formValues.phone,
+					LanguageId: formValues.language,
+					DepartmentId: formValues.department,
+					PositionId: formValues.position,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -180,87 +165,83 @@ export async function UpdateEmployee(
 	setActive: (active: boolean) => void,
 	employeeId: number
 ): Promise<void> {
-	const response = await fetch("http://localhost:8000/api/Employee/Update", {
-		method: "PUT",
-		headers: {
-			Accept: "*/*",
-			Authorization: "Bearer " + token,
-			"Content-Type": "application/json",
-		},
-		credentials: "include",
-		body: JSON.stringify({
-			id: employeeId,
-			NameRu: formValues.nameRu,
-			SurnameRu: formValues.surnameRu,
-			PatronymicRu: formValues.patronymicRu,
-			NameEn: formValues.nameEn,
-			SurnameEn: formValues.surnameEn,
-			Phone: formValues.phone,
-			WorkPhone: formValues.workPhone,
-			LanguageId: formValues.language,
-			DepartmentId: formValues.department,
-			PositionId: formValues.position,
-		}),
-	});
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/Employee/Update",
+			{
+				method: "PUT",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					id: employeeId,
+					NameRu: formValues.nameRu,
+					SurnameRu: formValues.surnameRu,
+					PatronymicRu: formValues.patronymicRu,
+					NameEn: formValues.nameEn,
+					SurnameEn: formValues.surnameEn,
+					Phone: formValues.phone,
+					WorkPhone: formValues.workPhone,
+					LanguageId: formValues.language,
+					DepartmentId: formValues.department,
+					PositionId: formValues.position,
+				}),
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		setActive(false);
-		window.location.reload();
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
 export async function EmployeeFired(token: string, id: string): Promise<void> {
-	const response = await fetch("http://localhost:8000/api/Employee/Fired", {
-		method: "PUT",
-		headers: {
-			Accept: "*/*",
-			Authorization: "Bearer " + token,
-			"Content-Type": "application/json",
-			id,
-		},
-		credentials: "include",
-	});
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/Employee/Fired",
+			{
+				method: "PUT",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+					id,
+				},
+				credentials: "include",
+			}
+		);
 
-	if (!response.ok) {
-		if (response.status !== undefined) {
-			notification.error({
-				message: ErrorTitles.ERROR,
-				description: Errors[response.status],
-			});
+		if (!response.ok) {
+			ErrorHandler(response);
 		} else {
-			response.json().then((data) => {
-				notification.error({
-					message: ErrorTitles.ERROR,
-					description: Errors[data["errorStatus"]],
-				});
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
 			});
-		}
-	} else {
-		notification.success({
-			message: ErrorTitles.SUCCESS,
-			description: "",
-		});
 
-		window.location.reload();
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
 	}
 }
 
@@ -288,5 +269,12 @@ export async function GetTestData(
 				Object.assign(el, { key: (i++).toString() })
 			);
 			return data as EmployeeTestData[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<EmployeeTestData[]>((reject) => {});
 		});
 }

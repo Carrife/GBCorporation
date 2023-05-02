@@ -4,21 +4,31 @@ import ApplicantAdd from "./ApplicantAdd";
 import ApplicantEdit from "./ApplicantEdit";
 import ApplicantTestData from "./ApplicantTestData";
 import * as AiIcons from "react-icons/ai";
-import { Layout, Table, Space, Button, FloatButton, Form, Input, Col, Select } from "antd";
+import {
+	Layout,
+	Table,
+	Space,
+	Button,
+	FloatButton,
+	Form,
+	Input,
+	Col,
+	Select,
+} from "antd";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import {
 	GetAllApplicants,
 	GetApplicantTestData,
-	Applicant,
 	GetApplicantById,
-	TestData,
 	GetApplicantStatuses,
 } from "../../Actions/ApplicantActions";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import { TableParams } from "../../Interfaces/Table";
 import { SorterResult } from "antd/es/table/interface";
 import Filter from "../../Components/Filter/Filter";
-import { Short } from "../../Interfaces/Data";
+import { Short } from "../../Interfaces/Short";
+import { Applicant } from "../../Interfaces/Applicants";
+import { TestResults } from "../../Interfaces/Tests";
 
 interface DataType {
 	key: React.Key;
@@ -39,7 +49,7 @@ const Applicants = (props: { role: string; token: string }) => {
 	const [modalEditActive, setModalEditActive] = useState(false);
 	const [modalTestDataActive, setModalTestDataActive] = useState(false);
 	const [isFilterActive, setIsFilterActive] = useState(false);
-	const [testData, setTestData] = useState<TestData>();
+	const [testData, setTestData] = useState<TestResults>();
 	const [tableParams, setTableParams] = useState<TableParams>({
 		pagination: {
 			current: 1,
@@ -109,7 +119,9 @@ const Applicants = (props: { role: string; token: string }) => {
 	];
 
 	useEffect(() => {
-		GetAllApplicants(props.token, null).then((result) => setApplicants(result));
+		GetAllApplicants(props.token, null).then((result) =>
+			setApplicants(result)
+		);
 		GetApplicantStatuses(props.token).then((result) => setStatuses(result));
 	}, [props.token]);
 
@@ -142,12 +154,16 @@ const Applicants = (props: { role: string; token: string }) => {
 	};
 
 	const onFilterSearch = (values: any) => {
-		GetAllApplicants(props.token, values).then((result) => setApplicants(result));
+		GetAllApplicants(props.token, values).then((result) =>
+			setApplicants(result)
+		);
 		setIsFilterActive(false);
 	};
 
 	const onFilterReset = () => {
-		GetAllApplicants(props.token, null).then((result) => setApplicants(result));
+		GetAllApplicants(props.token, null).then((result) =>
+			setApplicants(result)
+		);
 		form.resetFields();
 	};
 
@@ -183,32 +199,41 @@ const Applicants = (props: { role: string; token: string }) => {
 							<Form.Item name={`nameRu`} label={`Name (Ru)`}>
 								<Input />
 							</Form.Item>
-							<Form.Item name={`surnameRu`} label={`Surname (Ru)`}>
+							<Form.Item
+								name={`surnameRu`}
+								label={`Surname (Ru)`}
+							>
 								<Input />
 							</Form.Item>
-							<Form.Item name={`patronymicRu`} label={`Patronymic (Ru)`}>
+							<Form.Item
+								name={`patronymicRu`}
+								label={`Patronymic (Ru)`}
+							>
 								<Input />
 							</Form.Item>
 							<Form.Item name={`nameEn`} label={`Name (En)`}>
 								<Input />
 							</Form.Item>
-							<Form.Item name={`surnameEn`} label={`Surname (En)`}>
+							<Form.Item
+								name={`surnameEn`}
+								label={`Surname (En)`}
+							>
 								<Input />
 							</Form.Item>
 							<Form.Item name={`login`} label={`Login`}>
 								<Input />
 							</Form.Item>
 							<Form.Item name={`statusIds`} label={`Status`}>
-							<Select>
-								{statuses.map((item) => (
-									<Select.Option
-										value={item.id}
-										key={item.key}
-									>
-										{item.name}
-									</Select.Option>
-								))}
-							</Select>
+								<Select>
+									{statuses.map((item) => (
+										<Select.Option
+											value={item.id}
+											key={item.key}
+										>
+											{item.name}
+										</Select.Option>
+									))}
+								</Select>
 							</Form.Item>
 							<Col span={24} style={{ textAlign: "right" }}>
 								<Button type="primary" htmlType="submit">

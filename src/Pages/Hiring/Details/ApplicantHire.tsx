@@ -5,12 +5,12 @@ import {
 	GetDepartments,
 	GetPositions,
 	Hire,
-	HiringAccept,
 } from "../../../Actions/HiringActions";
 import ModalWindow from "../../../Components/Modal/Modal";
 import ModalTitles from "../../../Enums/ModalTitles";
 import { GetProgrammingLanguages } from "../../../Actions/ApplicantActions";
-import { Short } from "../../../Interfaces/Data";
+import { Short } from "../../../Interfaces/Short";
+import { HiringAccept } from "../../../Interfaces/Hirings";
 
 const ApplicantHire = (props: {
 	active: boolean;

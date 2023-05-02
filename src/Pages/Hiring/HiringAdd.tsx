@@ -2,10 +2,8 @@ import { useEffect, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
 import {
 	GetActiveApplicants,
-	Interviewers,
 	GetInterviewers,
 	GetTestData,
-	TestData,
 	CreateHiring,
 	GetInterviewerPositions,
 	GetPositions,
@@ -24,7 +22,9 @@ import ModalTitles from "../../Enums/ModalTitles";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import Role from "../../Enums/RoleEnum";
 import TestTypeEnum from "../../Enums/TestTypeEnum";
-import { Short } from "../../Interfaces/Data";
+import { Short } from "../../Interfaces/Short";
+import { Interviewers } from "../../Interfaces/Hirings";
+import { HiringTestData } from "../../Interfaces/Tests";
 
 const HiringAdd = (props: {
 	active: boolean;
@@ -44,7 +44,7 @@ const HiringAdd = (props: {
 	const [currentResults, setCurrentResults] = useState<Short[] | undefined>(
 		[]
 	);
-	const [testData, setTestData] = useState<TestData>();
+	const [testData, setTestData] = useState<HiringTestData>();
 	const [form] = Form.useForm();
 
 	const testTypes = [

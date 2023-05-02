@@ -4,9 +4,9 @@ import * as AiIcons from "react-icons/ai";
 import LogicTest from "./TestDatas/LogicTest";
 import ForeignLanguageTest from "./TestDatas/ForeignLanguageTest";
 import ProgrammingTest from "./TestDatas/ProgrammingTest";
-import { TestData } from "../../Actions/ApplicantActions";
 import { Button, Card, Space, Typography } from "antd";
 import ModalTitles from "../../Enums/ModalTitles";
+import { TestResults } from "../../Interfaces/Tests";
 
 const { Text } = Typography;
 
@@ -14,7 +14,7 @@ const ApplicantTestData = (props: {
 	active: boolean;
 	applicantId: string;
 	setActive: (active: boolean) => void;
-	testData: TestData | undefined;
+	testData: TestResults | undefined;
 	token: string | null;
 }) => {
 	const [modalAddLogicActive, setModalAddLogicActive] = useState(false);

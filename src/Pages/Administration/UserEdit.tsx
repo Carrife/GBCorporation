@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
 import ModalTitles from "../../Enums/ModalTitles";
 import { GetRoles, UpdateUser } from "../../Actions/AdministrationActions";
-import { Short } from "../../Interfaces/Data";
+import { Short } from "../../Interfaces/Short";
 
 const UserEdit = (props: {
 	active: boolean;
@@ -31,12 +31,7 @@ const UserEdit = (props: {
 	};
 
 	const onFinish = (values: any) => {
-        UpdateUser(
-			props.token,
-			values,
-			props.setActive,
-			props.user?.id
-		);
+		UpdateUser(props.token, values, props.setActive, props.user?.id);
 	};
 
 	return (

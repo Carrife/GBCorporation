@@ -5,7 +5,7 @@ import { GetDepartments, GetPositions } from "../../Actions/HiringActions";
 import { Button, Col, Divider, Form, Input, Row, Select } from "antd";
 import { CreateEmployee } from "../../Actions/EmployeeActions";
 import ModalTitles from "../../Enums/ModalTitles";
-import { Short } from "../../Interfaces/Data";
+import { Short } from "../../Interfaces/Short";
 
 const EmployeeAdd = (props: {
 	active: boolean;

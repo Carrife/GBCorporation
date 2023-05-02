@@ -1,8 +1,9 @@
 import { Col, Divider, Row, Space, Typography } from "antd";
-import { EmployeeData, EmployeeTestData } from "../../Actions/EmployeeActions";
 import ModalWindow from "../../Components/Modal/Modal";
 import ModalTitles from "../../Enums/ModalTitles";
 import Role from "../../Enums/RoleEnum";
+import { EmployeeData } from "../../Interfaces/Employees";
+import { EmployeeTestData } from "../../Interfaces/Tests";
 
 const EmployeeDetails = (props: {
 	active: boolean;

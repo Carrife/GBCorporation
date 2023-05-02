@@ -21,7 +21,7 @@ import * as AiIcons from "react-icons/ai";
 import DepartmentEdit from "./DepartmentEdit";
 import DepartmentAdd from "./DepartmentAdd";
 import { TableParams } from "../../../../Interfaces/Table";
-import { Short } from "../../../../Interfaces/Data";
+import { Short } from "../../../../Interfaces/Short";
 
 interface DataType {
 	key: React.Key;
@@ -179,7 +179,9 @@ const Departments = (props: {
 					</Button>
 					<Popconfirm
 						title="Sure to delete?"
-						onConfirm={() => departmentDelete(record.key.toString())}
+						onConfirm={() =>
+							departmentDelete(record.key.toString())
+						}
 					>
 						<Button type="text">
 							<AiIcons.AiOutlineDelete />

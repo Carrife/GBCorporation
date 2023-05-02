@@ -6,13 +6,10 @@ import EmployeeDetails from "./EmployeeData";
 import * as AiIcons from "react-icons/ai";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import {
-	Employee,
-	EmployeeData,
 	EmployeeFired,
 	GetAllEmployee,
 	GetEmployeeById,
 	GetTestData,
-	EmployeeTestData,
 	GetEmployeeStatuses,
 } from "../../Actions/EmployeeActions";
 import {
@@ -31,8 +28,10 @@ import Sidebar from "../../Components/Sidebar/Sidebar";
 import { TableParams } from "../../Interfaces/Table";
 import { SorterResult } from "antd/es/table/interface";
 import Filter from "../../Components/Filter/Filter";
-import { Short } from "../../Interfaces/Data";
+import { Short } from "../../Interfaces/Short";
 import { GetDepartments, GetPositions } from "../../Actions/HiringActions";
+import { Employee, EmployeeData } from "../../Interfaces/Employees";
+import { EmployeeTestData } from "../../Interfaces/Tests";
 
 interface DataType {
 	key: React.Key;

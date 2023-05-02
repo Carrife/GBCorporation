@@ -14,7 +14,7 @@ import {
 	SorterResult,
 } from "antd/es/table/interface";
 import { TableParams } from "../../../../Interfaces/Table";
-import { Short } from "../../../../Interfaces/Data";
+import { Short } from "../../../../Interfaces/Short";
 
 interface DataType {
 	key: React.Key;

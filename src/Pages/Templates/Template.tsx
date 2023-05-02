@@ -5,7 +5,6 @@ import TemplateUpload from "./TemplateUpload";
 import * as AiIcons from "react-icons/ai";
 import {
 	GetAllTemplates,
-	Template,
 	TemplateDelete,
 	TemplateDownload,
 } from "../../Actions/TemplateActions";
@@ -26,6 +25,7 @@ import {
 	FilterConfirmProps,
 	SorterResult,
 } from "antd/es/table/interface";
+import { Template } from "../../Interfaces/Templates";
 
 interface DataType {
 	key: React.Key;

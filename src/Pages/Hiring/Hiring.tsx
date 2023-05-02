@@ -18,13 +18,13 @@ import {
 	GetAllHirings,
 	GetHiringStatuses,
 	GetPositions,
-	HiringInterface,
 } from "../../Actions/HiringActions";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import { TableParams } from "../../Interfaces/Table";
 import { SorterResult } from "antd/es/table/interface";
 import Filter from "../../Components/Filter/Filter";
-import { Short } from "../../Interfaces/Data";
+import { Short } from "../../Interfaces/Short";
+import { Hiring } from "../../Interfaces/Hirings";
 
 interface DataType {
 	key: React.Key;
@@ -34,9 +34,9 @@ interface DataType {
 	status: string;
 }
 
-const Hiring = (props: { role: string; userId: string; token: string }) => {
+const Hirings = (props: { role: string; userId: string; token: string }) => {
 	const [form] = Form.useForm();
-	const [hirings, setHirings] = useState<HiringInterface[]>([]);
+	const [hirings, setHirings] = useState<Hiring[]>([]);
 	const [statuses, setStatuses] = useState<Short[]>([]);
 	const [positions, setPositions] = useState<Short[]>([]);
 	const [modalAddActive, setModalAddActive] = useState(false);
@@ -248,4 +248,4 @@ const Hiring = (props: { role: string; userId: string; token: string }) => {
 	);
 };
 
-export default Hiring;
+export default Hirings;

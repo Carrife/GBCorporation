@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
-import { TestData, TestComplete } from "../../Actions/TestActions";
+import { TestComplete } from "../../Actions/TestActions";
 import { Button, Form, Checkbox, Space, Row, Col } from "antd";
 import "./Test.css";
+import { TestData } from "../../Interfaces/Tests";
 
 const TestStart = (props: {
 	active: boolean;
