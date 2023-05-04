@@ -8,6 +8,7 @@ import {
 } from "./SidebarData";
 import { useEffect, useState } from "react";
 import { Typography, Space } from "antd";
+import Role from "../../Enums/RoleEnum";
 const { Title } = Typography;
 
 const Sidebar = (props: { role: string }) => {
@@ -20,7 +21,7 @@ const Sidebar = (props: { role: string }) => {
 	return (
 		<nav className={"nav-menu"}>
 			<Space.Compact direction="vertical" className="nav-menu-items">
-				{props.role === "Admin" || props.role === "HR"
+				{props.role === Role.ADMIN || props.role === Role.HR
 					? SidebarData.map((item, index) => {
 							return (
 								<li key={index} className={item.cName}>
@@ -41,8 +42,8 @@ const Sidebar = (props: { role: string }) => {
 								</li>
 							);
 					  })
-					: props.role === "LineManager" ||
-					  props.role === "TeamLeader"
+					: props.role === Role.LM ||
+					  props.role === Role.TL
 					? SidebarDataLMTL.map((item, index) => {
 							return (
 								<li key={index} className={item.cName}>

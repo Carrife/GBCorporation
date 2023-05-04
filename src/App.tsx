@@ -4,7 +4,7 @@ import Navbar from "./Components/Navbar/Navbar";
 import Login from "./Pages/Login";
 import Employee from "./Pages/Employees/Employees";
 import Templates from "./Pages/Templates/Template";
-import Tests from "./Pages/Tests/Test";
+import Tests from "./Pages/Tests/Tests";
 import Setting from "./Pages/Settings/Setting";
 import Applicant from "./Pages/Applicants/Applicant";
 import Hirings from "./Pages/Hiring/Hiring";

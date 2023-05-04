@@ -3,7 +3,6 @@ import { notification } from "antd";
 import { Short } from "../Interfaces/Short";
 import { ErrorHandler } from "./ErrorHandler/ErrorHandler";
 import { Employee, EmployeeData } from "../Interfaces/Employees";
-import { EmployeeTestData } from "../Interfaces/Tests";
 import fileDownload from "js-file-download";
 
 export function GetAllEmployee(
@@ -56,6 +55,28 @@ export function GetAllEmployee(
 				description: "Something went wrong",
 			});
 			return new Promise<Employee[]>((reject) => {});
+		});
+}
+
+export function GetAllEmployeeShort(token: string | null): Promise<Short[]> {
+	return fetch("http://localhost:8000/api/Employee/GetAllShort", {
+		method: "GET",
+		headers: { Accept: "*/*", Authorization: "Bearer " + token },
+		credentials: "include",
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			(data as Short[]).forEach((el) =>
+				Object.assign(el, { key: el.id.toString() })
+			);
+			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
 		});
 }
 
@@ -244,40 +265,6 @@ export async function EmployeeFired(token: string, id: string): Promise<void> {
 			description: "Something went wrong",
 		});
 	}
-}
-
-export async function GetTestData(
-	token: string | null,
-	id: string
-): Promise<EmployeeTestData[]> {
-	return await fetch(
-		"http://localhost:8000/api/TestCompetencies/GetByUserId",
-		{
-			method: "GET",
-			headers: {
-				Accept: "*/*",
-				Authorization: "Bearer " + token,
-				"Content-Type": "application/json",
-				id,
-			},
-			credentials: "include",
-		}
-	)
-		.then((response) => response.json())
-		.then((data) => {
-			var i = 0;
-			(data as EmployeeTestData[])?.forEach((el) =>
-				Object.assign(el, { key: (i++).toString() })
-			);
-			return data as EmployeeTestData[];
-		})
-		.catch((e) => {
-			notification.warning({
-				message: ErrorTitles.WARNING,
-				description: "Something went wrong",
-			});
-			return new Promise<EmployeeTestData[]>((reject) => {});
-		});
 }
 
 export async function GetEmployeeCV(

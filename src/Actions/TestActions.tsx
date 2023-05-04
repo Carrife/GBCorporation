@@ -1,9 +1,10 @@
 import { ErrorTitles } from "../Enums/Errors";
 import { notification } from "antd";
 import { ErrorHandler } from "./ErrorHandler/ErrorHandler";
-import { Test, TestData } from "../Interfaces/Tests";
+import { TestData, UserTest, UserTestResults } from "../Interfaces/Tests";
+import { Short } from "../Interfaces/Short";
 
-export function GetAllTests(token: string): Promise<Test[]> {
+export function GetAllTests(token: string | null): Promise<Short[]> {
 	return fetch("http://localhost:8000/api/TestCompetencies/GetAll", {
 		method: "GET",
 		headers: { Accept: "*/*", Authorization: "Bearer " + token },
@@ -11,18 +12,174 @@ export function GetAllTests(token: string): Promise<Test[]> {
 	})
 		.then((response) => response.json())
 		.then((data) => {
-			(data as Test[]).forEach((el) =>
+			(data as Short[]).forEach((el) =>
 				Object.assign(el, { key: el.id.toString() })
 			);
-			return data as Test[];
+			return data as Short[];
 		})
 		.catch((e) => {
 			notification.warning({
 				message: ErrorTitles.WARNING,
 				description: "Something went wrong",
 			});
-			return new Promise<Test[]>((reject) => {});
+			return new Promise<Short[]>((reject) => {});
 		});
+}
+
+export function GetUserTests(
+	token: string,
+	id: string,
+	filterForm: any | null
+): Promise<UserTest[]> {
+	var params = {
+		login: filterForm?.login ?? "",
+		test: filterForm?.test ?? "",
+	};
+
+	if (filterForm?.statusIds) {
+		Object.assign(params, { statusIds: filterForm?.statusIds });
+	}
+
+	return fetch(
+		"http://localhost:8000/api/TestCompetencies/GetUserTests?" +
+			new URLSearchParams(params).toString(),
+		{
+			method: "GET",
+			headers: {
+				Accept: "*/*",
+				Authorization: "Bearer " + token,
+				"Content-Type": "application/json",
+				id,
+			},
+			credentials: "include",
+		}
+	)
+		.then((response) => response.json())
+		.then((data) => {
+			(data as UserTest[]).forEach((el) =>
+				Object.assign(el, { key: el.id.toString() })
+			);
+			return data as UserTest[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<UserTest[]>((reject) => {});
+		});
+}
+
+export function GetUserResults(
+	token: string,
+	id: string,
+	filterForm: any | null
+): Promise<UserTestResults[]> {
+	var params = {
+		login: filterForm?.login ?? "",
+		test: filterForm?.test ?? "",
+	};
+
+	if (filterForm?.statusIds) {
+		Object.assign(params, { statusIds: filterForm?.statusIds });
+	}
+
+	return fetch(
+		"http://localhost:8000/api/TestCompetencies/GetUserResults?" +
+			new URLSearchParams(params).toString(),
+		{
+			method: "GET",
+			headers: {
+				Accept: "*/*",
+				Authorization: "Bearer " + token,
+				"Content-Type": "application/json",
+				id,
+			},
+			credentials: "include",
+		}
+	)
+		.then((response) => response.json())
+		.then((data) => {
+			(data as UserTestResults[]).forEach((el) =>
+				Object.assign(el, { key: el.id.toString() })
+			);
+			return data as UserTestResults[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<UserTestResults[]>((reject) => {});
+		});
+}
+
+export function GetTestCompetenciesStatuses(
+	token: string | null
+): Promise<Short[]> {
+	return fetch(
+		"http://localhost:8000/api/SuperDictionary/GetTestCompetenciesStatuses",
+		{
+			method: "GET",
+			headers: { Accept: "*/*", Authorization: "Bearer " + token },
+		}
+	)
+		.then((response) => response.json())
+		.then((data) => {
+			(data as Short[]).forEach((el) =>
+				Object.assign(el, { key: el.id.toString() })
+			);
+			return data as Short[];
+		})
+		.catch((e) => {
+			notification.warning({
+				message: ErrorTitles.WARNING,
+				description: "Something went wrong",
+			});
+			return new Promise<Short[]>((reject) => {});
+		});
+}
+
+export async function CreateTestCompetencies(
+	token: string | null,
+	formValues: any,
+	setActive: (active: boolean) => void
+): Promise<void> {
+	try {
+		const response = await fetch(
+			"http://localhost:8000/api/TestCompetencies/Create",
+			{
+				method: "POST",
+				headers: {
+					Accept: "*/*",
+					Authorization: "Bearer " + token,
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({
+					EmployeeId: formValues.employeeId,
+					Title: formValues.test,
+				}),
+			}
+		);
+
+		if (!response.ok) {
+			ErrorHandler(response);
+		} else {
+			notification.success({
+				message: ErrorTitles.SUCCESS,
+				description: "",
+			});
+
+			setActive(false);
+			window.location.reload();
+		}
+	} catch (e) {
+		notification.warning({
+			message: ErrorTitles.WARNING,
+			description: "Something went wrong",
+		});
+	}
 }
 
 export async function StartTest(
@@ -63,9 +220,8 @@ export async function StartTest(
 
 export async function TestComplete(
 	token: string | null,
-	title: string,
-	userId: string,
-	result: number
+	result: number,
+	id: string
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -79,8 +235,7 @@ export async function TestComplete(
 				},
 				credentials: "include",
 				body: JSON.stringify({
-					title,
-					userId,
+					id,
 					result,
 				}),
 			}

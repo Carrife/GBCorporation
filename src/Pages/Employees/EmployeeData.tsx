@@ -3,7 +3,6 @@ import ModalWindow from "../../Components/Modal/Modal";
 import ModalTitles from "../../Enums/ModalTitles";
 import Role from "../../Enums/RoleEnum";
 import { EmployeeData } from "../../Interfaces/Employees";
-import { EmployeeTestData } from "../../Interfaces/Tests";
 
 const EmployeeDetails = (props: {
 	active: boolean;
@@ -11,7 +10,6 @@ const EmployeeDetails = (props: {
 	employee: EmployeeData | undefined;
 	userId: string;
 	role: string;
-	testData: EmployeeTestData[];
 }) => {
 	const { Text } = Typography;
 
@@ -111,26 +109,6 @@ const EmployeeDetails = (props: {
 							<Text>{props.employee?.workPhone}</Text>
 						</Col>
 					</Row>
-				)}
-				{(props.employee?.id.toString() === props.userId ||
-					props.role === Role.LM ||
-					props.role === Role.ADMIN) && (
-					<>
-						<Divider plain>Test data</Divider>
-						{props.testData?.map((item) => (
-							<Row key={item.key}>
-								<Col span={10}>
-									<Text>{item.title}</Text>
-								</Col>
-								<Col span={10}>
-									<Text>{item.testResult}%</Text>
-								</Col>
-								<Col>
-									<Text>{item.date}</Text>
-								</Col>
-							</Row>
-						))}
-					</>
 				)}
 			</Space>
 		</ModalWindow>

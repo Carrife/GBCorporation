@@ -80,9 +80,9 @@ export const SidebarDataDevelopers = [
         cName: 'nav-text'
     },
     {
-        title: 'Templates',
-        path: '/templates',
-        icon: <AiIcons.AiOutlineFile/>,
+        title: 'Tests',
+        path: '/tests',
+        icon: <AiIcons.AiOutlineEdit/>,
         cName: 'nav-text'
     },
     {

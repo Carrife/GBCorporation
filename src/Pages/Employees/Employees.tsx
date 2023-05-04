@@ -9,7 +9,6 @@ import {
 	EmployeeFired,
 	GetAllEmployee,
 	GetEmployeeById,
-	GetTestData,
 	GetEmployeeStatuses,
 	GetEmployeeCV,
 } from "../../Actions/EmployeeActions";
@@ -32,7 +31,7 @@ import Filter from "../../Components/Filter/Filter";
 import { Short } from "../../Interfaces/Short";
 import { GetDepartments, GetPositions } from "../../Actions/HiringActions";
 import { Employee, EmployeeData } from "../../Interfaces/Employees";
-import { EmployeeTestData } from "../../Interfaces/Tests";
+import Role from "../../Enums/RoleEnum";
 
 interface DataType {
 	key: React.Key;
@@ -49,7 +48,6 @@ interface DataType {
 const Employees = (props: { role: string; token: string; userId: string }) => {
 	const [form] = Form.useForm();
 	const [employees, setEmployees] = useState<Employee[]>([]);
-	const [testData, setTestData] = useState<EmployeeTestData[]>([]);
 	const [employee, setEmployee] = useState<EmployeeData>();
 	const [departments, setDepartments] = useState<Short[]>([]);
 	const [positions, setPositions] = useState<Short[]>([]);
@@ -135,7 +133,7 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 					>
 						<AiIcons.AiOutlineAudit />
 					</Button>
-					{props.role === "Admin" && (
+					{props.role === Role.ADMIN && (
 						<>
 							<Button
 								type="text"
@@ -193,7 +191,6 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 
 	const employeeData = async (id: string) => {
 		GetEmployeeById(props.token, id).then((result) => setEmployee(result));
-		GetTestData(props.token, id).then((result) => setTestData(result));
 		setModalDataActive(true);
 	};
 
@@ -224,7 +221,7 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 			<Sidebar role={props.role} />
 			<Layout className="page-layout">
 				<Content>
-					{props.role === "Admin" && (
+					{props.role === Role.ADMIN && (
 						<Button
 							type="link"
 							onClick={() => setModalAddActive(true)}
@@ -345,7 +342,6 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 						employee={employee}
 						userId={props.userId}
 						role={props.role}
-						testData={testData}
 					/>
 					<EmployeeEdit
 						active={modalEditActive}

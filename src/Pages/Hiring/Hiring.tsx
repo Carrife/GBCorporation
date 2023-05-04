@@ -25,6 +25,7 @@ import { SorterResult } from "antd/es/table/interface";
 import Filter from "../../Components/Filter/Filter";
 import { Short } from "../../Interfaces/Short";
 import { Hiring } from "../../Interfaces/Hirings";
+import Role from "../../Enums/RoleEnum";
 
 interface DataType {
 	key: React.Key;
@@ -150,7 +151,7 @@ const Hirings = (props: { role: string; userId: string; token: string }) => {
 			<Sidebar role={props.role} />
 			<Layout className="page-layout">
 				<Content>
-					{(props.role === "Admin" || props.role === "HR") && (
+					{(props.role === Role.ADMIN || props.role === Role.HR) && (
 						<Button
 							type="link"
 							onClick={() => setModalAddActive(true)}

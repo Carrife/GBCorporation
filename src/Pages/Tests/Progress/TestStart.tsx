@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import ModalWindow from "../../Components/Modal/Modal";
-import { TestComplete } from "../../Actions/TestActions";
+import ModalWindow from "../../../Components/Modal/Modal";
+import { GetUserTests, TestComplete } from "../../../Actions/TestActions";
 import { Button, Form, Checkbox, Space, Row, Col } from "antd";
-import "./Test.css";
-import { TestData } from "../../Interfaces/Tests";
+import "../Test.css";
+import { TestData, UserTest } from "../../../Interfaces/Tests";
 
 const TestStart = (props: {
 	active: boolean;
@@ -11,7 +11,9 @@ const TestStart = (props: {
 	testData: TestData[];
 	testName: string;
 	userId: string;
-	token: string | null;
+	token: string;
+	competenceId: string;
+	setTests: React.Dispatch<React.SetStateAction<UserTest[]>>;
 }) => {
 	const testData = props.testData;
 	const [isConfirmed, setIsConfirmed] = useState(false);
@@ -61,11 +63,15 @@ const TestStart = (props: {
 
 		let res = Math.round((numCorrectByUser * 100) / numCorrectAnswers);
 
-		TestComplete(props.token, props.testName, props.userId, res);
+		TestComplete(props.token, res, props.competenceId);
 
 		setResult(res);
 
 		setIsConfirmed(true);
+
+		GetUserTests(props.token, props.userId, null).then((result) =>
+			props.setTests(result)
+		);
 	};
 
 	return (

@@ -1,21 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../../App.css";
-import TestStart from "./TestStart";
-import {
-	GetAllTests,
-	StartTest,
-} from "../../Actions/TestActions";
-import { Button, Input, InputRef, Layout, Space, Table } from "antd";
+import { GetAllTests } from "../../Actions/TestActions";
+import { Button, Input, InputRef, Space, Table } from "antd";
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import * as AiIcons from "react-icons/ai";
-import Sidebar from "../../Components/Sidebar/Sidebar";
 import { TableParams } from "../../Interfaces/Table";
 import {
 	ColumnType,
 	FilterConfirmProps,
 	SorterResult,
 } from "antd/es/table/interface";
-import { Test, TestData } from "../../Interfaces/Tests";
+import { Short } from "../../Interfaces/Short";
 
 interface DataType {
 	key: React.Key;
@@ -24,11 +19,8 @@ interface DataType {
 
 type DataIndex = keyof DataType;
 
-const Tests = (props: { userId: string; role: string; token: string }) => {
-	const [templates, setTemplates] = useState<Test[]>([]);
-	const [modalStartActive, setModalStartActive] = useState(false);
-	const [testName, setTestName] = useState("");
-	const [testData, setTestData] = useState<TestData[]>([]);
+const TestList = (props: { userId: string; role: string; token: string }) => {
+	const [tests, setTests] = useState<Short[]>([]);
 	const [tableParams, setTableParams] = useState<TableParams>({
 		pagination: {
 			current: 1,
@@ -36,7 +28,6 @@ const Tests = (props: { userId: string; role: string; token: string }) => {
 		},
 	});
 	const searchInput = useRef<InputRef>(null);
-	const { Content } = Layout;
 
 	const handleSearch = (confirm: (param?: FilterConfirmProps) => void) => {
 		confirm();
@@ -129,30 +120,12 @@ const Tests = (props: { userId: string; role: string; token: string }) => {
 			title: "",
 			key: "action",
 			...getColumnSearchProps("name"),
-			render: (_, record) => (
-				<Space size="middle">
-					<Button
-						style={{marginLeft: 30}} type="text"
-						onClick={() =>
-							startTest(record.key.toString(), record.name)
-						}
-					>
-						<AiIcons.AiOutlineAudit />
-					</Button>
-				</Space>
-			),
 		},
 	];
 
 	useEffect(() => {
-		GetAllTests(props.token).then((result) => setTemplates(result));
+		GetAllTests(props.token).then((result) => setTests(result));
 	}, [props.token]);
-
-	const startTest = async (id: string, name: string) => {
-		StartTest(props.token, id).then((result) => setTestData(result));
-		setTestName(name);
-		setModalStartActive(true);
-	};
 
 	const handleTableChange = (
 		pagination: TablePaginationConfig,
@@ -165,28 +138,13 @@ const Tests = (props: { userId: string; role: string; token: string }) => {
 	};
 
 	return (
-		<Layout className="layout">
-			<Sidebar role={props.role} />
-			<Layout className="page-layout">
-				<Content>
-					<Table
-						columns={columns}
-						dataSource={templates}
-						pagination={tableParams.pagination}
-						onChange={handleTableChange}
-					/>
-					<TestStart
-						active={modalStartActive}
-						setActive={setModalStartActive}
-						testData={testData}
-						testName={testName}
-						userId={props.userId}
-						token={props.token}
-					/>
-				</Content>
-			</Layout>
-		</Layout>
+		<Table
+			columns={columns}
+			dataSource={tests}
+			pagination={tableParams.pagination}
+			onChange={handleTableChange}
+		/>
 	);
 };
 
-export default Tests;
+export default TestList;

@@ -1,11 +1,20 @@
 import { Short } from "./Short";
 
-export interface Test {
+export interface UserTest {
 	key: string;
 	id: number;
-	name: string;
-	link: string;
-	lastUpdate: string;
+	employee: string | null;
+	test: string;
+	status: string;
+}
+
+export interface UserTestResults {
+	key: string;
+	id: number;
+	employee: string | null;
+	test: string;
+	result: string;
+	date: string;
 }
 
 export interface TestData {
@@ -43,13 +52,6 @@ export interface TestResults {
 			id: number;
 		}
 	];
-}
-
-export interface EmployeeTestData {
-	key: string;
-	title: string;
-	testResult: string;
-	date: string;
 }
 
 export interface HiringTestData {
