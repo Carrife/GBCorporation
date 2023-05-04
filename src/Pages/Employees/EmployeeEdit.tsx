@@ -27,6 +27,10 @@ const EmployeeEdit = (props: {
 		GetPositions(props.token).then((result) => setPositions(result));
 	}, [props.token]);
 
+	useEffect(() => {
+		reset();
+	}, [props.employee]);
+
 	const onChangePosition = (value: any) => {
 		if (
 			positions
@@ -61,19 +65,20 @@ const EmployeeEdit = (props: {
 		onChangePosition(props.employee?.position?.id);
 	};
 
-	useEffect(() => {
-		reset();
-	}, [props.employee]);
-
 	const onFinish = (values: any) => {
 		UpdateEmployee(props.token, values, props.setActive, props.employee.id);
+	};
+
+	const onModalCancel = () => {
+		reset();
+		props.setActive(false);
 	};
 
 	return (
 		<ModalWindow
 			title={ModalTitles.EDIT_EMPLOYEE}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form
 				form={form}

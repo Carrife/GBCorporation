@@ -14,11 +14,16 @@ const PositionAdd = (props: {
 		CreatePosition(props.token, values.title, props.setActive);
 	};
 
+	const onModalCancel = () => {
+		form.resetFields();
+		props.setActive(false);
+	};
+
 	return (
 		<ModalWindow
 			title={ModalTitles.CREAT_POSITION}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form
 				form={form}

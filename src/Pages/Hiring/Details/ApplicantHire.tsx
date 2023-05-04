@@ -25,6 +25,20 @@ const ApplicantHire = (props: {
 	const [departments, setDepartments] = useState<Short[]>([]);
 	const [languages, setLanguages] = useState<Short[]>([]);
 	const [isDisabled, setIsDisabled] = useState(false);
+	
+	useEffect(() => {
+		if (props.hiringId) {
+			GetApplicantHiringData(props.token, props.hiringId).then((result) =>
+				setApplicant(result)
+			);
+		}
+		GetPositions(props.token).then((result) => setPositions(result));
+		GetDepartments(props.token).then((result) => setDepartments(result));
+		GetProgrammingLanguages(props.token).then((result) =>
+			setLanguages(result)
+		);
+		onChangePosition(applicant?.positionId);
+	}, [props.token, props.hiringId, applicant?.positionId]);
 
 	const onFinish = (values: any) => {
 		Hire(props.token, props.hiringId, props.setActive, values);
@@ -44,25 +58,16 @@ const ApplicantHire = (props: {
 		}
 	};
 
-	useEffect(() => {
-		if (props.hiringId) {
-			GetApplicantHiringData(props.token, props.hiringId).then((result) =>
-				setApplicant(result)
-			);
-		}
-		GetPositions(props.token).then((result) => setPositions(result));
-		GetDepartments(props.token).then((result) => setDepartments(result));
-		GetProgrammingLanguages(props.token).then((result) =>
-			setLanguages(result)
-		);
-		onChangePosition(applicant?.positionId);
-	}, [props.token, props.hiringId, applicant?.positionId]);
+	const onModalCancel = () => {
+		form.resetFields();
+		props.setActive(false);
+	};
 
 	return (
 		<ModalWindow
 			title={ModalTitles.HIRING}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form
 				form={form}

@@ -22,11 +22,16 @@ const Description = (props: {
 		);
 	};
 
+	const onModalCancel = () => {
+		form.resetFields();
+		props.setActive(false);
+	};
+
 	return (
 		<ModalWindow
 			title={ModalTitles.HIRING_DESCRIPTION}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form form={form} style={{ padding: 10 }} onFinish={onFinish}>
 				<Form.Item

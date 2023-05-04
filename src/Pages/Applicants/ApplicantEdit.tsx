@@ -36,11 +36,16 @@ const ApplicantEdit = (props: {
 		);
 	};
 
+	const onModalCancel = () => {
+		reset();
+		props.setActive(false);
+	};
+
 	return (
 		<ModalWindow
 			title={ModalTitles.EDIT_APPLICANT}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form
 				form={form}

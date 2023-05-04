@@ -20,11 +20,16 @@ const LogicTest = (props: {
 		);
 	};
 
+	const onModalCancel = () => {
+		form.resetFields();
+		props.setActive(false);
+	};
+
 	return (
 		<ModalWindow
 			title={ModalTitles.CREATE_LOGIC_TEST}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form
 				form={form}

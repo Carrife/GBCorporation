@@ -74,11 +74,16 @@ const TestStart = (props: {
 		);
 	};
 
+	const onModalCancel = () => {
+		form.resetFields();
+		props.setActive(false);
+	};
+
 	return (
 		<ModalWindow
 			title={props.testName}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<>
 				{!isConfirmed ? (

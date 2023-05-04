@@ -31,11 +31,16 @@ const DepartmentEdit = (props: {
 		);
 	};
 
+	const onModalCancel = () => {
+		reset();
+		props.setActive(false);
+	};
+
 	return (
 		<ModalWindow
 			title={ModalTitles.EDIT_DEPARTMENT}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form
 				form={form}

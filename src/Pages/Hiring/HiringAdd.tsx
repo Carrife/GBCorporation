@@ -122,11 +122,16 @@ const HiringAdd = (props: {
 		CreateHiring(props.token, values, props.setActive);
 	};
 
+	const onModalCancel = () => {
+		form.resetFields();
+		props.setActive(false);
+	};
+
 	return (
 		<ModalWindow
 			title={ModalTitles.CREATE_HIRING}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form form={form} style={{ padding: 10 }} onFinish={onFinish}>
 				<Row gutter={25}>

@@ -31,11 +31,16 @@ const ForeignLanguageEdit = (props: {
 		);
 	};
 
+	const onModalCancel = () => {
+		reset();
+		props.setActive(false);
+	};
+
 	return (
 		<ModalWindow
 			title={ModalTitles.EDIT_FOREIGN_LANGUAGE}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form
 				form={form}

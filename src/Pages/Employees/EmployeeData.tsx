@@ -1,7 +1,6 @@
 import { Col, Divider, Row, Space, Typography } from "antd";
 import ModalWindow from "../../Components/Modal/Modal";
 import ModalTitles from "../../Enums/ModalTitles";
-import Role from "../../Enums/RoleEnum";
 import { EmployeeData } from "../../Interfaces/Employees";
 
 const EmployeeDetails = (props: {
@@ -13,11 +12,15 @@ const EmployeeDetails = (props: {
 }) => {
 	const { Text } = Typography;
 
+	const onModalCancel = () => {
+		props.setActive(false);
+	};
+
 	return (
 		<ModalWindow
 			title={ModalTitles.EMPLOYEE_DATA}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Space direction="vertical" style={{ width: 450 }}>
 				<Row>

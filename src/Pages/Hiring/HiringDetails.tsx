@@ -24,6 +24,14 @@ const HiringDetails = (props: {
 	const [hiringData, setHiringData] = useState<HiringData>();
 	const [hiringInterviewerId, setHiringInterviewerId] = useState("");
 
+	useEffect(() => {
+		if (props.hiringId) {
+			GetHiringById(props.token, props.hiringId).then((result) =>
+				setHiringData(result)
+			);
+		}
+	}, [props.token, props.hiringId]);
+
 	const addDescription = async (description: string, id: string) => {
 		setDescription(description);
 		setHiringInterviewerId(id);
@@ -40,20 +48,16 @@ const HiringDetails = (props: {
 		Reject(props.token, props.hiringId, props.setActive);
 	};
 
-	useEffect(() => {
-		if (props.hiringId) {
-			GetHiringById(props.token, props.hiringId).then((result) =>
-				setHiringData(result)
-			);
-		}
-	}, [props.token, props.hiringId]);
+	const onModalCancel = () => {
+		props.setActive(false);
+	};
 
 	return (
 		<>
 			<ModalWindow
 				title={ModalTitles.HIRING_DATA}
 				isActive={props.active}
-				setActive={props.setActive}
+				onCancel={onModalCancel}
 			>
 				<Space direction="vertical" style={{ width: 450 }}>
 					<Row>

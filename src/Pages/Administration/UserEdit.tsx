@@ -34,11 +34,16 @@ const UserEdit = (props: {
 		UpdateUser(props.token, values, props.setActive, props.user?.id);
 	};
 
+	const onModalCancel = () => {
+		reset();
+		props.setActive(false);
+	};
+
 	return (
 		<ModalWindow
 			title={ModalTitles.EDIT_USER}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form
 				form={form}

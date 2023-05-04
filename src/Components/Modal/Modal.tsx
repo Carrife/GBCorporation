@@ -1,13 +1,9 @@
 import { Modal } from 'antd';
 
-const ModalWindow = (props: {title: string, isActive: boolean, setActive: (active: boolean) => void, children: any}) => {    
+const ModalWindow = (props: {title: string, isActive: boolean, onCancel: () => void, children: any}) => {    
     
-    const handleCancel = () => {
-        props.setActive(false);
-    };
-
     return (
-        <Modal width={'fit-content'}  style={{display: 'flex', alignSelf: 'center'}} title={props.title} open={props.isActive} onCancel={handleCancel} footer={[]}>
+        <Modal width={'fit-content'}  style={{display: 'flex', alignSelf: 'center'}} title={props.title} open={props.isActive} onCancel={props.onCancel} footer={[]}>
             {props.children}
         </Modal>
     );

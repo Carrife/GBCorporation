@@ -17,6 +17,10 @@ const ForeignLanguageTest = (props: {
 	const [languages, setLanguages] = useState<Short[]>([]);
 	const [form] = Form.useForm();
 
+	useEffect(() => {
+		GetForeignLanguages(props.token).then((result) => setLanguages(result));
+	}, [props.active, props.token]);
+	
 	const onFinish = (values: any) => {
 		CreateForeignLanguageTest(
 			props.token,
@@ -26,15 +30,16 @@ const ForeignLanguageTest = (props: {
 		);
 	};
 
-	useEffect(() => {
-		GetForeignLanguages(props.token).then((result) => setLanguages(result));
-	}, [props.active, props.token]);
+	const onModalCancel = () => {
+		form.resetFields();
+		props.setActive(false);
+	};
 
 	return (
 		<ModalWindow
 			title={ModalTitles.CREATE_FOREIGN_TEST}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form
 				form={form}

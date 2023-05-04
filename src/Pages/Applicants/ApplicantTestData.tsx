@@ -38,12 +38,16 @@ const ApplicantTestData = (props: {
 		props.setActive(false);
 	};
 
+	const onModalCancel = () => {
+		props.setActive(false);
+	};
+
 	return (
 		<>
 			<ModalWindow
 				title={ModalTitles.APPLICANT_TESTS}
 				isActive={props.active}
-				setActive={props.setActive}
+				onCancel={onModalCancel}
 			>
 				<Space direction="horizontal" size={70}>
 					<Card

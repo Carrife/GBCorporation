@@ -16,18 +16,22 @@ const TemplateUpload = (props: {
 	const [form] = Form.useForm();
 
 	useEffect(() => {
+		reset();
+	}, [props.link, props.id, form]);
+
+	const reset = () => {
 		if (props.link) {
 			setFileList([
 				{
 					uid: "1",
-					name: props.link.split('/').pop() ?? '',
+					name: props.link.split("/").pop() ?? "",
 					status: "done",
 				},
 			]);
 		} else {
 			setFileList([]);
 		}
-	}, [props.link, props.id, form]);
+	};
 
 	const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
 		setFileList(newFileList);
@@ -37,11 +41,16 @@ const TemplateUpload = (props: {
 		UploadTemplate(props.token, props.id, file, props.setActive);
 	};
 
+	const onModalCancel = () => {
+		reset();
+		props.setActive(false);
+	};
+
 	return (
 		<ModalWindow
 			title={ModalTitles.UPLOAD_TEMPLATE}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form
 				form={form}

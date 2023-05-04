@@ -17,6 +17,12 @@ const ProgrammingTest = (props: {
 	const [languages, setLanguages] = useState<Short[]>([]);
 	const [form] = Form.useForm();
 
+	useEffect(() => {
+		GetProgrammingLanguages(props.token).then((result) =>
+			setLanguages(result)
+		);
+	}, [props.active, props.token]);
+
 	const onFinish = (values: any) => {
 		CreateProgrammingLanguageTest(
 			props.token,
@@ -26,17 +32,16 @@ const ProgrammingTest = (props: {
 		);
 	};
 
-	useEffect(() => {
-		GetProgrammingLanguages(props.token).then((result) =>
-			setLanguages(result)
-		);
-	}, [props.active, props.token]);
+	const onModalCancel = () => {
+		form.resetFields();
+		props.setActive(false);
+	};
 
 	return (
 		<ModalWindow
 			title={ModalTitles.CREATE_PROGRAMMING_TEST}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form
 				form={form}

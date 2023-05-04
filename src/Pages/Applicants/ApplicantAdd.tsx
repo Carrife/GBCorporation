@@ -14,11 +14,16 @@ const ApplicantAdd = (props: {
 		CreateApplicant(props.token, values, props.setActive);
 	};
 
+	const onModalCancel = () => {
+		form.resetFields();
+		props.setActive(false);
+	};
+
 	return (
 		<ModalWindow
 			title={ModalTitles.CREATE_APPLICANT}
 			isActive={props.active}
-			setActive={props.setActive}
+			onCancel={onModalCancel}
 		>
 			<Form
 				form={form}
