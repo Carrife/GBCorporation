@@ -16,6 +16,7 @@ const HiringDetails = (props: {
 	setActive: (active: boolean) => void;
 	role: string;
 	token: string | null;
+	userId: string;
 }) => {
 	const [modalDescriptionActive, setModalDescriptionActive] = useState(false);
 	const [modalApplicantHireActive, setModalApplicantHireActive] =
@@ -144,7 +145,7 @@ const HiringDetails = (props: {
 									<Text>{item.description}</Text>
 								</Col>
 								<Col>
-									{(props.role === item.position?.name ||
+									{(props.userId === item.interviewer?.id ||
 										props.role === Role.ADMIN) &&
 										hiringData?.status !== "Closed" && (
 											<Button

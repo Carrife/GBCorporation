@@ -16,7 +16,7 @@ export interface HiringData {
 	status: string;
 	interviewers: [
 		{
-			interviewer: { id: number; name: string };
+			interviewer: { id: string; name: string };
 			description: string;
 			position: { id: number; name: string };
 			id: number;

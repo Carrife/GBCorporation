@@ -140,15 +140,9 @@ const TestProgress = (props: {
 	];
 
 	useEffect(() => {
-		if (props.role === Role.ADMIN || props.role === Role.LM) {
-			GetUserTests(props.token, "", null).then((result) =>
-				setTests(result)
-			);
-		} else {
-			GetUserTests(props.token, props.userId, null).then((result) =>
-				setTests(result)
-			);
-		}
+		GetUserTests(props.token, props.userId, props.role, null).then(
+			(result) => setTests(result)
+		);
 
 		GetAllTests(props.token).then((result) => setTestTitles(result));
 		GetTestCompetenciesStatuses(props.token).then((result) =>
@@ -178,28 +172,16 @@ const TestProgress = (props: {
 	};
 
 	const onFilterSearch = (values: any) => {
-		if (props.role === Role.ADMIN || props.role === Role.LM) {
-			GetUserTests(props.token, "", values).then((result) =>
-				setTests(result)
-			);
-		} else {
-			GetUserTests(props.token, props.userId, values).then((result) =>
-				setTests(result)
-			);
-		}
+		GetUserTests(props.token, props.userId, props.role, values).then(
+			(result) => setTests(result)
+		);
 		setIsFilterActive(false);
 	};
 
 	const onFilterReset = () => {
-		if (props.role === Role.ADMIN || props.role === Role.LM) {
-			GetUserTests(props.token, "", null).then((result) =>
-				setTests(result)
-			);
-		} else {
-			GetUserTests(props.token, props.userId, null).then((result) =>
-				setTests(result)
-			);
-		}
+		GetUserTests(props.token, props.userId, props.role, null).then(
+			(result) => setTests(result)
+		);
 		form.resetFields();
 	};
 
@@ -277,6 +259,7 @@ const TestProgress = (props: {
 				testData={testData}
 				testName={testName}
 				userId={props.userId}
+				role={props.role}
 				token={props.token}
 				competenceId={testId}
 				setTests={setTests}

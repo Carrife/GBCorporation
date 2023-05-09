@@ -28,7 +28,8 @@ export function GetAllTests(token: string | null): Promise<Short[]> {
 
 export function GetUserTests(
 	token: string,
-	id: string,
+	userId: string,
+	role: string,
 	filterForm: any | null
 ): Promise<UserTest[]> {
 	var params = {
@@ -49,7 +50,8 @@ export function GetUserTests(
 				Accept: "*/*",
 				Authorization: "Bearer " + token,
 				"Content-Type": "application/json",
-				id,
+				userId,
+				role,
 			},
 			credentials: "include",
 		}

@@ -2,6 +2,7 @@ import { Col, Divider, Row, Space, Typography } from "antd";
 import ModalWindow from "../../Components/Modal/Modal";
 import ModalTitles from "../../Enums/ModalTitles";
 import { EmployeeData } from "../../Interfaces/Employees";
+import Role from "../../Enums/RoleEnum";
 
 const EmployeeDetails = (props: {
 	active: boolean;
@@ -60,14 +61,16 @@ const EmployeeDetails = (props: {
 						<Text>{props.employee?.phone}</Text>
 					</Col>
 				</Row>
-				<Row>
-					<Col span={10}>
-						<Text>Status</Text>
-					</Col>
-					<Col span={10}>
-						<Text>{props.employee?.status?.name}</Text>
-					</Col>
-				</Row>
+				{(props.role === Role.ADMIN || props.role === Role.HR) && (
+					<Row>
+						<Col span={10}>
+							<Text>Status</Text>
+						</Col>
+						<Col span={10}>
+							<Text>{props.employee?.status?.name}</Text>
+						</Col>
+					</Row>
+				)}
 				<Divider plain>Inner data</Divider>
 				<Row>
 					<Col span={10}>

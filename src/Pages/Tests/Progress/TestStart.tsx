@@ -11,6 +11,7 @@ const TestStart = (props: {
 	testData: TestData[];
 	testName: string;
 	userId: string;
+	role: string;
 	token: string;
 	competenceId: string;
 	setTests: React.Dispatch<React.SetStateAction<UserTest[]>>;
@@ -69,7 +70,7 @@ const TestStart = (props: {
 
 		setIsConfirmed(true);
 
-		GetUserTests(props.token, props.userId, null).then((result) =>
+		GetUserTests(props.token, props.userId, props.role, null).then((result) =>
 			props.setTests(result)
 		);
 	};

@@ -42,7 +42,7 @@ interface DataType {
 	email: string;
 	department: string;
 	position: string;
-	status: string;
+	status: string | null;
 }
 
 const Employees = (props: { role: string; token: string; userId: string }) => {
@@ -129,7 +129,9 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 					</Button>
 					<Button
 						type="text"
-						onClick={() => employeeCV(record.key.toString(), record.login)}
+						onClick={() =>
+							employeeCV(record.key.toString(), record.login)
+						}
 					>
 						<AiIcons.AiOutlineAudit />
 					</Button>
@@ -155,6 +157,79 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 								</Button>
 							</Popconfirm>
 						</>
+					)}
+				</Space>
+			),
+		},
+	];
+
+	const columnsWithoutStatus: ColumnsType<DataType> = [
+		{
+			title: "Name (Ru)",
+			dataIndex: "nameRu",
+			key: "nameRu",
+			sorter: {
+				compare: (a, b) =>
+					a.nameRu.toLowerCase() < b.nameRu.toLowerCase() ? 1 : -1,
+			},
+		},
+		{
+			title: "Name (En)",
+			dataIndex: "nameEn",
+			key: "nameEn",
+			sorter: {
+				compare: (a, b) =>
+					a.nameRu.toLowerCase() < b.nameRu.toLowerCase() ? 1 : -1,
+			},
+		},
+		{
+			title: "Login",
+			dataIndex: "login",
+			key: "login",
+			sorter: {
+				compare: (a, b) =>
+					a.nameRu.toLowerCase() < b.nameRu.toLowerCase() ? 1 : -1,
+			},
+		},
+		{
+			title: "Department",
+			dataIndex: "department",
+			key: "department",
+			sorter: {
+				compare: (a, b) =>
+					a.nameRu.toLowerCase() < b.nameRu.toLowerCase() ? 1 : -1,
+			},
+		},
+		{
+			title: "Position",
+			dataIndex: "position",
+			key: "position",
+			sorter: {
+				compare: (a, b) =>
+					a.nameRu.toLowerCase() < b.nameRu.toLowerCase() ? 1 : -1,
+			},
+		},
+		{
+			title: "",
+			key: "action",
+			width: "10%",
+			render: (_, record) => (
+				<Space size="middle">
+					<Button
+						type="text"
+						onClick={() => employeeData(record.key.toString())}
+					>
+						<AiIcons.AiOutlineUnorderedList />
+					</Button>
+					{props.role === Role.LM && (
+						<Button
+							type="text"
+							onClick={() =>
+								employeeCV(record.key.toString(), record.login)
+							}
+						>
+							<AiIcons.AiOutlineAudit />
+						</Button>
 					)}
 				</Space>
 			),
@@ -230,7 +305,11 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 						</Button>
 					)}
 					<Table
-						columns={columns}
+						columns={
+							props.role === Role.ADMIN || props.role === Role.HR
+								? columns
+								: columnsWithoutStatus
+						}
 						dataSource={employees}
 						pagination={tableParams.pagination}
 						onChange={handleTableChange}
@@ -304,18 +383,21 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 									))}
 								</Select>
 							</Form.Item>
-							<Form.Item name={`statusIds`} label={`Status`}>
-								<Select>
-									{statuses.map((item) => (
-										<Select.Option
-											value={item.id}
-											key={item.key}
-										>
-											{item.name}
-										</Select.Option>
-									))}
-								</Select>
-							</Form.Item>
+							{(props.role === Role.ADMIN ||
+								props.role === Role.HR) && (
+								<Form.Item name={`statusIds`} label={`Status`}>
+									<Select>
+										{statuses.map((item) => (
+											<Select.Option
+												value={item.id}
+												key={item.key}
+											>
+												{item.name}
+											</Select.Option>
+										))}
+									</Select>
+								</Form.Item>
+							)}
 							<Col span={24} style={{ textAlign: "right" }}>
 								<Button type="primary" htmlType="submit">
 									Search
