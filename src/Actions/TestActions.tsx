@@ -27,7 +27,7 @@ export function GetAllTests(token: string | null): Promise<Short[]> {
 }
 
 export function GetUserTests(
-	token: string,
+	token: string | null,
 	userId: string,
 	role: string,
 	filterForm: any | null
@@ -174,7 +174,6 @@ export async function CreateTestCompetencies(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({

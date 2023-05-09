@@ -6,7 +6,7 @@ import { Applicant } from "../Interfaces/Applicants";
 import { TestResults } from "../Interfaces/Tests";
 
 export function GetAllApplicants(
-	token: string,
+	token: string | null,
 	filterForm: any | null
 ): Promise<Applicant[]> {
 	var params = {
@@ -107,7 +107,6 @@ export async function CreateApplicant(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -182,7 +181,6 @@ export async function UpdateApplicant(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({

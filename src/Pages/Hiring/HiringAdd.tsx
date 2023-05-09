@@ -7,6 +7,7 @@ import {
 	CreateHiring,
 	GetInterviewerPositions,
 	GetPositions,
+	GetAllHirings,
 } from "../../Actions/HiringActions";
 import {
 	Button,
@@ -23,13 +24,16 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import Role from "../../Enums/RoleEnum";
 import TestTypeEnum from "../../Enums/TestTypeEnum";
 import { Short } from "../../Interfaces/Short";
-import { Interviewers } from "../../Interfaces/Hirings";
+import { Hiring, Interviewers } from "../../Interfaces/Hirings";
 import { HiringTestData } from "../../Interfaces/Tests";
 
 const HiringAdd = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	token: string | null;
+	role: string;
+	userId: string;
+	setHirings: React.Dispatch<React.SetStateAction<Hiring[]>>;
 }) => {
 	const [applicantId, setApplicantId] = useState("");
 	const [applicants, setApplicants] = useState<Short[]>([]);
@@ -120,6 +124,9 @@ const HiringAdd = (props: {
 
 	const onFinish = (values: any) => {
 		CreateHiring(props.token, values, props.setActive);
+		GetAllHirings(props.token, props.role, props.userId, null).then(
+			(result) => props.setHirings(result)
+		);
 	};
 
 	const onModalCancel = () => {

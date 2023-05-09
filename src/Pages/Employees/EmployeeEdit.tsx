@@ -3,15 +3,17 @@ import ModalWindow from "../../Components/Modal/Modal";
 import { Button, Col, Divider, Form, Input, Row, Select } from "antd";
 import { GetProgrammingLanguages } from "../../Actions/ApplicantActions";
 import { GetDepartments, GetPositions } from "../../Actions/HiringActions";
-import { UpdateEmployee } from "../../Actions/EmployeeActions";
+import { GetAllEmployee, UpdateEmployee } from "../../Actions/EmployeeActions";
 import ModalTitles from "../../Enums/ModalTitles";
 import { Short } from "../../Interfaces/Short";
+import { Employee } from "../../Interfaces/Employees";
 
 const EmployeeEdit = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	employee: any;
 	token: string | null;
+	setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
 }) => {
 	const [languages, setLanguages] = useState<Short[]>([]);
 	const [departments, setDepartments] = useState<Short[]>([]);
@@ -67,6 +69,9 @@ const EmployeeEdit = (props: {
 
 	const onFinish = (values: any) => {
 		UpdateEmployee(props.token, values, props.setActive, props.employee.id);
+		GetAllEmployee(props.token, null).then((result) =>
+			props.setEmployees(result)
+		);
 	};
 
 	const onModalCancel = () => {
@@ -169,16 +174,7 @@ const EmployeeEdit = (props: {
 				<Divider plain>Inner data</Divider>
 				<Row gutter={25}>
 					<Col span={12} key={1}>
-						<Form.Item
-							name={`workPhone`}
-							label={`Work phone`}
-							rules={[
-								{
-									required: true,
-									message: "Empty field",
-								},
-							]}
-						>
+						<Form.Item name={`workPhone`} label={`Work phone`}>
 							<Input />
 						</Form.Item>
 

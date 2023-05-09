@@ -132,6 +132,9 @@ const ProgrammingLanguages = (props: {
 
 	const programmingLanguageDelete = async (id: string) => {
 		DeleteProgrammingLanguage(props.token, id);
+		GetProgrammingLanguages(props.token).then((result) =>
+			setLanguages(result)
+		);
 	};
 
 	const handleTableChange = (
@@ -203,11 +206,13 @@ const ProgrammingLanguages = (props: {
 				setActive={setModalEditActive}
 				language={language}
 				token={props.token}
+				setLanguages={setLanguages}
 			/>
 			<ProgrammingLanguageAdd
 				active={modalAddActive}
 				setActive={setModalAddActive}
 				token={props.token}
+				setLanguages={setLanguages}
 			/>
 		</>
 	);

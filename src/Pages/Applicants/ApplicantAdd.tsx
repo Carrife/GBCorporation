@@ -1,17 +1,22 @@
 import ModalWindow from "../../Components/Modal/Modal";
 import ModalTitles from "../../Enums/ModalTitles";
 import { Button, Col, Form, Input, Row } from "antd";
-import { CreateApplicant } from "../../Actions/ApplicantActions";
+import { CreateApplicant, GetAllApplicants } from "../../Actions/ApplicantActions";
+import { Applicant } from "../../Interfaces/Applicants";
 
 const ApplicantAdd = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	token: string | null;
+	setApplicants: React.Dispatch<React.SetStateAction<Applicant[]>>;
 }) => {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: any) => {
 		CreateApplicant(props.token, values, props.setActive);
+		GetAllApplicants(props.token, null).then((result) =>
+			props.setApplicants(result)
+		);
 	};
 
 	const onModalCancel = () => {

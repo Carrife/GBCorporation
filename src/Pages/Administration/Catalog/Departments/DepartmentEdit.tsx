@@ -2,13 +2,15 @@ import { Button, Col, Form, Input, Row } from "antd";
 import { useEffect } from "react";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import { UpdateDepartment } from "../../../../Actions/AdministrationActions";
+import { GetDepartments, UpdateDepartment } from "../../../../Actions/AdministrationActions";
+import { Short } from "../../../../Interfaces/Short";
 
 const DepartmentEdit = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	department: any;
 	token: string | null;
+	setDepartments: React.Dispatch<React.SetStateAction<Short[]>>;
 }) => {
 	const [form] = Form.useForm();
 
@@ -28,6 +30,9 @@ const DepartmentEdit = (props: {
 			values.title,
 			props.setActive,
 			props.department.id
+		);
+		GetDepartments(props.token).then((result) =>
+			props.setDepartments(result)
 		);
 	};
 

@@ -1,17 +1,20 @@
 import { Button, Col, Form, Input, Row } from "antd";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import { CreateForeignLanguage } from "../../../../Actions/AdministrationActions";
+import { CreateForeignLanguage, GetForeignLanguages } from "../../../../Actions/AdministrationActions";
+import { Short } from "../../../../Interfaces/Short";
 
 const ForeignLanguageAdd = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	token: string | null;
+	setLanguages: React.Dispatch<React.SetStateAction<Short[]>>;
 }) => {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: any) => {
 		CreateForeignLanguage(props.token, values.title, props.setActive);
+		GetForeignLanguages(props.token).then((result) => props.setLanguages(result));
 	};
 
 	const onModalCancel = () => {

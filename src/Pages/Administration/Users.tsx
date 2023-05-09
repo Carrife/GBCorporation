@@ -212,6 +212,7 @@ const Users = (props: { userId: string; role: string; token: string }) => {
 				setActive={setModalEditActive}
 				user={user}
 				token={props.token}
+				setUsers={setUsers}
 			/>
 		</Content>
 	);

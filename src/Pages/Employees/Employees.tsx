@@ -257,6 +257,9 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 
 	const employeeFired = async (id: string) => {
 		EmployeeFired(props.token, id);
+		GetAllEmployee(props.token, null).then((result) =>
+			setEmployees(result)
+		);
 	};
 
 	const employeeEdit = async (id: string) => {
@@ -417,6 +420,7 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 						active={modalAddActive}
 						setActive={setModalAddActive}
 						token={props.token}
+						setEmployees={setEmployees}
 					/>
 					<EmployeeDetails
 						active={modalDataActive}
@@ -430,6 +434,7 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 						setActive={setModalEditActive}
 						employee={employee}
 						token={props.token}
+						setEmployees={setEmployees}
 					/>
 				</Content>
 			</Layout>

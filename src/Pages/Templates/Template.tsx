@@ -190,6 +190,7 @@ const Templates = (props: { role: string; token: string }) => {
 
 	const templateDelete = async (id: string) => {
 		TemplateDelete(props.token, id);
+		GetAllTemplates(props.token).then((result) => setTemplates(result));
 	};
 
 	const templateDownload = async (id: string, title: string) => {
@@ -230,6 +231,7 @@ const Templates = (props: { role: string; token: string }) => {
 						active={modalAddActive}
 						setActive={setModalAddActive}
 						token={props.token}
+						setTemplates={setTemplates}
 					/>
 					<TemplateUpload
 						active={modalUploadActive}
@@ -237,6 +239,7 @@ const Templates = (props: { role: string; token: string }) => {
 						id={id}
 						link={link}
 						token={props.token}
+						setTemplates={setTemplates}
 					/>
 				</Content>
 			</Layout>

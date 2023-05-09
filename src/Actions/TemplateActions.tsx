@@ -4,7 +4,7 @@ import fileDownload from "js-file-download";
 import { ErrorHandler } from "./ErrorHandler/ErrorHandler";
 import { Template } from "../Interfaces/Templates";
 
-export function GetAllTemplates(token: string): Promise<Template[]> {
+export function GetAllTemplates(token: string | null): Promise<Template[]> {
 	return fetch("http://localhost:8000/api/Template/GetAll", {
 		method: "GET",
 		headers: { Accept: "*/*", Authorization: "Bearer " + token },
@@ -52,8 +52,6 @@ export async function TemplateDelete(
 				message: ErrorTitles.SUCCESS,
 				description: "",
 			});
-
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -131,7 +129,6 @@ export async function CreateTemplate(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -172,7 +169,6 @@ export async function UploadTemplate(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({

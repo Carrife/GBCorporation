@@ -56,7 +56,6 @@ export async function CreatePosition(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -99,7 +98,6 @@ export async function UpdatePosition(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -135,8 +133,6 @@ export async function DeletePosition(
 				message: ErrorTitles.SUCCESS,
 				description: "",
 			});
-
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -198,7 +194,6 @@ export async function CreateDepartment(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -241,7 +236,6 @@ export async function UpdateDepartment(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -277,8 +271,6 @@ export async function DeleteDepartment(
 				message: ErrorTitles.SUCCESS,
 				description: "",
 			});
-
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -345,7 +337,6 @@ export async function CreateForeignLanguage(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -388,7 +379,6 @@ export async function UpdateForeignLanguage(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -424,8 +414,6 @@ export async function DeleteForeignLanguage(
 				message: ErrorTitles.SUCCESS,
 				description: "",
 			});
-
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -492,7 +480,6 @@ export async function CreateProgrammingLanguage(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -535,7 +522,6 @@ export async function UpdateProgrammingLanguage(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -571,8 +557,6 @@ export async function DeleteProgrammingLanguage(
 				message: ErrorTitles.SUCCESS,
 				description: "",
 			});
-
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -583,7 +567,7 @@ export async function DeleteProgrammingLanguage(
 }
 
 export function GetUsers(
-	token: string,
+	token: string | null,
 	filterForm: any | null
 ): Promise<User[]> {
 	var params = {
@@ -680,7 +664,6 @@ export async function UpdateUser(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({

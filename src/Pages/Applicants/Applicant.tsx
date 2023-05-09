@@ -254,6 +254,7 @@ const Applicants = (props: { role: string; token: string }) => {
 						active={modalAddActive}
 						setActive={setModalAddActive}
 						token={props.token}
+						setApplicants={setApplicants}
 					/>
 					<ApplicantTestData
 						active={modalTestDataActive}
@@ -267,6 +268,7 @@ const Applicants = (props: { role: string; token: string }) => {
 						setActive={setModalEditActive}
 						applicant={applicant}
 						token={props.token}
+						setApplicants={setApplicants}
 					/>
 				</Content>
 			</Layout>

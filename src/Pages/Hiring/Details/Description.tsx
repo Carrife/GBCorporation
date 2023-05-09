@@ -1,8 +1,9 @@
 import ModalWindow from "../../../Components/Modal/Modal";
 import { Button, Col, Form, Row } from "antd";
-import { UpdateDescription } from "../../../Actions/HiringActions";
+import { GetHiringById, UpdateDescription } from "../../../Actions/HiringActions";
 import ModalTitles from "../../../Enums/ModalTitles";
 import TextArea from "antd/es/input/TextArea";
+import { HiringData } from "../../../Interfaces/Hirings";
 
 const Description = (props: {
 	active: boolean;
@@ -10,6 +11,8 @@ const Description = (props: {
 	setActive: (active: boolean) => void;
 	description: string;
 	token: string | null;
+	hiringId: string;
+	setHiringData: React.Dispatch<React.SetStateAction<HiringData | undefined>>;
 }) => {
 	const [form] = Form.useForm();
 
@@ -20,6 +23,9 @@ const Description = (props: {
 			values,
 			props.setActive
 		);
+		GetHiringById(props.token, props.hiringId).then((result) =>
+				props.setHiringData(result)
+			);
 	};
 
 	const onModalCancel = () => {

@@ -6,7 +6,7 @@ import { Employee, EmployeeData } from "../Interfaces/Employees";
 import fileDownload from "js-file-download";
 
 export function GetAllEmployee(
-	token: string,
+	token: string | null,
 	filterForm: any | null
 ): Promise<Employee[]> {
 	var params = {
@@ -171,7 +171,6 @@ export async function CreateEmployee(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -223,7 +222,6 @@ export async function UpdateEmployee(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -256,8 +254,6 @@ export async function EmployeeFired(token: string, id: string): Promise<void> {
 				message: ErrorTitles.SUCCESS,
 				description: "",
 			});
-
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -294,9 +290,9 @@ export async function GetEmployeeCV(
 				description: "",
 			});
 
-			response.blob().then(
-				res => fileDownload(res, `CV ${login}.docx`)
-			);
+			response
+				.blob()
+				.then((res) => fileDownload(res, `CV ${login}.docx`));
 		}
 	} catch (e) {
 		notification.warning({

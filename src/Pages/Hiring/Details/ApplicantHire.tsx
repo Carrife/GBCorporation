@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Divider, Form, Input, Row, Select } from "antd";
 import {
+	GetAllHirings,
 	GetApplicantHiringData,
 	GetDepartments,
 	GetPositions,
@@ -10,7 +11,7 @@ import ModalWindow from "../../../Components/Modal/Modal";
 import ModalTitles from "../../../Enums/ModalTitles";
 import { GetProgrammingLanguages } from "../../../Actions/ApplicantActions";
 import { Short } from "../../../Interfaces/Short";
-import { HiringAccept } from "../../../Interfaces/Hirings";
+import { Hiring, HiringAccept } from "../../../Interfaces/Hirings";
 
 const ApplicantHire = (props: {
 	active: boolean;
@@ -18,6 +19,8 @@ const ApplicantHire = (props: {
 	setActive: (active: boolean) => void;
 	role: string;
 	token: string | null;
+	userId: string;
+	setHirings: React.Dispatch<React.SetStateAction<Hiring[]>>;
 }) => {
 	const [form] = Form.useForm();
 	const [applicant, setApplicant] = useState<HiringAccept>();
@@ -42,6 +45,9 @@ const ApplicantHire = (props: {
 
 	const onFinish = (values: any) => {
 		Hire(props.token, props.hiringId, props.setActive, values);
+		GetAllHirings(props.token, props.role, props.userId, null).then(
+			(result) => props.setHirings(result)
+		);
 	};
 
 	const onChangePosition = (value: any) => {

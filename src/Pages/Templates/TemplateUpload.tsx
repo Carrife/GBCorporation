@@ -1,9 +1,10 @@
 import ModalWindow from "../../Components/Modal/Modal";
-import { UploadTemplate } from "../../Actions/TemplateActions";
+import { GetAllTemplates, UploadTemplate } from "../../Actions/TemplateActions";
 import ModalTitles from "../../Enums/ModalTitles";
 import { Button, Col, Form, Upload, UploadFile, UploadProps } from "antd";
 import * as AiIcons from "react-icons/ai";
 import { useEffect, useState } from "react";
+import { Template } from "../../Interfaces/Templates";
 
 const TemplateUpload = (props: {
 	active: boolean;
@@ -11,6 +12,7 @@ const TemplateUpload = (props: {
 	id: string;
 	link: string;
 	token: string | null;
+	setTemplates: React.Dispatch<React.SetStateAction<Template[]>>;
 }) => {
 	const [fileList, setFileList] = useState<UploadFile[]>([]);
 	const [form] = Form.useForm();
@@ -39,6 +41,7 @@ const TemplateUpload = (props: {
 	const onFinish = (values: any) => {
 		let file = values.file?.file !== undefined ? values.file.file : null;
 		UploadTemplate(props.token, props.id, file, props.setActive);
+		GetAllTemplates(props.token).then((result) => props.setTemplates(result));
 	};
 
 	const onModalCancel = () => {

@@ -3,14 +3,16 @@ import ModalWindow from "../../Components/Modal/Modal";
 import { GetProgrammingLanguages } from "../../Actions/ApplicantActions";
 import { GetDepartments, GetPositions } from "../../Actions/HiringActions";
 import { Button, Col, Divider, Form, Input, Row, Select } from "antd";
-import { CreateEmployee } from "../../Actions/EmployeeActions";
+import { CreateEmployee, GetAllEmployee } from "../../Actions/EmployeeActions";
 import ModalTitles from "../../Enums/ModalTitles";
 import { Short } from "../../Interfaces/Short";
+import { Employee } from "../../Interfaces/Employees";
 
 const EmployeeAdd = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	token: string | null;
+	setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
 }) => {
 	const [languages, setLanguages] = useState<Short[]>([]);
 	const [departments, setDepartments] = useState<Short[]>([]);
@@ -28,6 +30,9 @@ const EmployeeAdd = (props: {
 
 	const onFinish = (values: any) => {
 		CreateEmployee(props.token, values, props.setActive);
+		GetAllEmployee(props.token, null).then((result) =>
+			props.setEmployees(result)
+		);
 	};
 
 	const onChangePosition = (value: any) => {

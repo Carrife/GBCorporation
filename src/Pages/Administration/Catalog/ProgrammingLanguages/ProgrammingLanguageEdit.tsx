@@ -2,13 +2,18 @@ import { Button, Col, Form, Input, Row } from "antd";
 import { useEffect } from "react";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import { UpdateProgrammingLanguage } from "../../../../Actions/AdministrationActions";
+import {
+	GetProgrammingLanguages,
+	UpdateProgrammingLanguage,
+} from "../../../../Actions/AdministrationActions";
+import { Short } from "../../../../Interfaces/Short";
 
 const ProgrammingLanguageEdit = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	language: any;
 	token: string | null;
+	setLanguages: React.Dispatch<React.SetStateAction<Short[]>>;
 }) => {
 	const [form] = Form.useForm();
 
@@ -28,6 +33,9 @@ const ProgrammingLanguageEdit = (props: {
 			values.title,
 			props.setActive,
 			props.language.id
+		);
+		GetProgrammingLanguages(props.token).then((result) =>
+			props.setLanguages(result)
 		);
 	};
 

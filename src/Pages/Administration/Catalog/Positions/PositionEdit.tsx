@@ -2,13 +2,15 @@ import { Button, Col, Form, Input, Row } from "antd";
 import { useEffect } from "react";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import { UpdatePosition } from "../../../../Actions/AdministrationActions";
+import { GetPositions, UpdatePosition } from "../../../../Actions/AdministrationActions";
+import { Short } from "../../../../Interfaces/Short";
 
 const PositionEdit = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	position: any;
 	token: string | null;
+	setPositions: React.Dispatch<React.SetStateAction<Short[]>>;
 }) => {
 	const [form] = Form.useForm();
 
@@ -29,6 +31,7 @@ const PositionEdit = (props: {
 			props.setActive,
 			props.position.id
 		);
+		GetPositions(props.token).then((result) => props.setPositions(result));
 	};
 
 	const onModalCancel = () => {

@@ -1,17 +1,22 @@
 import { Button, Col, Form, Input, Row } from "antd";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import { CreateProgrammingLanguage } from "../../../../Actions/AdministrationActions";
+import { CreateProgrammingLanguage, GetProgrammingLanguages } from "../../../../Actions/AdministrationActions";
+import { Short } from "../../../../Interfaces/Short";
 
 const ProgrammingLanguageAdd = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	token: string | null;
+	setLanguages: React.Dispatch<React.SetStateAction<Short[]>>;
 }) => {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: any) => {
 		CreateProgrammingLanguage(props.token, values.title, props.setActive);
+		GetProgrammingLanguages(props.token).then((result) =>
+			props.setLanguages(result)
+		);
 	};
 
 	const onModalCancel = () => {

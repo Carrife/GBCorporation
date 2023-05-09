@@ -2,14 +2,18 @@ import { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Select } from "antd";
 import ModalWindow from "../../../Components/Modal/Modal";
 import ModalTitles from "../../../Enums/ModalTitles";
-import { CreateTestCompetencies, GetAllTests } from "../../../Actions/TestActions";
+import { CreateTestCompetencies, GetAllTests, GetUserTests } from "../../../Actions/TestActions";
 import { Short } from "../../../Interfaces/Short";
 import { GetAllEmployeeShort } from "../../../Actions/EmployeeActions";
+import { UserTest } from "../../../Interfaces/Tests";
 
 const TestCompetenciesAdd = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	token: string | null;
+	userId: string;
+	role: string;
+	setTests: React.Dispatch<React.SetStateAction<UserTest[]>>;
 }) => {
 	const [testTitles, setTestTitles] = useState<Short[]>([]);
 	const [employees, setEmployees] = useState<Short[]>([]);
@@ -22,6 +26,9 @@ const TestCompetenciesAdd = (props: {
 
 	const onFinish = (values: any) => {
 		CreateTestCompetencies(props.token, values, props.setActive);
+		GetUserTests(props.token, props.userId, props.role, null).then(
+			(result) => props.setTests(result)
+		);
 	};
 
 	const onModalCancel = () => {

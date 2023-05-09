@@ -130,6 +130,7 @@ const ForeignLanguages = (props: {
 
 	const foreignLanguageDelete = async (id: string) => {
 		DeleteForeignLanguage(props.token, id);
+		GetForeignLanguages(props.token).then((result) => setLanguages(result));
 	};
 
 	const handleTableChange = (
@@ -201,11 +202,13 @@ const ForeignLanguages = (props: {
 				setActive={setModalEditActive}
 				language={language}
 				token={props.token}
+				setLanguages={setLanguages}
 			/>
 			<ForeignLanguageAdd
 				active={modalAddActive}
 				setActive={setModalAddActive}
 				token={props.token}
+				setLanguages={setLanguages}
 			/>
 		</>
 	);

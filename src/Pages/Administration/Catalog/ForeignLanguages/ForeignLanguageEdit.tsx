@@ -2,13 +2,15 @@ import { Button, Col, Form, Input, Row } from "antd";
 import { useEffect } from "react";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import { UpdateForeignLanguage } from "../../../../Actions/AdministrationActions";
+import { GetForeignLanguages, UpdateForeignLanguage } from "../../../../Actions/AdministrationActions";
+import { Short } from "../../../../Interfaces/Short";
 
 const ForeignLanguageEdit = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	language: any;
 	token: string | null;
+	setLanguages: React.Dispatch<React.SetStateAction<Short[]>>;
 }) => {
 	const [form] = Form.useForm();
 
@@ -29,6 +31,7 @@ const ForeignLanguageEdit = (props: {
 			props.setActive,
 			props.language.id
 		);
+		GetForeignLanguages(props.token).then((result) => props.setLanguages(result));
 	};
 
 	const onModalCancel = () => {

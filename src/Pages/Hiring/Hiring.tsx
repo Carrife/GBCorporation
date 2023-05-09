@@ -235,6 +235,9 @@ const Hirings = (props: { role: string; userId: string; token: string }) => {
 						active={modalAddActive}
 						setActive={setModalAddActive}
 						token={props.token}
+						role={props.role}
+						userId={props.userId}
+						setHirings={setHirings}
 					/>
 					<HiringDetails
 						active={modalDetailsActive}
@@ -243,6 +246,7 @@ const Hirings = (props: { role: string; userId: string; token: string }) => {
 						role={props.role}
 						token={props.token}
 						userId={props.userId}
+						setHirings={setHirings}
 					/>
 				</Content>
 			</Layout>

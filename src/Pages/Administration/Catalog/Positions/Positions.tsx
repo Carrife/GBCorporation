@@ -126,6 +126,7 @@ const Positions = (props: { userId: string; role: string; token: string }) => {
 
 	const positionDelete = async (id: string) => {
 		DeletePosition(props.token, id);
+		GetPositions(props.token).then((result) => setPositions(result));
 	};
 
 	const handleTableChange = (
@@ -195,11 +196,13 @@ const Positions = (props: { userId: string; role: string; token: string }) => {
 				setActive={setModalEditActive}
 				position={position}
 				token={props.token}
+				setPositions={setPositions}
 			/>
 			<PositionAdd
 				active={modalAddActive}
 				setActive={setModalAddActive}
 				token={props.token}
+				setPositions={setPositions}
 			/>
 		</>
 	);

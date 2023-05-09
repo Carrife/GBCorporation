@@ -143,7 +143,6 @@ const TestProgress = (props: {
 		GetUserTests(props.token, props.userId, props.role, null).then(
 			(result) => setTests(result)
 		);
-
 		GetAllTests(props.token).then((result) => setTestTitles(result));
 		GetTestCompetenciesStatuses(props.token).then((result) =>
 			setStatuses(result)
@@ -252,6 +251,9 @@ const TestProgress = (props: {
 				active={modalAddActive}
 				setActive={setModalAddActive}
 				token={props.token}
+				userId={props.userId}
+				role={props.role}
+				setTests={setTests}
 			/>
 			<TestStart
 				active={modalStartActive}

@@ -2,14 +2,16 @@ import { Button, Col, Form, Input, Row, Select } from "antd";
 import { useEffect, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
 import ModalTitles from "../../Enums/ModalTitles";
-import { GetRoles, UpdateUser } from "../../Actions/AdministrationActions";
+import { GetRoles, GetUsers, UpdateUser } from "../../Actions/AdministrationActions";
 import { Short } from "../../Interfaces/Short";
+import { User } from "../../Interfaces/Users";
 
 const UserEdit = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	user: any;
 	token: string | null;
+	setUsers: React.Dispatch<React.SetStateAction<User[]>>;
 }) => {
 	const [roles, setRoles] = useState<Short[]>([]);
 	const [form] = Form.useForm();
@@ -32,6 +34,7 @@ const UserEdit = (props: {
 
 	const onFinish = (values: any) => {
 		UpdateUser(props.token, values, props.setActive, props.user?.id);
+		GetUsers(props.token, null).then((result) => props.setUsers(result));
 	};
 
 	const onModalCancel = () => {

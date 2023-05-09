@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
 import * as AiIcons from "react-icons/ai";
-import { Reject, GetHiringById } from "../../Actions/HiringActions";
+import { Reject, GetHiringById, GetAllHirings } from "../../Actions/HiringActions";
 import { Button, Col, Divider, Row, Space, Typography } from "antd";
 import ModalTitles from "../../Enums/ModalTitles";
 import Role from "../../Enums/RoleEnum";
 import Description from "./Details/Description";
 import ApplicantHire from "./Details/ApplicantHire";
-import { HiringData } from "../../Interfaces/Hirings";
+import { Hiring, HiringData } from "../../Interfaces/Hirings";
 const { Text } = Typography;
 
 const HiringDetails = (props: {
@@ -17,6 +17,7 @@ const HiringDetails = (props: {
 	role: string;
 	token: string | null;
 	userId: string;
+	setHirings: React.Dispatch<React.SetStateAction<Hiring[]>>;
 }) => {
 	const [modalDescriptionActive, setModalDescriptionActive] = useState(false);
 	const [modalApplicantHireActive, setModalApplicantHireActive] =
@@ -47,6 +48,9 @@ const HiringDetails = (props: {
 
 	const reject = async () => {
 		Reject(props.token, props.hiringId, props.setActive);
+		GetAllHirings(props.token, props.role, props.userId, null).then(
+			(result) => props.setHirings(result)
+		);
 	};
 
 	const onModalCancel = () => {
@@ -194,6 +198,8 @@ const HiringDetails = (props: {
 				setActive={setModalDescriptionActive}
 				description={description}
 				token={props.token}
+				hiringId={props.hiringId}
+				setHiringData={setHiringData}
 			/>
 			<ApplicantHire
 				active={modalApplicantHireActive}
@@ -201,6 +207,8 @@ const HiringDetails = (props: {
 				setActive={setModalApplicantHireActive}
 				role={props.role}
 				token={props.token}
+				userId={props.userId}
+				setHirings={props.setHirings}
 			/>
 		</>
 	);

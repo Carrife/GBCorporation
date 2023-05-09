@@ -14,7 +14,7 @@ import {
 import { HiringTestData } from "../Interfaces/Tests";
 
 export function GetAllHirings(
-	token: string,
+	token: string | null,
 	role: string,
 	userId: string,
 	filterForm: any | null
@@ -129,7 +129,6 @@ export async function Hire(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -168,7 +167,6 @@ export async function Reject(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -377,7 +375,6 @@ export async function CreateHiring(
 			});
 
 			setActive(false);
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({
@@ -418,8 +415,6 @@ export async function UpdateDescription(
 			});
 
 			setActive(false);
-
-			window.location.reload();
 		}
 	} catch (e) {
 		notification.warning({

@@ -1,17 +1,25 @@
 import { Button, Col, Form, Input, Row } from "antd";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import { CreateDepartment } from "../../../../Actions/AdministrationActions";
+import {
+	CreateDepartment,
+	GetDepartments,
+} from "../../../../Actions/AdministrationActions";
+import { Short } from "../../../../Interfaces/Short";
 
 const DepartmentAdd = (props: {
 	active: boolean;
 	setActive: (active: boolean) => void;
 	token: string | null;
+	setDepartments: React.Dispatch<React.SetStateAction<Short[]>>;
 }) => {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: any) => {
 		CreateDepartment(props.token, values.title, props.setActive);
+		GetDepartments(props.token).then((result) =>
+			props.setDepartments(result)
+		);
 	};
 
 	const onModalCancel = () => {
