@@ -7,7 +7,6 @@ import {
 	CreateHiring,
 	GetInterviewerPositions,
 	GetPositions,
-	GetAllHirings,
 } from "../../Actions/HiringActions";
 import {
 	Button,
@@ -123,9 +122,13 @@ const HiringAdd = (props: {
 	}, [applicantId, props.token, applicants]);
 
 	const onFinish = (values: any) => {
-		CreateHiring(props.token, values, props.setActive);
-		GetAllHirings(props.token, props.role, props.userId, null).then(
-			(result) => props.setHirings(result)
+		CreateHiring(
+			props.token,
+			values,
+			props.setActive,
+			props.role,
+			props.userId,
+			props.setHirings
 		);
 	};
 

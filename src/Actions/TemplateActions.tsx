@@ -28,7 +28,8 @@ export function GetAllTemplates(token: string | null): Promise<Template[]> {
 
 export async function TemplateDelete(
 	token: string | null,
-	id: string
+	id: string,
+	setTemplates: React.Dispatch<React.SetStateAction<Template[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -52,6 +53,8 @@ export async function TemplateDelete(
 				message: ErrorTitles.SUCCESS,
 				description: "",
 			});
+
+			GetAllTemplates(token).then((result) => setTemplates(result));
 		}
 	} catch (e) {
 		notification.warning({
@@ -101,7 +104,8 @@ export async function TemplateDownload(
 export async function CreateTemplate(
 	token: string | null,
 	name: string,
-	setActive: (active: boolean) => void
+	setActive: (active: boolean) => void,
+	setTemplates: React.Dispatch<React.SetStateAction<Template[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -128,6 +132,7 @@ export async function CreateTemplate(
 				description: "",
 			});
 
+			GetAllTemplates(token).then((result) => setTemplates(result));
 			setActive(false);
 		}
 	} catch (e) {
@@ -142,7 +147,8 @@ export async function UploadTemplate(
 	token: string | null,
 	id: string,
 	file: any,
-	setActive: (active: boolean) => void
+	setActive: (active: boolean) => void,
+	setTemplates: React.Dispatch<React.SetStateAction<Template[]>>
 ): Promise<void> {
 	const formData = new FormData();
 	formData.append("file", file);
@@ -168,6 +174,7 @@ export async function UploadTemplate(
 				description: "",
 			});
 
+			GetAllTemplates(token).then((result) => setTemplates(result));
 			setActive(false);
 		}
 	} catch (e) {

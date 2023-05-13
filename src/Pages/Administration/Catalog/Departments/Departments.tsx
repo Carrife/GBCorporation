@@ -136,8 +136,7 @@ const Departments = (props: {
 	};
 
 	const departmentDelete = async (id: string) => {
-		DeleteDepartment(props.token, id);
-		GetDepartments(props.token).then((result) => setDepartments(result));
+		DeleteDepartment(props.token, id, setDepartments);
 	};
 
 	const handleTableChange = (

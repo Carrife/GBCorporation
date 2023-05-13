@@ -125,8 +125,7 @@ const Positions = (props: { userId: string; role: string; token: string }) => {
 	};
 
 	const positionDelete = async (id: string) => {
-		DeletePosition(props.token, id);
-		GetPositions(props.token).then((result) => setPositions(result));
+		DeletePosition(props.token, id, setPositions);
 	};
 
 	const handleTableChange = (

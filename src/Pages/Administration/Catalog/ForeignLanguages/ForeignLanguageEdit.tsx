@@ -2,7 +2,7 @@ import { Button, Col, Form, Input, Row } from "antd";
 import { useEffect } from "react";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import { GetForeignLanguages, UpdateForeignLanguage } from "../../../../Actions/AdministrationActions";
+import { UpdateForeignLanguage } from "../../../../Actions/AdministrationActions";
 import { Short } from "../../../../Interfaces/Short";
 
 const ForeignLanguageEdit = (props: {
@@ -29,9 +29,9 @@ const ForeignLanguageEdit = (props: {
 			props.token,
 			values.title,
 			props.setActive,
-			props.language.id
+			props.language.id,
+			props.setLanguages
 		);
-		GetForeignLanguages(props.token).then((result) => props.setLanguages(result));
 	};
 
 	const onModalCancel = () => {

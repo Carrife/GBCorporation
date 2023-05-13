@@ -3,7 +3,7 @@ import ModalWindow from "../../Components/Modal/Modal";
 import { GetProgrammingLanguages } from "../../Actions/ApplicantActions";
 import { GetDepartments, GetPositions } from "../../Actions/HiringActions";
 import { Button, Col, Divider, Form, Input, Row, Select } from "antd";
-import { CreateEmployee, GetAllEmployee } from "../../Actions/EmployeeActions";
+import { CreateEmployee } from "../../Actions/EmployeeActions";
 import ModalTitles from "../../Enums/ModalTitles";
 import { Short } from "../../Interfaces/Short";
 import { Employee } from "../../Interfaces/Employees";
@@ -29,10 +29,7 @@ const EmployeeAdd = (props: {
 	}, [props.token]);
 
 	const onFinish = (values: any) => {
-		CreateEmployee(props.token, values, props.setActive);
-		GetAllEmployee(props.token, null).then((result) =>
-			props.setEmployees(result)
-		);
+		CreateEmployee(props.token, values, props.setActive, props.setEmployees);
 	};
 
 	const onChangePosition = (value: any) => {

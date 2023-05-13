@@ -1,5 +1,5 @@
 import ModalWindow from "../../Components/Modal/Modal";
-import { GetAllTemplates, UploadTemplate } from "../../Actions/TemplateActions";
+import { UploadTemplate } from "../../Actions/TemplateActions";
 import ModalTitles from "../../Enums/ModalTitles";
 import { Button, Col, Form, Upload, UploadFile, UploadProps } from "antd";
 import * as AiIcons from "react-icons/ai";
@@ -40,8 +40,13 @@ const TemplateUpload = (props: {
 
 	const onFinish = (values: any) => {
 		let file = values.file?.file !== undefined ? values.file.file : null;
-		UploadTemplate(props.token, props.id, file, props.setActive);
-		GetAllTemplates(props.token).then((result) => props.setTemplates(result));
+		UploadTemplate(
+			props.token,
+			props.id,
+			file,
+			props.setActive,
+			props.setTemplates
+		);
 	};
 
 	const onModalCancel = () => {
@@ -57,11 +62,10 @@ const TemplateUpload = (props: {
 		>
 			<Form
 				form={form}
-				style={{ padding: 10 }}
+				style={{ padding: 10, width: 240 }}
 				onFinish={onFinish}
 				labelCol={{ flex: "55px" }}
 				labelAlign="left"
-				labelWrap
 			>
 				<Form.Item name={`file`} label={"File"}>
 					<Upload
@@ -79,7 +83,7 @@ const TemplateUpload = (props: {
 						onChange={handleChange}
 					>
 						<Button
-							style={{ width: 100 }}
+							style={{ width: 165 }}
 							icon={<AiIcons.AiOutlineUpload />}
 						/>
 					</Upload>

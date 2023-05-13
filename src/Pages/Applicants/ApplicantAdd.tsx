@@ -1,7 +1,7 @@
 import ModalWindow from "../../Components/Modal/Modal";
 import ModalTitles from "../../Enums/ModalTitles";
 import { Button, Col, Form, Input, Row } from "antd";
-import { CreateApplicant, GetAllApplicants } from "../../Actions/ApplicantActions";
+import { CreateApplicant } from "../../Actions/ApplicantActions";
 import { Applicant } from "../../Interfaces/Applicants";
 
 const ApplicantAdd = (props: {
@@ -13,9 +13,11 @@ const ApplicantAdd = (props: {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: any) => {
-		CreateApplicant(props.token, values, props.setActive);
-		GetAllApplicants(props.token, null).then((result) =>
-			props.setApplicants(result)
+		CreateApplicant(
+			props.token,
+			values,
+			props.setActive,
+			props.setApplicants
 		);
 	};
 
@@ -32,11 +34,11 @@ const ApplicantAdd = (props: {
 		>
 			<Form
 				form={form}
-				style={{padding: 10}}
+				style={{ padding: 10 }}
 				onFinish={onFinish}
 				labelCol={{ flex: "114px" }}
 				labelAlign="left"
-                labelWrap
+				labelWrap
 			>
 				<Row gutter={25}>
 					<Col span={8} key={1}>

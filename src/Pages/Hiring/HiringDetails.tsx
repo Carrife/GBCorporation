@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ModalWindow from "../../Components/Modal/Modal";
 import * as AiIcons from "react-icons/ai";
-import { Reject, GetHiringById, GetAllHirings } from "../../Actions/HiringActions";
+import { Reject, GetHiringById } from "../../Actions/HiringActions";
 import { Button, Col, Divider, Row, Space, Typography } from "antd";
 import ModalTitles from "../../Enums/ModalTitles";
 import Role from "../../Enums/RoleEnum";
@@ -47,9 +47,13 @@ const HiringDetails = (props: {
 	};
 
 	const reject = async () => {
-		Reject(props.token, props.hiringId, props.setActive);
-		GetAllHirings(props.token, props.role, props.userId, null).then(
-			(result) => props.setHirings(result)
+		Reject(
+			props.token,
+			props.hiringId,
+			props.setActive,
+			props.role,
+			props.userId,
+			props.setHirings
 		);
 	};
 

@@ -1,5 +1,5 @@
 import ModalWindow from "../../Components/Modal/Modal";
-import { CreateTemplate, GetAllTemplates } from "../../Actions/TemplateActions";
+import { CreateTemplate } from "../../Actions/TemplateActions";
 import { Button, Col, Form, Input } from "antd";
 import ModalTitles from "../../Enums/ModalTitles";
 import { Template } from "../../Interfaces/Templates";
@@ -13,8 +13,7 @@ const TemplateAdd = (props: {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: any) => {
-		CreateTemplate(props.token, values.name, props.setActive);
-		GetAllTemplates(props.token).then((result) => props.setTemplates(result));
+		CreateTemplate(props.token, values.name, props.setActive, props.setTemplates);
 	};
 
 	const onModalCancel = () => {

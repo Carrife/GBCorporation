@@ -28,7 +28,8 @@ export function GetPositions(token: string | null): Promise<Short[]> {
 export async function CreatePosition(
 	token: string | null,
 	name: string,
-	setActive: (active: boolean) => void
+	setActive: (active: boolean) => void,
+	setPositions: React.Dispatch<React.SetStateAction<Short[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -55,6 +56,7 @@ export async function CreatePosition(
 				description: "",
 			});
 
+			GetPositions(token).then((result) => setPositions(result));
 			setActive(false);
 		}
 	} catch (e) {
@@ -69,7 +71,8 @@ export async function UpdatePosition(
 	token: string | null,
 	name: string,
 	setActive: (active: boolean) => void,
-	id: number
+	id: number,
+	setPositions: React.Dispatch<React.SetStateAction<Short[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -97,6 +100,7 @@ export async function UpdatePosition(
 				description: "",
 			});
 
+			GetPositions(token).then((result) => setPositions(result));
 			setActive(false);
 		}
 	} catch (e) {
@@ -109,7 +113,8 @@ export async function UpdatePosition(
 
 export async function DeletePosition(
 	token: string | null,
-	id: string
+	id: string,
+	setPositions: React.Dispatch<React.SetStateAction<Short[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -133,6 +138,8 @@ export async function DeletePosition(
 				message: ErrorTitles.SUCCESS,
 				description: "",
 			});
+
+			GetPositions(token).then((result) => setPositions(result));
 		}
 	} catch (e) {
 		notification.warning({
@@ -166,7 +173,8 @@ export function GetDepartments(token: string | null): Promise<Short[]> {
 export async function CreateDepartment(
 	token: string | null,
 	name: string,
-	setActive: (active: boolean) => void
+	setActive: (active: boolean) => void,
+	setDepartments: React.Dispatch<React.SetStateAction<Short[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -193,6 +201,7 @@ export async function CreateDepartment(
 				description: "",
 			});
 
+			GetDepartments(token).then((result) => setDepartments(result));
 			setActive(false);
 		}
 	} catch (e) {
@@ -207,7 +216,8 @@ export async function UpdateDepartment(
 	token: string | null,
 	name: string,
 	setActive: (active: boolean) => void,
-	id: number
+	id: number,
+	setDepartments: React.Dispatch<React.SetStateAction<Short[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -235,6 +245,7 @@ export async function UpdateDepartment(
 				description: "",
 			});
 
+			GetDepartments(token).then((result) => setDepartments(result));
 			setActive(false);
 		}
 	} catch (e) {
@@ -247,7 +258,8 @@ export async function UpdateDepartment(
 
 export async function DeleteDepartment(
 	token: string | null,
-	id: string
+	id: string,
+	setDepartments: React.Dispatch<React.SetStateAction<Short[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -271,6 +283,8 @@ export async function DeleteDepartment(
 				message: ErrorTitles.SUCCESS,
 				description: "",
 			});
+
+			GetDepartments(token).then((result) => setDepartments(result));
 		}
 	} catch (e) {
 		notification.warning({
@@ -309,7 +323,8 @@ export async function GetForeignLanguages(
 export async function CreateForeignLanguage(
 	token: string | null,
 	name: string,
-	setActive: (active: boolean) => void
+	setActive: (active: boolean) => void,
+	setLanguages: React.Dispatch<React.SetStateAction<Short[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -336,6 +351,7 @@ export async function CreateForeignLanguage(
 				description: "",
 			});
 
+			GetForeignLanguages(token).then((result) => setLanguages(result));
 			setActive(false);
 		}
 	} catch (e) {
@@ -350,7 +366,8 @@ export async function UpdateForeignLanguage(
 	token: string | null,
 	name: string,
 	setActive: (active: boolean) => void,
-	id: number
+	id: number,
+	setLanguages: React.Dispatch<React.SetStateAction<Short[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -378,6 +395,7 @@ export async function UpdateForeignLanguage(
 				description: "",
 			});
 
+			GetForeignLanguages(token).then((result) => setLanguages(result));
 			setActive(false);
 		}
 	} catch (e) {
@@ -390,7 +408,8 @@ export async function UpdateForeignLanguage(
 
 export async function DeleteForeignLanguage(
 	token: string | null,
-	id: string
+	id: string,
+	setLanguages: React.Dispatch<React.SetStateAction<Short[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -414,6 +433,8 @@ export async function DeleteForeignLanguage(
 				message: ErrorTitles.SUCCESS,
 				description: "",
 			});
+
+			GetForeignLanguages(token).then((result) => setLanguages(result));
 		}
 	} catch (e) {
 		notification.warning({
@@ -452,7 +473,8 @@ export async function GetProgrammingLanguages(
 export async function CreateProgrammingLanguage(
 	token: string | null,
 	name: string,
-	setActive: (active: boolean) => void
+	setActive: (active: boolean) => void,
+	setLanguages: React.Dispatch<React.SetStateAction<Short[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -479,6 +501,9 @@ export async function CreateProgrammingLanguage(
 				description: "",
 			});
 
+			GetProgrammingLanguages(token).then((result) =>
+				setLanguages(result)
+			);
 			setActive(false);
 		}
 	} catch (e) {
@@ -493,7 +518,8 @@ export async function UpdateProgrammingLanguage(
 	token: string | null,
 	name: string,
 	setActive: (active: boolean) => void,
-	id: number
+	id: number,
+	setLanguages: React.Dispatch<React.SetStateAction<Short[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -521,6 +547,9 @@ export async function UpdateProgrammingLanguage(
 				description: "",
 			});
 
+			GetProgrammingLanguages(token).then((result) =>
+				setLanguages(result)
+			);
 			setActive(false);
 		}
 	} catch (e) {
@@ -533,7 +562,8 @@ export async function UpdateProgrammingLanguage(
 
 export async function DeleteProgrammingLanguage(
 	token: string | null,
-	id: string
+	id: string,
+	setLanguages: React.Dispatch<React.SetStateAction<Short[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -557,6 +587,10 @@ export async function DeleteProgrammingLanguage(
 				message: ErrorTitles.SUCCESS,
 				description: "",
 			});
+
+			GetProgrammingLanguages(token).then((result) =>
+				setLanguages(result)
+			);
 		}
 	} catch (e) {
 		notification.warning({
@@ -632,7 +666,8 @@ export async function UpdateUser(
 	token: string | null,
 	formValues: any,
 	setActive: (active: boolean) => void,
-	id: number
+	id: number,
+	setUsers: React.Dispatch<React.SetStateAction<User[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -663,6 +698,7 @@ export async function UpdateUser(
 				description: "",
 			});
 
+			GetUsers(token, null).then((result) => setUsers(result));
 			setActive(false);
 		}
 	} catch (e) {

@@ -2,7 +2,7 @@ import { Button, Col, Form, Input, Row } from "antd";
 import { useEffect } from "react";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import { GetPositions, UpdatePosition } from "../../../../Actions/AdministrationActions";
+import { UpdatePosition } from "../../../../Actions/AdministrationActions";
 import { Short } from "../../../../Interfaces/Short";
 
 const PositionEdit = (props: {
@@ -29,9 +29,9 @@ const PositionEdit = (props: {
 			props.token,
 			values.title,
 			props.setActive,
-			props.position.id
+			props.position.id,
+			props.setPositions
 		);
-		GetPositions(props.token).then((result) => props.setPositions(result));
 	};
 
 	const onModalCancel = () => {

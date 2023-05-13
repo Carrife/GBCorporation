@@ -1,7 +1,7 @@
 import ModalWindow from "../../Components/Modal/Modal";
 import ModalTitles from "../../Enums/ModalTitles";
 import { Button, Col, Form, Input, Row } from "antd";
-import { GetAllApplicants, UpdateApplicant } from "../../Actions/ApplicantActions";
+import { UpdateApplicant } from "../../Actions/ApplicantActions";
 import { useEffect } from "react";
 import { Applicant } from "../../Interfaces/Applicants";
 
@@ -27,17 +27,15 @@ const ApplicantEdit = (props: {
 			surnameEn: props.applicant?.surnameEn,
 			phone: props.applicant?.phone,
 		});
-	}
+	};
 
 	const onFinish = (values: any) => {
 		UpdateApplicant(
 			props.token,
 			values,
 			props.setActive,
-			props.applicant.id
-		);
-		GetAllApplicants(props.token, null).then((result) =>
-			props.setApplicants(result)
+			props.applicant.id,
+			props.setApplicants
 		);
 	};
 

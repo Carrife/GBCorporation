@@ -129,8 +129,7 @@ const ForeignLanguages = (props: {
 	};
 
 	const foreignLanguageDelete = async (id: string) => {
-		DeleteForeignLanguage(props.token, id);
-		GetForeignLanguages(props.token).then((result) => setLanguages(result));
+		DeleteForeignLanguage(props.token, id, setLanguages);
 	};
 
 	const handleTableChange = (

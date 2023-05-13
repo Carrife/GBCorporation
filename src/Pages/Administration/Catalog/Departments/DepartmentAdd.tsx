@@ -1,10 +1,7 @@
 import { Button, Col, Form, Input, Row } from "antd";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import {
-	CreateDepartment,
-	GetDepartments,
-} from "../../../../Actions/AdministrationActions";
+import { CreateDepartment } from "../../../../Actions/AdministrationActions";
 import { Short } from "../../../../Interfaces/Short";
 
 const DepartmentAdd = (props: {
@@ -16,9 +13,11 @@ const DepartmentAdd = (props: {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: any) => {
-		CreateDepartment(props.token, values.title, props.setActive);
-		GetDepartments(props.token).then((result) =>
-			props.setDepartments(result)
+		CreateDepartment(
+			props.token,
+			values.title,
+			props.setActive,
+			props.setDepartments
 		);
 	};
 

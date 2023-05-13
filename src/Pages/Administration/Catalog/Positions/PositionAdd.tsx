@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, Row } from "antd";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import { CreatePosition, GetPositions } from "../../../../Actions/AdministrationActions";
+import { CreatePosition } from "../../../../Actions/AdministrationActions";
 import { Short } from "../../../../Interfaces/Short";
 
 const PositionAdd = (props: {
@@ -13,8 +13,12 @@ const PositionAdd = (props: {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: any) => {
-		CreatePosition(props.token, values.title, props.setActive);
-		GetPositions(props.token).then((result) => props.setPositions(result));
+		CreatePosition(
+			props.token,
+			values.title,
+			props.setActive,
+			props.setPositions
+		);
 	};
 
 	const onModalCancel = () => {

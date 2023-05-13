@@ -256,10 +256,7 @@ const Employees = (props: { role: string; token: string; userId: string }) => {
 	};
 
 	const employeeFired = async (id: string) => {
-		EmployeeFired(props.token, id);
-		GetAllEmployee(props.token, null).then((result) =>
-			setEmployees(result)
-		);
+		EmployeeFired(props.token, id, setEmployees);
 	};
 
 	const employeeEdit = async (id: string) => {

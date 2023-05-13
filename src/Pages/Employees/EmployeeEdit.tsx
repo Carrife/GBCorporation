@@ -3,7 +3,7 @@ import ModalWindow from "../../Components/Modal/Modal";
 import { Button, Col, Divider, Form, Input, Row, Select } from "antd";
 import { GetProgrammingLanguages } from "../../Actions/ApplicantActions";
 import { GetDepartments, GetPositions } from "../../Actions/HiringActions";
-import { GetAllEmployee, UpdateEmployee } from "../../Actions/EmployeeActions";
+import { UpdateEmployee } from "../../Actions/EmployeeActions";
 import ModalTitles from "../../Enums/ModalTitles";
 import { Short } from "../../Interfaces/Short";
 import { Employee } from "../../Interfaces/Employees";
@@ -68,10 +68,7 @@ const EmployeeEdit = (props: {
 	};
 
 	const onFinish = (values: any) => {
-		UpdateEmployee(props.token, values, props.setActive, props.employee.id);
-		GetAllEmployee(props.token, null).then((result) =>
-			props.setEmployees(result)
-		);
+		UpdateEmployee(props.token, values, props.setActive, props.employee.id, props.setEmployees);
 	};
 
 	const onModalCancel = () => {

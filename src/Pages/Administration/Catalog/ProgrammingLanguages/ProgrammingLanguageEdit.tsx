@@ -2,10 +2,7 @@ import { Button, Col, Form, Input, Row } from "antd";
 import { useEffect } from "react";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import {
-	GetProgrammingLanguages,
-	UpdateProgrammingLanguage,
-} from "../../../../Actions/AdministrationActions";
+import { UpdateProgrammingLanguage } from "../../../../Actions/AdministrationActions";
 import { Short } from "../../../../Interfaces/Short";
 
 const ProgrammingLanguageEdit = (props: {
@@ -32,10 +29,8 @@ const ProgrammingLanguageEdit = (props: {
 			props.token,
 			values.title,
 			props.setActive,
-			props.language.id
-		);
-		GetProgrammingLanguages(props.token).then((result) =>
-			props.setLanguages(result)
+			props.language.id,
+			props.setLanguages
 		);
 	};
 

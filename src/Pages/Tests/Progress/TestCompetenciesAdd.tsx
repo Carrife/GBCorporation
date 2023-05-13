@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Select } from "antd";
 import ModalWindow from "../../../Components/Modal/Modal";
 import ModalTitles from "../../../Enums/ModalTitles";
-import { CreateTestCompetencies, GetAllTests, GetUserTests } from "../../../Actions/TestActions";
+import {
+	CreateTestCompetencies,
+	GetAllTests,
+} from "../../../Actions/TestActions";
 import { Short } from "../../../Interfaces/Short";
 import { GetAllEmployeeShort } from "../../../Actions/EmployeeActions";
 import { UserTest } from "../../../Interfaces/Tests";
@@ -25,9 +28,13 @@ const TestCompetenciesAdd = (props: {
 	}, [props.token]);
 
 	const onFinish = (values: any) => {
-		CreateTestCompetencies(props.token, values, props.setActive);
-		GetUserTests(props.token, props.userId, props.role, null).then(
-			(result) => props.setTests(result)
+		CreateTestCompetencies(
+			props.token,
+			values,
+			props.setActive,
+			props.userId,
+			props.role,
+			props.setTests
 		);
 	};
 
@@ -44,7 +51,7 @@ const TestCompetenciesAdd = (props: {
 		>
 			<Form
 				form={form}
-				style={{ padding: 10, minWidth: 350}}
+				style={{ padding: 10, minWidth: 350 }}
 				onFinish={onFinish}
 				labelCol={{ flex: "100px" }}
 				labelAlign="left"

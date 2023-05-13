@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Divider, Form, Input, Row, Select } from "antd";
 import {
-	GetAllHirings,
 	GetApplicantHiringData,
 	GetDepartments,
 	GetPositions,
@@ -28,7 +27,7 @@ const ApplicantHire = (props: {
 	const [departments, setDepartments] = useState<Short[]>([]);
 	const [languages, setLanguages] = useState<Short[]>([]);
 	const [isDisabled, setIsDisabled] = useState(false);
-	
+
 	useEffect(() => {
 		if (props.hiringId) {
 			GetApplicantHiringData(props.token, props.hiringId).then((result) =>
@@ -44,9 +43,14 @@ const ApplicantHire = (props: {
 	}, [props.token, props.hiringId, applicant?.positionId]);
 
 	const onFinish = (values: any) => {
-		Hire(props.token, props.hiringId, props.setActive, values);
-		GetAllHirings(props.token, props.role, props.userId, null).then(
-			(result) => props.setHirings(result)
+		Hire(
+			props.token,
+			props.hiringId,
+			props.setActive,
+			values,
+			props.role,
+			props.userId,
+			props.setHirings
 		);
 	};
 

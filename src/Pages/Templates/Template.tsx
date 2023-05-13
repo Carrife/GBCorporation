@@ -189,8 +189,7 @@ const Templates = (props: { role: string; token: string }) => {
 	}, [props.token]);
 
 	const templateDelete = async (id: string) => {
-		TemplateDelete(props.token, id);
-		GetAllTemplates(props.token).then((result) => setTemplates(result));
+		TemplateDelete(props.token, id, setTemplates);
 	};
 
 	const templateDownload = async (id: string, title: string) => {

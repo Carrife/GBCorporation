@@ -95,7 +95,10 @@ export async function Hire(
 	token: string | null,
 	id: string,
 	setActive: (active: boolean) => void,
-	formValues: any
+	formValues: any,
+	role: string,
+	userId: string,
+	setHirings: React.Dispatch<React.SetStateAction<Hiring[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch("http://localhost:8000/api/Hiring/Hire", {
@@ -128,6 +131,9 @@ export async function Hire(
 				description: "",
 			});
 
+			GetAllHirings(token, role, userId, null).then((result) =>
+				setHirings(result)
+			);
 			setActive(false);
 		}
 	} catch (e) {
@@ -141,7 +147,10 @@ export async function Hire(
 export async function Reject(
 	token: string | null,
 	id: string,
-	setActive: (active: boolean) => void
+	setActive: (active: boolean) => void,
+	role: string,
+	userId: string,
+	setHirings: React.Dispatch<React.SetStateAction<Hiring[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -166,6 +175,9 @@ export async function Reject(
 				description: "",
 			});
 
+			GetAllHirings(token, role, userId, null).then((result) =>
+				setHirings(result)
+			);
 			setActive(false);
 		}
 	} catch (e) {
@@ -333,7 +345,10 @@ export function GetHiringStatuses(token: string | null): Promise<Short[]> {
 export async function CreateHiring(
 	token: string | null,
 	formValues: hiringCreate,
-	setActive: (active: boolean) => void
+	setActive: (active: boolean) => void,
+	role: string,
+	userId: string,
+	setHirings: React.Dispatch<React.SetStateAction<Hiring[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -374,6 +389,9 @@ export async function CreateHiring(
 				description: "",
 			});
 
+			GetAllHirings(token, role, userId, null).then((result) =>
+				setHirings(result)
+			);
 			setActive(false);
 		}
 	} catch (e) {

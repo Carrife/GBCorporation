@@ -134,7 +134,8 @@ export function GetEmployeeStatuses(token: string | null): Promise<Short[]> {
 export async function CreateEmployee(
 	token: string | null,
 	formValues: any,
-	setActive: (active: boolean) => void
+	setActive: (active: boolean) => void,
+	setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -170,6 +171,7 @@ export async function CreateEmployee(
 				description: "",
 			});
 
+			GetAllEmployee(token, null).then((result) => setEmployees(result));
 			setActive(false);
 		}
 	} catch (e) {
@@ -184,7 +186,8 @@ export async function UpdateEmployee(
 	token: string | null,
 	formValues: any,
 	setActive: (active: boolean) => void,
-	employeeId: number
+	employeeId: number,
+	setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -221,6 +224,7 @@ export async function UpdateEmployee(
 				description: "",
 			});
 
+			GetAllEmployee(token, null).then((result) => setEmployees(result));
 			setActive(false);
 		}
 	} catch (e) {
@@ -231,7 +235,11 @@ export async function UpdateEmployee(
 	}
 }
 
-export async function EmployeeFired(token: string, id: string): Promise<void> {
+export async function EmployeeFired(
+	token: string,
+	id: string,
+	setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>
+): Promise<void> {
 	try {
 		const response = await fetch(
 			"http://localhost:8000/api/Employee/Fired",
@@ -254,6 +262,8 @@ export async function EmployeeFired(token: string, id: string): Promise<void> {
 				message: ErrorTitles.SUCCESS,
 				description: "",
 			});
+
+			GetAllEmployee(token, null).then((result) => setEmployees(result));
 		}
 	} catch (e) {
 		notification.warning({

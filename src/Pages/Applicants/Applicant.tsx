@@ -138,7 +138,7 @@ const Applicants = (props: { role: string; token: string }) => {
 	const applicantEdit = async (id: string) => {
 		GetApplicantById(props.token, id)
 			.then((result) => setApplicant(result))
-			.then((data) => setModalEditActive(true));
+			.then(() => setModalEditActive(true));
 	};
 
 	const applicantTestData = async (id: string) => {

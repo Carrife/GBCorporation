@@ -145,7 +145,10 @@ export function GetTestCompetenciesStatuses(
 export async function CreateTestCompetencies(
 	token: string | null,
 	formValues: any,
-	setActive: (active: boolean) => void
+	setActive: (active: boolean) => void,
+	userId: string,
+	role: string,
+	setTests: React.Dispatch<React.SetStateAction<UserTest[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -173,6 +176,9 @@ export async function CreateTestCompetencies(
 				description: "",
 			});
 
+			GetUserTests(token, userId, role, null).then((result) =>
+				setTests(result)
+			);
 			setActive(false);
 		}
 	} catch (e) {
@@ -222,7 +228,10 @@ export async function StartTest(
 export async function TestComplete(
 	token: string | null,
 	result: number,
-	id: string
+	id: string,
+	userId: string,
+	role: string,
+	setTests: React.Dispatch<React.SetStateAction<UserTest[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -249,6 +258,10 @@ export async function TestComplete(
 				message: ErrorTitles.SUCCESS,
 				description: "",
 			});
+
+			GetUserTests(token, userId, role, null).then((result) =>
+				setTests(result)
+			);
 		}
 	} catch (e) {
 		notification.warning({

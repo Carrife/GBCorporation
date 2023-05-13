@@ -73,7 +73,8 @@ export function GetApplicantStatuses(token: string | null): Promise<Short[]> {
 export async function CreateApplicant(
 	token: string | null,
 	formValues: any,
-	setActive: (active: boolean) => void
+	setActive: (active: boolean) => void,
+	setApplicants: React.Dispatch<React.SetStateAction<Applicant[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -106,6 +107,9 @@ export async function CreateApplicant(
 				description: "",
 			});
 
+			GetAllApplicants(token, null).then((result) =>
+				setApplicants(result)
+			);
 			setActive(false);
 		}
 	} catch (e) {
@@ -147,7 +151,8 @@ export async function UpdateApplicant(
 	token: string | null,
 	formValues: any,
 	setActive: (active: boolean) => void,
-	applicantId: number
+	applicantId: number,
+	setApplicants: React.Dispatch<React.SetStateAction<Applicant[]>>
 ): Promise<void> {
 	try {
 		const response = await fetch(
@@ -180,6 +185,9 @@ export async function UpdateApplicant(
 				description: "",
 			});
 
+			GetAllApplicants(token, null).then((result) =>
+				setApplicants(result)
+			);
 			setActive(false);
 		}
 	} catch (e) {

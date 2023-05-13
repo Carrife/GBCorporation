@@ -2,7 +2,7 @@ import { Button, Col, Form, Input, Row } from "antd";
 import { useEffect } from "react";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import { GetDepartments, UpdateDepartment } from "../../../../Actions/AdministrationActions";
+import { UpdateDepartment } from "../../../../Actions/AdministrationActions";
 import { Short } from "../../../../Interfaces/Short";
 
 const DepartmentEdit = (props: {
@@ -29,10 +29,8 @@ const DepartmentEdit = (props: {
 			props.token,
 			values.title,
 			props.setActive,
-			props.department.id
-		);
-		GetDepartments(props.token).then((result) =>
-			props.setDepartments(result)
+			props.department.id,
+			props.setDepartments
 		);
 	};
 

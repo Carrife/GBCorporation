@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, Row } from "antd";
 import ModalWindow from "../../../../Components/Modal/Modal";
 import ModalTitles from "../../../../Enums/ModalTitles";
-import { CreateProgrammingLanguage, GetProgrammingLanguages } from "../../../../Actions/AdministrationActions";
+import { CreateProgrammingLanguage } from "../../../../Actions/AdministrationActions";
 import { Short } from "../../../../Interfaces/Short";
 
 const ProgrammingLanguageAdd = (props: {
@@ -13,9 +13,11 @@ const ProgrammingLanguageAdd = (props: {
 	const [form] = Form.useForm();
 
 	const onFinish = (values: any) => {
-		CreateProgrammingLanguage(props.token, values.title, props.setActive);
-		GetProgrammingLanguages(props.token).then((result) =>
-			props.setLanguages(result)
+		CreateProgrammingLanguage(
+			props.token,
+			values.title,
+			props.setActive,
+			props.setLanguages
 		);
 	};
 

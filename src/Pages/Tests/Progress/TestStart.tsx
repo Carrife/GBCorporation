@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ModalWindow from "../../../Components/Modal/Modal";
-import { GetUserTests, TestComplete } from "../../../Actions/TestActions";
+import { TestComplete } from "../../../Actions/TestActions";
 import { Button, Form, Checkbox, Space, Row, Col } from "antd";
 import "../Test.css";
 import { TestData, UserTest } from "../../../Interfaces/Tests";
@@ -64,15 +64,17 @@ const TestStart = (props: {
 
 		let res = Math.round((numCorrectByUser * 100) / numCorrectAnswers);
 
-		TestComplete(props.token, res, props.competenceId);
+		TestComplete(
+			props.token,
+			res,
+			props.competenceId,
+			props.userId,
+			props.role,
+			props.setTests
+		);
 
 		setResult(res);
-
 		setIsConfirmed(true);
-
-		GetUserTests(props.token, props.userId, props.role, null).then((result) =>
-			props.setTests(result)
-		);
 	};
 
 	const onModalCancel = () => {

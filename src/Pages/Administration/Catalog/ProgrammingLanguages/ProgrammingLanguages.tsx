@@ -131,10 +131,7 @@ const ProgrammingLanguages = (props: {
 	};
 
 	const programmingLanguageDelete = async (id: string) => {
-		DeleteProgrammingLanguage(props.token, id);
-		GetProgrammingLanguages(props.token).then((result) =>
-			setLanguages(result)
-		);
+		DeleteProgrammingLanguage(props.token, id, setLanguages);
 	};
 
 	const handleTableChange = (
