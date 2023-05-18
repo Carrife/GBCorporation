@@ -45,7 +45,7 @@ const TestCompetenciesAdd = (props: {
 
 	return (
 		<ModalWindow
-			title={ModalTitles.CREATE_EMPLOYEE}
+			title={ModalTitles.CREATE_COMPETENCIES_TEST}
 			isActive={props.active}
 			onCancel={onModalCancel}
 		>

@@ -51,7 +51,7 @@ const LogicTest = (props: {
 								},
 							]}
 						>
-							<InputNumber placeholder="0" min={1} max={100} />
+							<InputNumber placeholder="0" min={1} max={100} style={{ width: 200 }}/>
 						</Form.Item>
 						<Form.Item
 							name={`date`}
@@ -63,7 +63,7 @@ const LogicTest = (props: {
 								},
 							]}
 						>
-							<DatePicker />
+							<DatePicker style={{ width: 200 }}/>
 						</Form.Item>
 					</Col>
 				</Row>

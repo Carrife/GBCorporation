@@ -47,7 +47,7 @@ const ProgrammingTest = (props: {
 				form={form}
 				style={{ padding: 10 }}
 				onFinish={onFinish}
-				labelCol={{ flex: "80px" }}
+				labelCol={{ flex: "85px" }}
 				labelAlign="left"
 				labelWrap
 			>
@@ -63,7 +63,7 @@ const ProgrammingTest = (props: {
 								},
 							]}
 						>
-							<Select>
+							<Select style={{ width: 200 }}>
 								{languages.map((item) => (
 									<Select.Option
 										value={item.id}
@@ -84,7 +84,12 @@ const ProgrammingTest = (props: {
 								},
 							]}
 						>
-							<InputNumber placeholder="0" min={1} max={100} />
+							<InputNumber
+								placeholder="0"
+								min={1}
+								max={100}
+								style={{ width: 200 }}
+							/>
 						</Form.Item>
 						<Form.Item
 							name={`date`}
@@ -96,7 +101,7 @@ const ProgrammingTest = (props: {
 								},
 							]}
 						>
-							<DatePicker />
+							<DatePicker style={{ width: 200 }} />
 						</Form.Item>
 					</Col>
 				</Row>

@@ -2,9 +2,9 @@ enum ModalTitles {
     CREATE_APPLICANT = "Create Applicant",
     EDIT_APPLICANT = "Update Applicant",
     APPLICANT_TESTS = "Applicant test data",
-    CREATE_FOREIGN_TEST = "Create foreign language test data",
-    CREATE_LOGIC_TEST = "Create logic test data",
-    CREATE_PROGRAMMING_TEST = "Create programming language test data",
+    CREATE_FOREIGN_TEST = "Add foreign language test data",
+    CREATE_LOGIC_TEST = "Add logic test data",
+    CREATE_PROGRAMMING_TEST = "Add programming language test data",
     CREATE_HIRING = "Create a hire",
     HIRING_DATA = "Hiring data",
     HIRING_DESCRIPTION= "Update description",
@@ -23,6 +23,7 @@ enum ModalTitles {
     EDIT_PROGRAMMING_LANGUAGE = "Update Programming language",
     CREAT_PROGRAMMING_LANGUAGE = "Create Programming language",
     EDIT_USER = "Update User",
+    CREATE_COMPETENCIES_TEST = "Assign a test",
 }
 
 export default ModalTitles;

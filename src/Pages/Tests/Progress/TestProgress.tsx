@@ -38,6 +38,7 @@ const TestProgress = (props: {
 	userId: string;
 	role: string;
 	token: string;
+	login: string | null;
 }) => {
 	const [tests, setTests] = useState<UserTest[]>([]);
 	const [testTitles, setTestTitles] = useState<Short[]>([]);
@@ -94,6 +95,30 @@ const TestProgress = (props: {
 				compare: (a, b) =>
 					a.status.toLowerCase() < b.status.toLowerCase() ? 1 : -1,
 			},
+		},
+		{
+			title: "",
+			key: "action",
+			render: (_, record) => (
+				<Space size="middle">
+					{record.status === "Open" &&
+						props.role === Role.ADMIN &&
+						record.employee === props.login && (
+							<Button
+								style={{ marginLeft: 30 }}
+								type="text"
+								onClick={() =>
+									startTest(
+										record.key.toString(),
+										record.test
+									)
+								}
+							>
+								<AiIcons.AiOutlineAudit />
+							</Button>
+						)}
+				</Space>
+			),
 		},
 	];
 

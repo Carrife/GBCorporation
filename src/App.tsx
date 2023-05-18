@@ -17,6 +17,7 @@ function App() {
 	const [role, setRole] = useState("");
 	const [token, setToken] = useState("");
 	const [userId, setUserId] = useState("");
+	const [login, setLogin] = useState("");
 
 	useEffect(() => {
 		(async () => {
@@ -37,6 +38,7 @@ function App() {
 				setName(content.name);
 				setRole(content.role);
 				setUserId(content.id);
+				setLogin(content.login);
 				window.localStorage.setItem("token", content.token);
 				setToken(content.token);
 				if (window.location.pathname === "/") {
@@ -94,6 +96,7 @@ function App() {
 											userId={userId}
 											role={role}
 											token={token}
+											login={login}
 										/>
 									}
 								/>

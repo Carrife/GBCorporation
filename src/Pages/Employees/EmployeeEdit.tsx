@@ -68,7 +68,13 @@ const EmployeeEdit = (props: {
 	};
 
 	const onFinish = (values: any) => {
-		UpdateEmployee(props.token, values, props.setActive, props.employee.id, props.setEmployees);
+		UpdateEmployee(
+			props.token,
+			values,
+			props.setActive,
+			props.employee.id,
+			props.setEmployees
+		);
 	};
 
 	const onModalCancel = () => {
@@ -244,7 +250,7 @@ const EmployeeEdit = (props: {
 				<Row>
 					<Col span={24} style={{ textAlign: "right" }}>
 						<Button type="primary" htmlType="submit">
-							Create
+							Save
 						</Button>
 						<Button
 							style={{ margin: "0 8px" }}

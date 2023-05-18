@@ -6,7 +6,12 @@ import TestResults from "./TestResults";
 import TestProgress from "./Progress/TestProgress";
 import Role from "../../Enums/RoleEnum";
 
-const Tests = (props: { userId: string; role: string; token: string }) => {
+const Tests = (props: {
+	userId: string;
+	role: string;
+	token: string;
+	login: string;
+}) => {
 	const { Content } = Layout;
 
 	const managerTabItems: TabsProps["items"] = [
@@ -29,6 +34,7 @@ const Tests = (props: { userId: string; role: string; token: string }) => {
 					userId={props.userId}
 					role={props.role}
 					token={props.token}
+					login={props.login}
 				/>
 			),
 		},
@@ -54,6 +60,7 @@ const Tests = (props: { userId: string; role: string; token: string }) => {
 					userId={props.userId}
 					role={props.role}
 					token={props.token}
+					login=""
 				/>
 			),
 		},

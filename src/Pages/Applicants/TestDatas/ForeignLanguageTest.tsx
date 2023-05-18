@@ -20,7 +20,7 @@ const ForeignLanguageTest = (props: {
 	useEffect(() => {
 		GetForeignLanguages(props.token).then((result) => setLanguages(result));
 	}, [props.active, props.token]);
-	
+
 	const onFinish = (values: any) => {
 		CreateForeignLanguageTest(
 			props.token,
@@ -45,7 +45,7 @@ const ForeignLanguageTest = (props: {
 				form={form}
 				style={{ padding: 10 }}
 				onFinish={onFinish}
-				labelCol={{ flex: "83px" }}
+				labelCol={{ flex: "84px" }}
 				labelAlign="left"
 				labelWrap
 			>
@@ -61,7 +61,7 @@ const ForeignLanguageTest = (props: {
 								},
 							]}
 						>
-							<Select>
+							<Select style={{ width: 200 }}>
 								{languages.map((item) => (
 									<Select.Option
 										value={item.id}
@@ -82,7 +82,12 @@ const ForeignLanguageTest = (props: {
 								},
 							]}
 						>
-							<InputNumber placeholder="0" min={1} max={100} />
+							<InputNumber
+								placeholder="0"
+								min={1}
+								max={100}
+								style={{ width: 200 }}
+							/>
 						</Form.Item>
 						<Form.Item
 							name={`date`}
@@ -94,7 +99,7 @@ const ForeignLanguageTest = (props: {
 								},
 							]}
 						>
-							<DatePicker />
+							<DatePicker style={{ width: 200 }} />
 						</Form.Item>
 					</Col>
 				</Row>
